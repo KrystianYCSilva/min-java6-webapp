@@ -1,0 +1,1689 @@
+CURSO - CENSO DA EDUCAÇÃO SUPERIOR 2025;;;;;;;;
+LEIAUTE DE MIGRAÇÃO – ARQUIVO CURSO;;;;;;;;
+#;Campo;Tamanho;"Fixo/
+Variável";Tipo;;Preenchimento;1ª Etapa de Validação;2ª Etapa de Validação
+CABEÇALHO DO ARQUIVO - REGISTRO 20;;;;;;;;
+1;Tipo do registro;2;Fixo;Numérico;Inteiro/Decimal;Obrigatório;"Se o valor informado for diferente de 20, deverá aparecer a mensagem: ""Preencher com o valor 20"". ";
+2;ID da IES;12;Variável;Numérico;Inteiro;Obrigatório;"Se o ID da IES no INEP for diferente do Código da IES do usuário logado, deverá aparecer a mensagem: ""A IES do usuário logado no sistema deve ser a mesma IES informada no arquivo de importação"".";"Se o ID da IES no INEP não estiver cadastrado na base de dados deverá aparecer a mensagem: ""ID da IES no INEP não está cadastrado na base de dados"".
+
+Se o usuário não possuir permissão a IES informada no campo ID da IES no INEP para realizar migração, deverá aparecer a mensagem: ""O usuário não possui acesso a IES informada"".
+"
+REGISTRO DO CURSO - REGISTRO 21;;;;;;;;
+1;Tipo do registro;2;Fixo;Numérico;Inteiro;Obrigatório;"Se o valor informado for diferente de 21, deverá aparecer a mensagem: ""Preencher com o valor 21""";
+2;Código do curso no E-MEC;12;Variável;Numérico;Inteiro;Obrigatório;"Se o ID do curso aparecer mais de uma vez no mesmo arquivo, deverá aparecer a mensagem: 
+""Id do curso já existe neste mesmo arquivo""";"Se o ID do curso pertencer a outra IES, diferente da IES logada, deverá aparecer a mensagem: 
+""ID do CURSO não pertence a IES logada no sistema do Censo da Educação Superior"""
+3;Curso teve aluno vinculado no ano do Censo?;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos: 
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: 0, 1"".
+";"
+Se for informado que o curso não teve alunos vinculados no ano do Censo, verificar se o curso foi informado como representante de outro curso. Caso tenha sido, exibir a mensagem: 
+""O campo não pode ser informado com 'Não', pois o mesmo está sendo utilizado como 'Curso representado pelo curso' em outro curso da IES""
+
+Se o campo curso teve aluno vinculado no ano do Censo informado com valor 'Sim', o curso informado pertence à IES, e o formato de oferta (no banco de dados) é presencial e nenhum dos campos turno de funcionamento do curso Matutino, Vespertino, Noturno ou Integral foram informados como ""Sim"", deverá apresentar mensagem:
+""Ao menos um turno de funcionamento deve ser informado com o valor 'Sim' para curso presencial""."
+4;Motivo de curso sem aluno vinculado no ano do Censo;1;Variável;Numérico;Inteiro;Condicional;"
+Valores válidos:
+1- Curso extinto
+2- Curso novo
+3- Curso representado por outro código de curso
+4- Curso ativo sem demanda
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: 1,2,3 ou 4"".
+
+Se campo Curso teve aluno vinculado informado com 'Não' e não for informado o campo ""Motivo de curso sem aluno vinculado, apresentar mensagem:
+""Campo obrigatório, se informado o valor 'Não' em curso teve aluno vinculado no ano do censo"". 
+
+Se campo Curso teve aluno vinculado informado com 'Sim' e  for informado o campo ""Motivo de curso sem aluno vinculado, apresentar mensagem:
+""Somente informe valor para curso que não teve aluno vinculado ano do censo""
+";"Se o curso estiver com situação extinto no e-MEC e for selecionado motivo diferente das opções “Curso extinto” e “Curso representado por outro código de curso”, mostrar a mensagem de erro: 
+“O curso está com situação extinto no e-MEC, somente é possível selecionar as opções “Curso extinto” ou “Curso representado por outro código de curso””.
+
+Se o curso teve alunos vinculados com situação ""Cursando"" ou ""Matricula Trancada"" no Censo anterior, e for selecionado motivo diferente de “Curso representado por outro código de curso”. mostrar mensagem de erro:
+“Como o curso teve alunos vinculados no Censo anterior, somente é possível selecionar a opção “Curso representado por outro código de curso””.
+
+Se curso possui aluno ou docente vinculado e for selecionado o motivo diferente de “Curso representado por outro código de curso”, mostrar mensagem de erro: 
+“Como curso possui aluno vinculado ou docente vinculado, somente é permitido selecionar o motivo “Curso representado por outro código de curso”.
+
+"
+5;Curso representado por outro curso da IES;12;Variável;Numérico;Inteiro;Condicional;"Se o campo Motivo do curso sem aluno vinculado informado com 'Curso representado por outro código de curso' e não for informado o campo Curso representado po outroco curso da IES, deverá apresentar mensagem:
+""Campo obrigatório se informada a opção '3 - Curso representado por outro código de curso' no campo Motivo de curso sem aluno vinculado""
+
+Se o campo Motivo do curso sem aluno vinculado informado com valor diferente de 'Curso representado por outro código de curso' e o campo Curso representado por outro curso da IES dor informado, deverá apresentar mensagem:
+""O código do curso somente poderá ser informado se for informada a opção '3 - Curso representado por outro código de curso' no campo Motivo do curso que não possui aluno vinculado no ano do censo"". 
+";"Se o código do curso não pertence à IES: 
+""ID do CURSO não está cadastrado no INEP""
+
+Se o código do curso pertencer a outra IES, diferente da IES logada, deverá aparecer a mensagem: 
+""Código do curso não pertence a IES logada no sistema do Censo da Educação Superior""
+
+Se o curso informado no campo Curso representado por outro curso da IES tiver valor diferente de 'Sim' no campo 'Curso teve aluno vinculado no ano do Censo', apresentar a mensagem: 
+""É obrigatório informar um curso com a opção 'Curso teve aluno vinculado no ano do Censo' respondido como '1-Sim'"".
+
+Se o campo ""Motivo de curso sem aluno vinculado"" for informado com ""3 - Curso representado por outro código de curso"", o campo ""Curso representado"" foi informado, este curso representado pertence à IES e este curso Representado (no banco de dados) não possui aluno vinculado no ano do Censo, deverá apresentar mensagem:
+""É obrigatório informar um curso com a opção 'Curso teve aluno vinculado no ano do Censo' respondido como '1-Sim'""
+<ESTA REGRA É VERIFICADA SE PASSAR PELA ANTERIOR> 
+
+Se o curso informado não possuir o mesmo grau acadêmico, nível e formato de oferta, deverá apresentar a mensagem: 
+""Curso selecionado deverá ter o mesmo grau acadêmico, nível e formato de oferta e não poderá estar extinto no e-MEC""
+"
+6;Curso financiado por convênio;1;Variável;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo ""Curso teve aluno vinculado no ano do Censo"" foi preenchido com ""Não"" e o campo Curso financiado por convênio for informado, deverá apresentar a mensagem: 
+""Este campo não poderá ser informado se o campo 'Curso teve aluno vinculado no ano do censo' foi preenchido com 'Não'""";"Para Universidade Federal, se o campo ""Curso teve aluno vinculado no ano do Censo"" foi preenchido com ""Sim"" e o campo Curso financiado por convêcnio não for informado, apresentar a mensagem:
+""Campo obrigatório, se informado o valor 'Sim' em Curso teve aluno vinculado no ano do censo e IES Federal""
+
+Se a categoria administrativa da IES for diferente de ""Pública Federal"" e a organização acadêmica é diferente de ""Universidade"" e o campo for informado, apresentar a mensagem:
+""Este campo não poderá ser informado se a IES não for Universidade Federal""
+
+"
+7;Turno de funcionamento do curso - Matutino;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo'""
+
+";"Se curso for EAD e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e o campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se o campo formato de oferta for igual a 'EAD' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo"" 
+
+Se o curso for presencial e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e não for informado o campo, apresentar a mensagem: 
+""Campo obrigatório se o campo formato de oferta for igual a 'Presencial' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo"". 
+
+Se curso for semipresencial e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e o campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se o campo formato de oferta for igual a 'Semipresencial' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo""  "
+8;Prazo mínimo para integralização no turno matutino;3;Variável;Numérico;Decimal;Condicional;"
+Valores válidos:
+Numérico (0-9) e separador (ponto)
+['<vazio>', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0', '5.5', '6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5']
+Se for informado um valor diferente, deve aparecer mensagem 
+""Valor inválido para o prazo mínimo de integralização - turno Matutino""
+
+Se o campo Turno de funcionamento do curso - Matutino foi informado com 'Não' e este campo foi informado, deverá apresentar mensagem:
+""O campo prazo mínimo de integralização – matutino, somente deverá ser informado se informado o turno matutino"".
+
+Se o campo Curso teve aluno vinculado no ano do Censo informado com valor 'Sim' e este campo  não for informado, deverá apresentar mensagem:
+""Prazo mínimo de integralização deve ser preenchido para o turno de funcionamento matutino"".";"Se o formato de oferta é presencial e o campo turno de funcionamento do curso - Matutino foi informado com 'Sim' e este campo não foi informado, deverá apresentar mensagem:
+""Campo obrigatório se o campo formato de oferta for igual a 'Presencial' e se o turno matutino do curso for marcado""
+
+
+"
+9;Número de Vagas Novas Oferecidas - turno matutino;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento matutino seja preenchido com 'Sim'"".
+";"Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Cursos vinculados a um curso ABI em atividade não podem informar quantidade de Vagas Novas Oferecidas""
+
+Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Sim' e o curso não for um curso vinculado a um curso ABI em atividade, e este campo não for informado, deverá apresentar mensagem:
+""Campo obrigatório se o campo turno do curso - matutino for marcado e o curso não for um curso vinculado a um curso ABI em atividade"""
+10;Número de Vagas Remanescentes - turno matutino;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Não e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento matutino seja preenchido com 'Sim'"".
+
+Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Número de Vagas Remanescentes - turno matutino deve ser preenchido para o turno matutino"".";
+11;Número de Vagas Oferecidas de Programas Especiais- turno matutino;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Não e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento matutino seja preenchido com 'Sim'"".
+
+Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Número de Vagas Remanescentes - turno matutino deve ser preenchido para o turno matutino"".";
+12;Numero de Candidatos para Vagas Novas Oferecidas- turno matutino;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento matutino seja preenchido com 'Sim'"".
+";"Se a quantidade de Vagas novas oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar mensagem:
+""Não pode haver Candidatos para Vagas Novas Oferecidas no turno matutino se o total de vagas oferecidas é 0 (zero)""
+
+Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Campo obrigatório se o campo turno do curso - matutino for marcado e o curso não for um curso vinculado a um curso ABI em atividade""
+
+Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Cursos vinculados a um curso ABI em atividade não podem informar quantidade de Candidatos para Vagas Novas Oferecidas""."
+13;Numero de Candidatos em Vagas Remanescentes - turno matutino;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento matutino seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem:  ""Número de Candidatos para Vagas Remanescentes - turno matutino deve ser preenchido para o turno matutino""
+
+Se o total de vagas remanescentes oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar a mensagem: 
+""Não pode haver Candidatos para Vagas Remanescentes no turno matutino se o total de vagas oferecidas é 0 (zero)"". ";
+14;Numero de Candidatos em Vagas Oferecidas de Programas Especiais - turno matutino;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento matutino seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Matutino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem:
+""Número de Candidatos para Vagas Oferecidas de Programas Especiais - turno matutino deve ser preenchido para o turno matutino""
+
+Se o total de vagas de programas especiais oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar mensagem de erro:
+""Não pode haver Candidatos para Vagas Oferecidas de Programas Especiais no turno matutino se o total de vagas oferecidas é 0 (zero)""
+";
+15;Turno de funcionamento do curso - Vespertino;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo'""
+
+";"Se curso for EAD e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e o campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se o campo formato de oferta for igual a 'EAD' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo""
+
+Se o curso for presencial e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e não for informado o campo, apresentar a mensagem: 
+""Campo obrigatório se o campo formato de oferta for igual a 'Presencial' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo""
+
+Se curso for semipresencial e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e o campo for informado, apresentar mensagem:  
+""Campo não pode ser preenchido se o campo formato de oferta for igual a 'Semipresencial' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo"""
+16;Prazo mínimo para integralização no turno vespertino;3;Variável;Numérico;Decimal;Condicional;"Valores válidos:
+Numérico (0-9) e separador (ponto)
+['<vazio>', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0', '5.5', '6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5']
+Se for informado um valor diferente, deve aparecer mensagem 
+""Valor inválido para o prazo mínimo de integralização - turno Vespertino""
+
+Se o formato de oferta é presencial e o campo turno de funcionamento do curso - Matutino foi informado com 'Sim' e este campo não foi informado, deverá apresentar mensagem:
+""Campo obrigatório se o campo formato de oferta for igual a 'Presencial' e se o turno vespertino do curso for marcado"".
+
+Se o campo Turno de funcionamento do curso - Matutino foi informado com 'Não' e este campo foi informado, deverá apresentar mensagem:
+""O campo prazo mínimo de integralização – vespertino, somente deverá ser informado se informado o turno vespertino"".
+";
+17;Número de Vagas Novas Oferecidas - turno vespertino;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento vespertino seja preenchido com 'Sim'"".
+";"Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Cursos vinculados a um curso ABI em atividade não podem informar quantidade de Vagas Novas Oferecidas""
+
+
+Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Sim' e o curso não for um curso vinculado a um curso ABI em atividade, e este campo não for informado, deverá apresentar mensagem:
+""Campo obrigatório se o campo turno do curso - vespertino for marcado e o curso não for um curso vinculado a um curso ABI em atividade"".
+"
+18;Número de Vagas Remanescentes  - turno vespertino;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Não e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento vespertino seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Número de Vagas Remanescentes - turno vespertino deve ser preenchido para o turno vespertino""";
+19;Número de Vagas Oferecidas de Programas Especiais - turno vespertino;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Não e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento vespertino seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Número de Vagas Remanescentes - turno vespertino deve ser preenchido para o turno vespertino""";
+20;Numero de Candidatos para Vagas Novas Oferecidas - turno vespertino;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento vespertino seja preenchido com 'Sim'"".
+";"Se a quantidade de Vagas novas oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar mensagem:
+""Não pode haver Candidatos para Vagas Novas Oferecidas no turno vespertino se o total de vagas oferecidas é 0 (zero)""
+
+Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Campo obrigatório se o campo turno do curso - vespertino for marcado e o curso não for um curso vinculado a um curso ABI em atividade""
+
+Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Cursos vinculados a um curso ABI em atividade não podem informar quantidade de Candidatos para Vagas Novas Oferecidas""
+
+"
+21;Numero de Candidatos em Vagas Remanescentes  - turno vespertino;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento vespertino seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: ""Número de Candidatos para Vagas Remanescentes - turno vespertino deve ser preenchido para o turno vespertino""
+
+Se o total de vagas remanescentes oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar a mensagem: 
+""Não pode haver Candidatos para Vagas Remanescentes no turno vespertino se o total de vagas oferecidas é 0 (zero)""
+";"
+"
+22;Número de Candidatos em Vagas Oferecidas de Programas Especiais- turno vespertino;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento vespertino seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Vespertino  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem:
+ ""Número de Candidatos para Vagas Oferecidas de Programas Especiais - turno vespertino deve ser preenchido para o turno vespertino""
+
+Se o total de vagas de programas especiais oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar mensagem de erro:
+""Não pode haver Candidatos para Vagas Oferecidas de Programas Especiais no turno vespertino se o total de vagas oferecidas é 0 (zero)""
+";
+23;Turno de funcionamento do curso - Noturno;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo'""
+
+";"Se curso for EAD e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e o campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se o campo formato de oferta for igual a 'EAD' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo""
+
+Se o curso for presencial e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e não for informado o campo, apresentar a mensagem: 
+""Campo obrigatório se o campo formato de oferta for igual a 'Presencial' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo""
+
+Se curso for semipresencial e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e o campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se o campo formato de oferta for igual a 'Semipresencial' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo"""
+24;Prazo mínimo para integralização no turno noturno;3;Variável;Numérico;Decimal;Condicional;"
+Valores válidos:
+Numérico (0-9) e separador (ponto)
+['<vazio>', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0', '5.5', '6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5']
+Se for informado um valor diferente, deve aparecer mensagem:
+""Valor inválido para o prazo mínimo de integralização - turno Noturno""
+
+Se o campo Curso teve aluno vinculado no ano do Censo informado com valor 'Não' e o este campo for informado, deverá apresentar mensagem:
+""Prazo mínimo de integralização - Noturno somente poderá ser informados se informado Sim no campo o curso teve aluno vinculado no ano do Censo""
+
+
+Se o campo Curso teve aluno vinculado no ano do Censo informado com valor 'Sim' e este campo  não for informado, deverá apresentar mensagem:
+""Prazo mínimo de integralização deve ser preenchido para o turno de funcionamento Noturno""
+
+";"Se o formato de oferta é presencial e o campo turno de funcionamento do curso - Noturno foi informado com 'Sim' e este campo não foi informado, deverá apresentar mensagem:
+""Campo obrigatório se o campo formato de oferta for igual a 'Presencial' e se o turno noturno do curso for marcado"".
+
+Se o campo Turno de funcionamento do curso - Noturno foi informado com 'Não' e este campo foi informado, deverá apresentar mensagem:
+""O campo prazo mínimo de integralização – noturno, somente deverá ser informado se informado o turno noturno"".
+"
+25;Número de Vagas Novas Oferecidas - turno noturno;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Noturno  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento noturno seja preenchido com 'Sim'"".
+";"Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Cursos vinculados a um curso ABI em atividade não podem informar quantidade de Vagas Novas Oferecidas""
+
+Se o campo turno do curso for marcado com a opção  Noturno e o curso não for um curso vinculado a um curso ABI em atividade, apresentar a mensagem: 
+""Campo obrigatório se o campo turno do curso - noturno for marcado e o curso não for um curso vinculado a um curso ABI em atividade"".
+"
+26;Número de Vagas Remanescentes - turno noturno;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Noturno  foi informado com 'Não e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento noturno seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Noturno  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Número de Vagas Remanescentes - turno noturno deve ser preenchido para o turno noturno""
+";
+27;Número de Vagas Oferecidas de Programas Especiais- turno noturno;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Noturno  foi informado com 'Não e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento noturno seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Noturno  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Número de Vagas Oferecidas de Programas Especiais - turno noturno deve ser preenchido para o turno noturno""
+";
+28;Numero de Candidatos para Vagas Novas Oferecidas - turno noturno;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Noturno  foi informado com 'Não e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento noturno seja preenchido com 'Sim'""
+
+
+";"Se a quantidade de Vagas novas oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar mensagem:
+""Não pode haver Candidatos para Vagas Novas Oferecidas no turno noturno se o total de vagas oferecidas é 0 (zero)""
+
+Se o campo Turno de funcionamento do curso - Noturno  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Campo obrigatório se o campo turno do curso - noturno for marcado e o curso não for um curso vinculado a um curso ABI em atividade""
+
+Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Cursos vinculados a um curso ABI em atividade não podem informar quantidade de Candidatos para Vagas Novas Oferecidas""
+"
+29;Numero de Candidatos para Vagas Remanescentes - turno noturno;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Noturno  foi informado com 'Não e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento noturno seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Noturno  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem:  ""Número de Candidatos para Vagas Remanescentes - turno noturno deve ser preenchido para o turno noturno""
+
+Se o total de vagas remanescentes oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar a mensagem: 
+""Não pode haver Candidatos para Vagas Remanescentes no turno noturno se o total de vagas oferecidas é 0 (zero)""
+
+
+";
+30;Número de Candidatos para Vagas Oferecidas de Programas Especiais - turno noturno;6;Variável;Numérico;Inteiro;Condicional;"Se o campo turno de funcionamento noturno forem preenchidos com 0 (zero) e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento noturno seja preenchido com 'Sim'""
+
+Se o campo não for preenchido e o turno de funcionamento noturno for preenchido com 1, apresentar a mensagem: 
+""Número de Candidatos para Vagas Oferecidas de Programas Especiais - turno noturno deve ser preenchido para o turno noturno""
+
+Se o total de vagas de programas especiais oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar mensagem de erro:
+""Não pode haver Candidatos para Vagas Oferecidas de Programas Especiais no turno noturno se o total de vagas oferecidas é 0 (zero)""
+";
+31;Turno de funcionamento do curso - Integral;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo'""
+
+";"Se curso for EAD e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e o campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se o campo formato de oferta for igual a 'EAD' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo""
+
+Se o curso for presencial e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e não for informado o campo, apresentar a mensagem: 
+""Campo obrigatório se o campo formato de oferta for igual a 'Presencial' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo""
+
+Se curso for semipresencial e informado 'Sim' no campo o Curso teve aluno vinculado no ano do censo, e o campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se o campo formato de oferta for igual a 'Semipresencial' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo"""
+32;Prazo mínimo para integralização no turno integral;3;Variável;Numérico;Decimal;Condicional;"Valores válidos:
+Numérico (0-9) e separador (ponto)
+['<vazio>', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0', '5.5', '6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5']
+Se for informado um valor diferente, deve aparecer mensagem:
+""Valor inválido para o prazo mínimo de integralização - turno Integral""
+
+Se o campo Curso teve aluno vinculado no ano do Censo informado com valor 'Não' e o este campo for informado, deverá apresentar mensagem:
+""Prazo mínimo de integralização - Integral somente poderá ser informados se informado Sim no campo o curso teve aluno vinculado no ano do Censo""
+
+Se o campo Curso teve aluno vinculado no ano do Censo informado com valor 'Sim' e este campo não for informado, deverá apresentar mensagem:
+""Prazo mínimo de integralização deve ser preenchido para o turno de funcionamento Integral""
+";"Se o formato de oferta é presencial e o campo turno de funcionamento do curso - Integral foi informado com 'Sim' e este campo não foi informado, deverá apresentar mensagem:
+""Campo obrigatório se o campo formato de oferta for igual a 'Presencial' e se o turno integral do curso for marcado""
+
+Se o campo Turno de funcionamento do curso - Integral foi informado com 'Não' e este campo foi informado, deverá apresentar mensagem:
+""O campo prazo mínimo de integralização – integral, somente deverá ser informado se informado o turno integral"""
+33;Número de Vagas Novas Oferecidas - turno integral;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento integral seja preenchido com 'Sim'""
+";"Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Cursos vinculados a um curso ABI em atividade não podem informar quantidade de Vagas Novas Oferecidas""
+
+Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Sim' e o curso não for um curso vinculado a um curso ABI em atividade, e este campo não for informado, deverá apresentar mensagem:
+""Campo obrigatório se o campo turno do curso - integral for marcado e o curso não for um curso vinculado a um curso ABI em atividade""
+"
+34;Número de Vagas Remanescentes - turno integral;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento integral seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Número de Vagas Remanescentes - turno integral deve ser preenchido para o turno integral""";
+35;Número de Vagas Oferecidas de Programas Especiais- turno integral;5;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento integral seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Número de Vagas Oferecidas de Programas Especiais - turno integral deve ser preenchido para o turno integral""";
+36;Numero de Candidatos para Vagas Novas Oferecidas - turno integral;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento integral seja preenchido com 'Sim'"".
+";"Se a quantidade de Vagas novas oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar mensagem:
+""Não pode haver Candidatos para Vagas Novas Oferecidas no turno integral se o total de vagas oferecidas é 0 (zero)""
+
+Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem: 
+""Campo obrigatório se o campo turno do curso - integral for marcado e o curso não for um curso vinculado a um curso ABI em atividade""
+
+Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Cursos vinculados a um curso ABI em atividade não podem informar quantidade de Candidatos para Vagas Novas Oferecidas"""
+37;Numero de Candidatos para Vagas Remanescentes- turno integral;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento integral seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem:
+""Número de Candidatos para Vagas Remanescentes - turno integral deve ser preenchido para o turno integral""
+
+Se o total de vagas remanescentes oferecidasfor igual a zero e o número de Candidatos for maior que zero, apresentar a mensagem: 
+""Não pode haver Candidatos para Vagas Remanescentes no turno integral se o total de vagas oferecidas é 0 (zero)""";
+38;Número de Candidatos para Vagas Oferecidas de Programas Especiais- turno integral;6;Variável;Numérico;Inteiro;Condicional;"Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Não' e for informado valor neste campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido caso o turno de funcionamento integral seja preenchido com 'Sim'""
+
+Se o campo Turno de funcionamento do curso - Integral  foi informado com 'Sim' e este campo não for informado, apresentar a mensagem:
+""Número de Candidatos para Vagas Oferecidas de Programas Especiais - turno integral deve ser preenchido para o turno integral""
+
+Se o total de vagas de programas especiais oferecidasfor igual a zero e o número de Candidatos for maior que zero, apresentar a mensagem: 
+""Não pode haver Candidatos para Vagas Oferecidas de Programas Especiais no turno integral se o total de vagas oferecidas é 0 (zero)""";
+39;Prazo mínimo para integralização para EAD;3;Variável;Numérico;Decimal;Condicional;"Valores válidos:
+Numérico (0-9) e separador (ponto)
+['<vazio>', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0', '5.5', '6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5']
+Se for informado um valor diferente e o curso for EAD, deve aparecer mensagem:
+""Valor inválido para o prazo mínimo de integralização - EAD""
+
+Se o campo Curso teve aluno vinculado no ano do Censo informado com valor 'Não' e o este campo for informado, deverá apresentar mensagem:
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""";"Se o formato de oferta é presencial e este campo foi informado, deverá apresentar mensagem:
+""Campo somente deve ser preenchido para curso no formato de oferta à distância ""
+
+Se o campo for preenchido e o formato de oferta de curso for semipresencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância""
+
+Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é EaD e este campo não foi informado, deverá apresentar mensagem:
+""Prazo mínimo para integralização - EAD deve ser preenchido para curso com formato de oferta à distância"""
+40;Número de Vagas Novas Oferecidas - EAD ;5;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é EAD, e o curso não for um curso vinculado a um curso ABI em atividade, e este campo não for informado, deverá apresentar mensagem:
+""Número de Vagas Novas Oferecidas - EAD deve ser preenchido para curso com formato de oferta à distância""
+
+Se informado 'Sim' no campo o 'Curso teve aluno vinculado no ano do censo' e o curso for um curso vinculado a um curso ABI em atividade, e este campo for informado, deverá apresentar mensagem:
+""Campo somente deve ser preenchido se o curso não for vinculado a um curso ABI em atividade""
+
+Se o formato de oferta do curso é presencial e este campo for infromado, apresentar a mensagem:
+""Campo somente deve ser preenchido para curso no formato de oferta à distância""
+
+Se o campo for preenchido e o formato de oferta de curso for semipresencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância"""
+41;Número de Vagas Remanescentes - EAD;5;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é EaD e este campo não foi informado, deverá apresentar mensagem:
+""Número de Vagas Remanescentes - EAD deve ser preenchido para curso com  formato de oferta à distância""
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância ""
+
+Se o campo for preenchido e o formato de oferta de curso for semipresencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância"""
+42;Número de Vagas Oferecidas de Programas Especiais - EAD ;5;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é EaD e este campo não foi informado, deverá apresentar mensagem:
+""Número de Vagas Oferecidas de Programas Especiais - EAD deve ser preenchido para curso com formato de oferta à distância""
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância""
+
+Se o campo for preenchido e o formato de oferta de curso for semipresencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância"""
+43;Número de Candidatos para Vagas Novas Oferecidas - EAD ;6;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+
+Se o formato de oferta do curso é EaD, a quantidade de Vagas novas oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar mensagem:
+""Não pode haver Candidatos para Vagas Novas Oferecidas - EAD se o total de vagas oferecidas é 0 (zero)""";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é EAD, e o curso não for um curso vinculado a um curso ABI em atividade, e este campo não for informado, deverá apresentar mensagem:
+""Número de Candidatos para Vagas Novas Oferecidas - EAD deve ser preenchido para curso com formato de oferta à distância""
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância ""
+
+Se o campo for preenchido e o formato de oferta de curso for semipresencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância""
+
+Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido se o curso não for vinculado a um curso ABI em atividade""
+"
+44;Número de Candidatos para Vagas Remanescentes - EAD;6;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+
+Se o formato de oferta do curso é EaD, o total de vagas remanescentes oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar a mensagem: 
+""Não pode haver Candidatos para Vagas Remanescentes - EAD se o total de vagas oferecidas é 0 (zero)""";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é EaD e este campo não foi informado, deverá apresentar mensagem:
+""Número de Candidatos para Vagas Remanescentes - EAD deve ser preenchido para curso com formato de oferta à distância""
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância""
+
+Se o campo for preenchido e o formato de oferta de curso for semipresencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância"""
+45;Número de Candidatos para Vagas Oferecidas de Programas Especiais- EAD;6;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+
+Se  o formato de oferta do curso é EaD, o total de vagas de programas especiais oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar a mensagem: 
+""Não pode haver Candidatos para Vagas Oferecidas de Programas Especiais - EAD se o total de vagas oferecidas é 0 (zero)""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é EaD e este campo não foi informado, deverá apresentar mensagem:
+""Número de Candidatos para Vagas Oferecidas de Programas Especiais - EAD deve ser preenchido para curso com formato de oferta à distância""
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância""
+
+Se o campo for preenchido e o formato de oferta de curso for semipresencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta à distância"""
+46;Prazo mínimo para integralização para curso semipresencial;3;Variável;Numérico;Decimal;Condicional;"Valores válidos:
+Numérico (0-9) e separador (ponto)
+['<vazio>', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0', '5.5', '6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5']
+
+Se for informado um valor diferente e o curso for semipresencial, deve aparecer mensagem:
+""Valor inválido para o prazo mínimo de integralização - Semipresencial""
+
+Se o campo Curso teve aluno vinculado no ano do Censo informado com valor 'Não' e o este campo for informado, deverá apresentar mensagem:
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""";"Se o formato de oferta é presencial e este campo foi informado, deverá apresentar mensagem:
+""Campo somente deve ser preenchido para curso no formato de oferta semipresencial""
+
+Se o formato de oferta é EAD e este campo foi informado, deverá apresentar mensagem:
+""Campo somente deve ser preenchido para curso no formato de oferta semipresencial""
+
+Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é semipresencial e este campo não foi informado, deverá apresentar mensagem:
+""Prazo mínimo para integralização - semipresencial deve ser preenchido para curso com formato de oferta semipresencial"""
+47;Número de Vagas Novas Oferecidas -  semipresencial;5;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é semipresencial, e o curso não for um curso vinculado a um curso ABI em atividade, e este campo não for informado, deverá apresentar mensagem:
+""Número de Vagas Novas Oferecidas - semipresencial deve ser preenchido para curso com formato de oferta semipresencial""
+
+Se informado 'Sim' no campo o 'Curso teve aluno vinculado no ano do censo' e o curso for um curso vinculado a um curso ABI em atividade, e este campo for informado, deverá apresentar mensagem:
+""Campo somente deve ser preenchido se o curso não for vinculado a um curso ABI em atividade""
+
+Se o formato de oferta do curso é presencial e este campo for infromado, apresentar a mensagem:
+""Campo somente deve ser preenchido para curso no formato de oferta semipresencial""
+
+Se o formato de oferta do curso é EAD e este campo for infromado, apresentar a mensagem:
+""Campo somente deve ser preenchido para curso no formato de oferta semipresencial"""
+48;Número de Vagas Remanescentes - semipresencial;5;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é semipresencial e este campo não foi informado, deverá apresentar mensagem:
+""Número de Vagas Remanescentes - semipresencial deve ser preenchido para curso com  formato de oferta semipresencial""
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta  semipresencial""
+
+
+Se o campo for preenchido e o formato de oferta de curso for EAD, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta  semipresencial"""
+49;Número de Vagas Oferecidas de Programas Especiais -  semipresencial;5;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é semipresencial e este campo não foi informado, deverá apresentar mensagem:
+""Número de Vagas Oferecidas de Programas Especiais - semipresencial deve ser preenchido para curso com formato de oferta semipresencial""
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta  semipresencial""
+
+Se o campo for preenchido e o formato de oferta de curso for EAD, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta  semipresencial"""
+50;Número de Candidatos para Vagas Novas Oferecidas -  semipresencial;6;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+
+
+Se o formato de oferta do curso é semipresencial, a quantidade de Vagas novas oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar mensagem:
+""Não pode haver Candidatos para Vagas Novas Oferecidas - semipresencial se o total de vagas oferecidas é 0 (zero)""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é semipresencial, e o curso não for um curso vinculado a um curso ABI em atividade, e este campo não for informado, deverá apresentar mensagem:
+""Número de Candidatos para Vagas Novas Oferecidas - semipresencial deve ser preenchido para curso com formato de oferta semipresencial""
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta semipresencial""
+
+Se o campo for preenchido e o formato de oferta de curso for EAD, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta semipresencial""
+
+Se o curso for um curso vinculado a um curso ABI em atividade e for informado valor para este campo, apresentar a mensagem: 
+""Campo somente deve ser preenchido se o curso não for vinculado a um curso ABI em atividade""
+"
+51;Número de Candidatos para Vagas Remanescentes -  semipresencial;6;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+
+Se o formato de oferta do curso é semipresencial, o total de vagas remanescentes oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar a mensagem: 
+""Não pode haver Candidatos para Vagas Remanescentes - semipresencial se o total de vagas oferecidas é 0 (zero)""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é semipresencial e este campo não foi informado, deverá apresentar mensagem:
+""Número de Candidatos para Vagas Remanescentes - semipresencial deve ser preenchido para curso com formato de oferta semipresencial"" 
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta  semipresencial""
+
+Se o campo for preenchido e o formato de oferta de curso for EAD, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta  semipresencial"""
+52;Número de Candidatos para Vagas Oferecidas de Programas Especiais- semipresencial;6;Variável;Numérico;Inteiro;Condicional;"Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+
+Se  o formato de oferta do curso é semipresencial, o total de vagas de programas especiais oferecidas for igual a zero e o número de Candidatos for maior que zero, apresentar a mensagem: 
+""Não pode haver Candidatos para Vagas Oferecidas de Programas Especiais - semipresencial se o total de vagas oferecidas é 0 (zero)""
+";"Se o campo ""Curso teve aluno vinculado no ano de referência do Censo"" foi informado com a opção ""Sim"", o formato de oferta do curso é semipresencial e este campo não foi informado, deverá apresentar mensagem:
+""Número de Candidatos para Vagas Oferecidas de Programas Especiais - semipresencial deve ser preenchido para curso com formato de oferta semipresencial""
+
+Se o campo for preenchido e o formato de oferta de curso for EAD, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta  semipresencial""
+
+Se o campo for preenchido e o formato de oferta de curso for presencial, apresentar a mensagem: 
+""Campo somente deve ser preenchido para curso no formato de oferta  semipresencial"""
+53;Condições de ensino-aprendizagem, por meio de tecnologia assistiva ou ajudas técnicas, a pessoas com deficiência;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0 ,1"".
+
+Se informado 'Sim' no campo o 'Curso teve aluno vinculado no ano do censo' e campo não for informado, apresentar mensagem: 
+""Campo obrigatório: 'O curso garante condições de acessibilidade às pessoas com deficiência?'""
+
+Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Não informar esse campo para curso sem aluno vinculado no ano do censo""
+
+Se este campo for preenchido com 'Sim' e todos os campos de tipo de condição de ensino-aprendizagem forem preenchidos com 'Não', apresentar a mensagem: 
+""Quando informado 'Sim' neste campo, é obrigatório que, em pelo menos um tipo de condição de ensino aprendizagem, seja informada a opção 'Sim'""
+";
+54;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Material em Braille;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+55;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Material em áudio;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+56;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Recursos de informática acessível;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+57;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Material em formato impresso em caractere ampliado;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+58;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Material pedagógico tátil;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+59;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Recursos de acessibilidade à comunicação;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+60;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Tradutor e intérprete de língua brasileira de sinais;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+61;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Guia intérprete;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+62;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Material didático em língua brasileira de sinais;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+63;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Inserção da disciplina de língua brasileira de sinais no curso;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+64;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Material didático em formato impresso acessível;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+65;Recursos de tecnologia assistiva disponíveis às pessoas com deficiência: Material didático digital acessível;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo de Condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com ""Sim"" e este campo não for preenchido, apresentar a mensagem: 
+""Campo obrigatório quando condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Sim'""
+
+Se a opção de condição de ensino-aprendizagem por meio de tecnologia assistiva ou ajudas técnicas a pessoas com deficiências foi preenchida com 'Não' e este campo foi preenchido, apresentar a mensagem: 
+""Campo não deve ser preenchido quando preenchido com 'Não' em Condições de ensino-aprendizagem por meio de tecnologias assistiva ou ajudas técnicas a pessoas com deficiência""
+";
+66;Oferece disciplina  a distância?;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se informado 'Não' no campo o 'Curso teve aluno vinculado no ano do censo' e campo for informado, apresentar mensagem: 
+""Campo não pode ser preenchido se informado 'Não' no campo o curso teve aluno vinculado no ano do censo""
+";"Se informado 'Sim' no campo o 'Curso teve aluno vinculado no ano do censo', o curso é presencial e este campo não for informado, apresentar mensagem:  
+""Campo obrigatório para curso presencial que teve aluno vinculado no ano do censo""
+
+Se informado 'Sim' no campo o 'Curso teve aluno vinculado no ano do censo', o curso é EAD e este campo for informado, apresentar mensagem:  
+""Campo não pode ser preenchido se o campo  formato de oferta for igual a 'EAD' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo""
+
+Se informado 'Sim' no campo o 'Curso teve aluno vinculado no ano do censo', o curso é semipresencial e este campo for informado, apresentar mensagem:  
+""Campo não pode ser preenchido se o campo  formato de oferta for igual a 'Semipresencial' e se informado 'Sim' no campo o curso teve aluno vinculado no ano do censo""
+"
+67;Percentual de carga horária a distância;5;Variável;Numérico;Decimal;Condicional;"
+Se o campo for preenchido com 3 ou mais casas decimais, apresentar a mensagem: 
+""Valor informado com 3 ou mais casas decimais""
+
+Se o campo for preenchido com valores fora do intervalo de 0.1 até 40, apresentar a mensagem: 
+""O percentual permitido é de 0,10% a 40%""
+
+
+Se o curso oferece disciplina semipresencial (1-Sim) e não informou este campo, apresentar a mensagem: 
+""Campo obrigatório para curso que oferece disciplina semipresencial""
+
+Se o curso não oferece disciplina semipresencial e informou este campo, apresentar a mensagem: 
+""Campo só deve ser preenchido quando curso oferece disciplina semipresencial""
+";
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;;

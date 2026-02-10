@@ -1,0 +1,347 @@
+IES - CENSO DA EDUCAÇÃO SUPERIOR 2025;;;;;;;;;;;;;;;;;;;;;;;;;
+LEIAUTE DE MIGRAÇÃO – ARQUIVO  LOCAL DE OFERTA;;;;;;;;;;;;;;;;;;;;;;;;;
+#;Campo;Tamanho;"Fixo/
+Variável";Tipo;Inteiro/Decimal;Preenchimento;1ª Etapa de Validação;2ª Etapa de Validação;;;;;;;;;;;;;;;;;
+CABEÇALHO DO ARQUIVO - REGISTRO 60;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;2;Fixo;Numérico;Inteiro;Obrigatório;"Se o valor informado for diferente de 60, deverá aparecer a mensagem: ""Tipo do registro informado inválido. Preencher com valor 60.""";;;;;;;;;;;;;;;;;;
+2;ID da IES no INEP;12;Variável;Numérico;Inteiro;Obrigatório;"Se o ID da IES no INEP for diferente do ID da IES do usuário logado, deverá aparecer a mensagem: ""A IES do usuário logado no sistema deve ser a mesma IES informada no arquivo de importação.""";"Se o ID da instituição não estiver cadastrado na base de dados, deverá aparecer a mensagem: ""ID da IES no INEP não está cadastrado na base de dados."" ""
+
+O código da instituição deverá ser validado na tabela TS_IES.";;;;;;;;;;;;;;;;;
+REGISTRO DO LOCAL DE OFERTA - REGISTRO 61;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;2;Fixo;Numérico;Inteiro;Obrigatório;"Se o valor informado for diferente de 61, deverá aparecer a mensagem: ""Tipo do registro informado inválido. Preencher com o valor 61""";;;;;;;;;;;;;;;;;;
+2;Código do Local de Oferta;8;Variável;Numérico;Inteiro;Obrigatório;"Se o Código do Local de Oferta aparecer mais de uma vez no mesmo arquivo, deverá apresentar a mensagem:
+""Código do Local de Oferta  já existe neste mesmo arquivo""";"Se o campo for preenchido com valor inexistente de Locais de Oferta vinculados aquela IES, apresentar a mensagem: ""Código inexistente para Locais de Oferta vinculados a esta IES"".
+
+";;;;;;;;;;;;;;;;;
+3;Local de oferta esteve em funcionamento?;1;Fixo;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+
+Valores válidos:
+0 - Não
+1 - Sim 
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”";;;;;;;;;;;;;;;;;;
+4;Existem condições de acessibilidade arquitetônica para pessoas com deficiência?;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção SIM"" parar o campo ""Local de oferta esteve em funcionamento?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+
+Valores válidos:
+0 - Não
+1 – Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?*"" foi preenchido com ""Não"" e o campo 'Existem condições de acessibilidade arquitetônica para pessoas com deficiência?*' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não'"".
+
+Se o campo ""Existem condições de acessibilidade arquitetônica para pessoas com deficiência?* for preenchido com ""Sim"" é obrigatório que pelo menos um dos campos do tipo 61 de código entre (5 e 15 (inclusive)) tenha sido informado como 1 – SIM. Se não for informado deverá apresentar a mensagem: ""Pelo menos uma opção de acessibilidade arquitetônica ou física deve ser selecionada.""";;;;;;;;;;;;;;;;;;
+5;"
+Opções de Acessibilidade - Banheiros adaptados";1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+6;Acessibilidade Arquitetônica ou Física - Bebedouros e lavabos adaptados;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+7;"
+Opções de Acessibilidade - Entrada/Saída com dimensionamento";1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+8;Acessibilidade Arquitetônica ou Física - Espaço para atendimento adaptado;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+9;"
+Opções de Acessibilidade - Mobiliário adaptado";1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+10;"
+Opções de Acessibilidade - Sinalização tátil";1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+11;"
+Opções de Acessibilidade - Sinalização visual";1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+12;"
+Opções de Acessibilidade - Sinalização sonora";1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+13;"
+Opções de Acessibilidade - Ambientes desobstruídos que facilitem a movimentação de cadeirantes e pessoas com deficiência visual";1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+14;"
+Opções de Acessibilidade - Rampa de acesso com corrimão";1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+2 - Não se aplica
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1, 2].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+15;"
+Opções de Acessibilidade - Equipamento eletromecânicos (elevadores, esteiras rolantes, entre outros) ";1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+2 - Não se aplica
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1, 2].”
+
+Se o campo ""Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?"" foi preenchido com ""Não"" e este o campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Existem condicoes de acessibilidade arquitetonica para pessoas com deficiencia?' foi preenchido com 'Não'"" ";;;;;;;;;;;;;;;;;;
+16;Instalações da Unidade - Cinema;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+17;Instalações da Unidade - Bicicletário;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+18;Instalações da Unidade - Pista de atletismo;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+19;Instalações da Unidade - Quadra coberta/ginásio;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+20;Instalações da Unidade - Piscina olímpica/semi-olímpica;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+21;Instalações da Unidade - Posto de atendimento para primeiros socorros;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+22;Instalações da Unidade - Serviços;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+23;Instalações da Unidade - Auditório/Teatro;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+24;Instalações da Unidade - Cantina/Lanchonete;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+25;Instalações da Unidade - Restaurante universitário;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+26;Instalações da Unidade - Campo para práticas esportivas;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+27;Instalações da Unidade - Estacionamento para docente/técnico-administrativo;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+28;Instalações da Unidade - Vestiário;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+29;Instalações da Unidade - Moradia estudantil;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+30;Instalações da Unidade - Quadra poliesportiva;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+31;Instalações da Unidade - Estacionamento para aluno;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+32;Instalações da Unidade - Rede sem fio para comunidade acadêmica;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Local de oferta esteve em funcionamento?"" e o Local de Oferta possuir pelo menos um curso com formato de oferta ""presencial"" vinculado. Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Valores válidos:
+0 - Não
+1 - Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado, e este campo for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Local de oferta esteve em funcionamento?' foi preenchido com 'Não' ou o Local de Oferta NÃO possuir curso com formato de oferta ""presencial"" vinculado"" ";;;;;;;;;;;;;;;;;;
+33;Tecnologias e Equipamentos do Polo - Conexão à internet banda larga;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" e este campo for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando o campo 'Local de oferta em funcionamento' foi informado com a opção 'Não'.”
+
+Se a IES do Local de oferta NÃO possui curso com formato de oferta EAD ou Semipresencial vinculado e este campo for informado for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando a IES não possui curso com formato de oferta EaD ou semipresencial.”
+
+Valores válidos: 
+0 - Não
+1 – Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”";;;;;;;;;;;;;;;;;;
+34;Tecnologias e Equipamentos do Polo - Equipamento para videoconferência;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" e este campo for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando o campo 'Local de oferta em funcionamento' foi informado com a opção 'Não'.”
+
+Se a IES do Local de oferta NÃO possui curso com formato de oferta EAD ou Semipresencial vinculado e este campo for informado for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando a IES não possui curso com formato de oferta EaD ou semipresencial.”
+
+Valores válidos: 
+0 - Não
+1 – Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”";;;;;;;;;;;;;;;;;;
+35;Tecnologias e Equipamentos do Polo - Microcomputadores;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" e este campo for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando o campo 'Local de oferta em funcionamento' foi informado com a opção 'Não'.”
+
+Se a IES do Local de oferta NÃO possui curso com formato de oferta EAD ou Semipresencial vinculado e este campo for informado for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando a IES não possui curso com formato de oferta EaD ou semipresencial.”
+
+Valores válidos: 
+0 - Não
+1 – Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”";;;;;;;;;;;;;;;;;;
+36;Tecnologias e Equipamentos do Polo - Sala de coordenação do polo;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" e este campo for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando o campo 'Local de oferta em funcionamento' foi informado com a opção 'Não'.”
+
+Se a IES do Local de oferta NÃO possui curso com formato de oferta EAD ou Semipresencial vinculado e este campo for informado for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando a IES não possui curso com formato de oferta EaD ou semipresencial.”
+
+Valores válidos: 
+0 - Não
+1 – Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”";;;;;;;;;;;;;;;;;;
+37;Tecnologias e Equipamentos do Polo - Salas equipadas para o atendimento pelos tutores;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" e este campo for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando o campo 'Local de oferta em funcionamento' foi informado com a opção 'Não'.”
+
+Se a IES do Local de oferta NÃO possui curso com formato de oferta EAD ou Semipresencial vinculado e este campo for informado for informado, deverá apresentar a mensagem: ""O campo não pode ser informado quando a IES não possui curso com formato de oferta EaD ou semipresencial.”
+
+Valores válidos: 
+0 - Não
+1 – Sim
+
+Se o valor informado não estiver contido no dominio de valores válidos, apresentar a mensagem: “Preencher com um dos valores: [0, 1].”";;;;;;;;;;;;;;;;;;
+38;"
+Tecnologias aos Discentes - Quantidade de computadores destinados ao uso dos discentes";4;Variável;Numérico;Inteiro;Condicional;"Campo obrigatório se ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Sim"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"". 
+
+Se o campo ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Não"" e o campo 'Quantidade de computadores destinados ao uso dos discentes' for informado,   deverá apresentar a mensagem: ""Campo opcional, somente será informado se o ""Local de oferta esteve em funcionamento?"" foi preenchido com ""Sim"". ";;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;

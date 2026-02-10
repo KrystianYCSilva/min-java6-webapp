@@ -1,0 +1,363 @@
+IES - CENSO DA EDUCAÇÃO SUPERIOR 2025 ;;;;;;;;;;;;;;;;;;;;;;;;;;
+LEIAUTE DE MIGRAÇÃO – ARQUIVO  BIBLIOTECA;;;;;;;;;;;;;;;;;;;;;;;;;;
+#;Campo;;Tamanho;"Fixo/
+Variável";Tipo;Inteiro/Decimal;Preenchimento;1ª Etapa de Validação;2ª Etapa de Validação;;;;;;;;;;;;;;;;;
+CABEÇALHO DO ARQUIVO - REGISTRO 50;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;;2;Fixo;Numérico;Inteiro;Obrigatório;"Se o valor informado for diferente de 50, deverá aparecer a mensagem: ""Tipo do registro informado inválido. Preencher com valor 50."".";;;;;;;;;;;;;;;;;;
+2;ID da IES no INEP;;12;Variável;Numérico;Inteiro;Obrigatório;"Se o ID da IES no INEP for diferente do ID da IES do usuário logado, deverá aparecer a mensagem: ""A IES do usuário logado no sistema deve ser a mesma IES informada no arquivo de importação.""";"Se o ID da instituição não estiver cadastrado na base de dados, deverá aparecer a mensagem: ""ID da IES no INEP não está cadastrado na base de dados."" ""
+O código da instituição deverá ser validado na tabela TB_IES.";;;;;;;;;;;;;;;;;
+REGISTRO DA BIBLIOTECA - REGISTRO 51;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;;2;Fixo;Numérico;Inteiro;Obrigatório;"Se o valor informado for diferente de 51, deverá aparecer a mensagem: ""Tipo do registro informado inválido. Preencher com o valor 51""";;;;;;;;;;;;;;;;;;
+2;Sigla biblioteca;;20;Variável;Alfanumérico;-;Opcional;"Se valores inválidos forem informados deverá apresentar a mensagem: ""Sigla da biblioteca informada inválida.""
+Todos os caracteres devem ser informados em letras maiúsculas.
+Não pode conter nada além de (A-Z).";"Se houver 4 ou mais caracteres iguais consecutivos deverá apresentar a mensagem: ""Sigla da biblioteca informado inválido. Possui excesso de caracteres iguais consecutivos.""";;;;;;;;;;;;;;;;;
+3;Nome biblioteca;;120;Variável;Alfanumérico;-;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório.""
+Se valores inválidos forem informados deverá apresentar a mensagem: ""Nome da biblioteca informada inválida.""
+Valores válidos: (a-zA-Zà-úÀ-Ú0-9 _-)";"Se houver 4 ou mais carcteres iguais consecutivos deverá apresentar a mensagem: “Nome da biblioteca informado inválido. Possui excesso de caracteres iguais consecutivos.”
+Se houver Nome de Biblioteca duplicado no arquivo, apresentar a mensagem: “Nome de Bblioteca já informado no arquivo.”.";;;;;;;;;;;;;;;;;
+4;Tipo de Biblioteca;;1;Fixo;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado, deverá apresentar a mensagem: “Tipo de biblioteca informado inválido.”
+Valores válidos:
+1 - Biblioteca Central
+2 - Biblioteca Setorial";;;;;;;;;;;;;;;;;;
+5;Número de assentos;;6;Variável;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se informado valor igual a 0, deverá apresentar a mensagem: ""Número de assentos informado inválido. Deve ser maior que 0.""";;;;;;;;;;;;;;;;;;
+6;Número de empréstimos domiciliares;;6;Variável;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".";;;;;;;;;;;;;;;;;;
+7;Número de empréstimos entre bibliotecas;;6;Variável;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".";;;;;;;;;;;;;;;;;;
+8;Realiza comutações bibliográficas?;;1;Fixo;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Campo informado inválido"".
+Valores válidos:
+0 - Não
+1 - Sim";;;;;;;;;;;;;;;;;;
+9;Usuários treinados em programas de capacitação;;6;Variável;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".";;;;;;;;;;;;;;;;;;
+10;Possui rede sem fio?;;1;Fixo;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório. ""
+Se o campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim";;;;;;;;;;;;;;;;;;
+11;Número de Títulos do acervo de periódicos impressos;;9;Variável;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".";;;;;;;;;;;;;;;;;;
+12;Número de Títulos do acervo de livros impressos;;9;Variável;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se informado valor menor que 10, deverá apresentar a mensagem: “Número de Títulos do acervo de livros impressos informado inválido. Deve ser maior que 10”.";;;;;;;;;;;;;;;;;;
+13;Número de Títulos de Outros Materiais;;9;Variável;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".";;;;;;;;;;;;;;;;;;
+14;Oferece condições de acessibilidade?;;1;Fixo;Numérico;Inteiro;Obrigatório;"Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Campo informado inválido"".
+Valores válidos:
+0 - Não
+1 - Sim";;;;;;;;;;;;;;;;;;
+15;Possui atendente treinado na língua brasileira de sinais - Libras?;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Possui atendente treinado na língua brasileira de sinais - Libras?' for informado, deverá apresentar a mensagem:
+""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+16;Acessibilidade Arquitetônica ou Física - Sinalização tátil;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Sinalização tátil' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+17;Acessibilidade Arquitetônica ou Física - Rampa de acesso com corrimão;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Rampa de acesso com corrimão' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+18;Acessibilidade Arquitetônica ou Física - Entrada/Saída com dimensionamento;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Entrada/Saída com dimensionamento' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+19;Acessibilidade Arquitetônica ou Física - Ambientes desobstruídos que facilitem a movimentação de cadeirantes e pessoas com deficiência visual;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Ambientes desobstruídos que facilitem a movimentação de cadeirantes e pessoas com deficiência visual' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+20;Acessibilidade Arquitetônica ou Física - Bebedouros e lavabos adaptados;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Bebedouros e lavabos adaptados' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+21;Acessibilidade Arquitetônica ou Física - Sinalização sonora;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Sinalização sonora' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+22;Acessibilidade Arquitetônica ou Física - Sinalização visual;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Sinalização visual' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+23;Acessibilidade Arquitetônica ou Física - Equipamento eletromecânicos (elevadores, esteiras rolantes, entre outros);;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Equipamento eletromecânicos (elevadores, esteiras rolantes, entre outros)' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+24;Acessibilidade Arquitetônica ou Física - Banheiros adaptados;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Banheiros adaptados' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+25;Acessibilidade Arquitetônica ou Física - Espaço para atendimento adaptado;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Espaço para atendimento adaptado' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+26;Acessibilidade Arquitetônica ou Física - Mobiliário adaptado;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Arquitetônica ou Física - Mobiliário adaptado' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+27;Acessibilidade de Conteúdo - Possui acervo em formato especial(Braille/Sonoro);;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade de Conteúdo - Possui acervo em formato especial(Braille/Sonoro) ' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+28;Acessibilidade de Conteúdo - Sítios desenvolvidos para que pessoas percebam, compreendam, naveguem e utilizem os serviços oferecidos;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade de Conteúdo - Sítios desenvolvidos para que pessoas percebam, compreendam, naveguem e utilizem os serviços oferecidos ' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+29;Acessibilidade de Conteúdo - Plano de aquisição gradual de acervo bibliográfico dos conteúdos básicos em formato especial;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade de Conteúdo - Plano de aquisição gradual de acervo bibliográfico dos conteúdos básicos em formato especial' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+30;Acessibilidade Tecnológica - Disponibiliza software e outras aplicações de leitura para pessoas com baixa visão;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Tecnológica - Disponibiliza software e outras aplicações de leitura para pessoas com baixa visão' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+31;Acessibilidade Tecnológica - Disponibiliza impressoras em Braille;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Tecnológica - Disponibiliza impressoras em Braille' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+32;Acessibilidade Tecnológica - Teclado virtual;;1;Fixo;Numérico;Inteiro;Condicional;"Campo obrigatório se informada a opção ""1 - Sim"" no campo ""Oferece condições de acessibilidade?"". Se não apresentar valor no campo, deverá apresentar a mensagem: ""Campo obrigatório"".
+Se o campo for informado com algum valor diferente do especificado deverá apresentar a mensagem: ""Campo informado inválido.""
+Valores válidos:
+0 - Não
+1 - Sim
+Se o campo ""Oferece condições de acessibilidade?"" foi preenchido com ""Não"" e o campo 'Acessibilidade Tecnológica - Teclado virtual' for informado, deverá apresentar a mensagem: ""Este campo não poderá ser informado se o campo 'Oferece condições de acessibilidade?' foi preenchido com 'Não'""";;;;;;;;;;;;;;;;;;
+DADOS DO VÍNCULO DA BIBLIOTECA AO LOCAL DE OFERTA - REGISTRO 52;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;;2;Fixo;Numérico;Inteiro;Obrigatório;"Se não for informado nenhum Local de Oferta, apresentar a mensagem ""Campo obrigatório. É necessário vincular ao menos um local de oferta à biblioteca.""
+Se informado valor diferente de 52, apresentar a mensagem: ""Deve ser informado o tipo de registro 52""";;;;;;;;;;;;;;;;;;
+2;Código do Local de Oferta;;8;Variável;Numérico;Inteiro;Obrigatório;"Se o valor informado for nulo ou vazio, apresentar a mensagem: ""Campo obrigatório"" .
+Se for informado um Local de Oferta com o código duplicado no mesmo arquivo, apresentar a mensagem: ""Local de Oferta repetido na mesma Biblioteca""";"Se o campo for preenchido com valor inexistente de Locais de Oferta vinculados aquela IES, apresentar a mensagem: ""Código inexistente para Locais de Oferta vinculados a esta IES"".
+Se o campo ""Local de oferta esteve em funcionamento em (ANO_REFERENCIA)? estive preenchido com o valor 'Não' e esse local de oferta for informado, deverá apresentar a mensagem: ""O campo ""Local de oferta esteve em funcionamento em (ANO_REFERENCIA)? deve estar respondido com a opção 'Sim' para poder ser vinculado a biblioteca.""
+O local de oferta vinculado a biblioteca precisa estar em funcionamento.
+TB_DADO_CENSITARIO_LOCAL_OFE.DC_DADO_CENSITARIO.""emFuncionamento"" = true";;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;

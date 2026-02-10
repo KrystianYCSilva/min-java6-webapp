@@ -1,0 +1,382 @@
+DOCENTE - CENSO DA EDUCAÇÃO SUPERIOR 2025;;;;;;;;;;;;;;;;;;;;;;;;;;
+LEIAUTE DE MIGRAÇÃO – ARQUIVO  DOCENTE;;;;;;;;;;;;;;;;;;;;;;;;;;
+#;Campo;;Tamanho;"Fixo/
+Variável";Tipo;Inteiro/Decimal;Preenchimento;1ª Etapa de Validação;2ª Etapa de Validação;;;;;;;;;;;;;;;;;
+CABEÇALHO DO ARQUIVO - REGISTRO 30;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;;2;Fixo;Numérico;Inteiro;Obrigatório;"Indica o tipo de registro informado.
+Preencher com o valor 30.";;;;;;;;;;;;;;;;;;
+2;ID da IES no INEP;;12;Variável;Numérico;Inteiro;Obrigatório;"Se o ID da IES no INEP for diferente do Código da IES do usuário logado, deverá aparecer a mensagem:
+""A IES do usuário logado no sistema deve ser a mesma IES informada no arquivo de importação""";"Se o ID da IES no INEP não estiver cadastrado na base de dados deverá aparecer a mensagem: ""ID da IES no INEP não está cadastrado na base de dados"".
+Se o usuário não possuir permissão a IES informada no campo ID da IES no INEP para realizar migração, deverá aparecer a mensagem: ""O usuário não possui acesso a IES informada.""";;;;;;;;;;;;;;;;;
+REGISTRO DO DOCENTE - REGISTRO 31;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;;2;Fixo;Numérico;Inteiro;Obrigatório;"Se o valor informado for diferente de 31, deverá aparecer a mensagem: ""Preencher com o valor 31""";"Se o campo ""Atuação do Docente - Ensino"" for informado com ""Não"" E o campo ""Atuação do Docente - Pesquisa"" for informado com ""Não"" E o campo ""Atuação do Docente - Extensão"" for informado com ""Não"" E o campo ""Atuação do Docente - Gestão, planejamento e avaliação"" for informado com ""Não"", deverá apresentar a mensagem:
+
+""Pelo menos uma atuação (Ensino, Pesquisa, Extensão ou Gestão, planejamento e avaliação) deve ser informada com 'Sim'.""";;;;;;;;;;;;;;;;;
+2;ID do docente na IES;;20;Variável;Alfanumérico;-;Opcional;O ID do Docente é um informação opcional e não será gravada no banco de dados do Censo. A informação de ID do Docente só é válida no arquivo de exportação.;;;;;;;;;;;;;;;;;;
+3;Nome do Docente;;120;Variável;Alfanumérico;-;Obrigatório;"Se valores inválidos forem informados deverá apresentar a mensagem: ""Nome informado inválido.""
+Todos os caracteres devem ser informados em letras.
+Não pode conter nada além de (A-Za-z).";Se o primeiro nome do docente for diferente da informação do arquivo, deverá aparecer a mensagem: “O nome do docente informado é diferente do nome correspondente a este CPF localizado na base de dados.”;;;;;;;;;;;;;;;;;
+4;CPF;;11;Fixo;Numérico;Inteiro;Obrigatório;;"Se o CPF não for encontrado na base de dados, deverá aparecer a mensagem: ""CPF não encontrado na base de dados da Receita Federal.""";;;;;;;;;;;;;;;;;
+5;Documento estrangeiro;;20;Variável;Alfanumérico;-;Opcional;"Se for informado o documento estrangeiro e a nacionalidade do docente informada for diferente de ""Estrangeira"" apresentar mensagem ""Preenchimento e exclusivo para docente estrangeiro.""";;;;;;;;;;;;;;;;;;
+6;Data de Nascimento;;8;Fixo;Data;-;Obrigatório;"Se a idade do docente for superior a 110 anos ou se for inferior a 15 anos, considerando a data de referência 31/12, deverá aparecer a mensagem de erro: ""O docente não pode ter menos de 15 anos nem mais de 110 anos.""
+Se a data de nascimento for informada com uma data inválida, mensagem de erro deverá ser apresentada, ""Data inválida.""";"Data nascimento deve ser idêntico ao encontrado na tabela do censo ou corporativa. Caso contrário, apresentar mensagem: ""A data de nascimento informada difere da registrada para este CPF na base de dados.""";;;;;;;;;;;;;;;;;
+7;Cor/Raça;;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+1 - Branca
+2 - Preta
+3 - Parda
+4 - Amarela
+5 - Indígena
+0 - Docente não quis declarar cor/raça
+Se for informado um valor diferente, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1,2,3,4,5"".";;;;;;;;;;;;;;;;;;
+8;Nacionalidade;;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+1 - Brasileira nata
+2 - Brasileira por naturalização
+3 - Estrangeira
+Se for informado um valor diferente, deve aparecer mensagem ""Preencher com um dos valores: 1,2,3"".";;;;;;;;;;;;;;;;;;
+9;País de origem;;3;Fixo;Alfanumérico;-;Obrigatório;"Se informada a opção “1 – Brasileira Nata"" no campo Nacionalidade e não for informado o país “BRA”, deverá aparecer a mensagem: ""Preencher com 'BRA' quando docente for brasileiro nato.”.
+Se informada as opções ""2 - Brasileira por naturalização"" ou ""3 - Estrangeira"" no campo Nacionalidade e for informado o país ""BRA"", deverá aparecer a mensagem: ""Preencher com 'BRA' somente quando docente for brasileiro nato.""
+Nos demais casos, deverá ser informado o código do País de acordo com a tabela corporativa de paises ISO-3166-1. Caso contrário, apresentar mensagem ""País não encontrado.""";;;;;;;;;;;;;;;;;;
+10;UF de nascimento;;2;Fixo;Numérico;Inteiro;Opcional;"Se informada UF e a nacionalidade for diferente de ""Brasileira nata"", apresentar mensagem ""Preenchimento exclusivo para docente brasileiro nato.""
+Se o código da UF não for um valor válido de acordo com a tabela corporativa de UF, deverá aparecer a mensagem: ""UF com código desconhecido.""
+Se for informado o Muncípio de Nascimento e não for informado a UF de nascimento, apresentar mensagem: ""UF de Nascimento do docente é um campo obrigatório quando informado Município de Nascimento do docente.""";;;;;;;;;;;;;;;;;;
+11;Município de Nascimento;;7;Fixo;Numérico;Inteiro;Condicional;"
+Se informado o município de nascimento e a nacionalidade for diferente de ""Brasileira nata"", apresentar a mensagem ""Preenchimento exclusivo para docente brasileiro nato"".
+Se o código do municipio não for um valor válido de acordo com a tabela corporativa de município, deverá aparecer a mensagem: ""Município com código desconhecido"".
+O município deve pertencer a UF informada no campo UF de nascimento. Caso contrário apresentar mensagem ""Município não pertence à UF"".";;;;;;;;;;;;;;;;;;
+12;Deficiência, Transtorno do espectro autista (TEA), altas habilidades ou superdotação;;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+2 - Não dispõe da informação
+Caso seja informado valor diferente, apresentar a mensagem ""Preencher com um dos valores: 0,1,2""
+Quando informado ""Sim"" neste campo, é obrigatório que pelo menos um tipo de deficiência seja informada. Caso não seja informada nenhum tipo de deficiência, apresentar a mensagem: ""Especifique pelo menos uma deficiência quando docente tiver deficiência.""
+Os tipos de deficiência ""Cegueira"" ou ""Baixa Visão"" ou ""Surdocegueira"", quando informados simultaneamente, apresenta a mensagem "" apresenta a mensagem: “Não é possível informar 'Cegueira' ou 'Baixa visão' ou 'Visão monocular' ou 'Surdocegueira' simultaneamente.”
+Os tipos de deficiência ""Surdez"" ou ""Deficiência auditiva"" ou ""Surdocegueira"", quando informados simultâneamente apresenta a mensagem: “Não é possível informar 'Surdez' ou 'Deficiência auditiva' ou 'Surdocegueira' simultaneamente”
+Os tipos de deficiência ""Cegueira"" ou ""Surdez"" ou ""Surdocegueira"", quando informados simultaneamente, apresenta a mensagem: “Não é possível informar 'Cegueira' ou 'Surdez' ou 'Surdocegueira' simultaneamente”";;;;;;;;;;;;;;;;;;
+13;Tipo de deficiência - Cegueira;;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiencia for informado com o valor ""Sim"" e tipo de deficiência-cegueira não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado ""Não"" ou ""Não dispõe da informação"" no campo ""Docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+14;Tipo de deficiência - Baixa visão;;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiencia for informado com o valor ""Sim"" e tipo de deficiência-Baixa visão não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado ""Não"" ou ""Não dispõe da informação"" no campo ""Docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+15;Tipo de deficiência - Visão monocular;;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiencia for informado com o valor ""Sim"" e tipo de deficiência - visão monocular não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado ""Não"" ou ""Não dispõe da informação"" no campo ""Docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+16;Tipo de deficiência - Surdez;;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiencia for informado com o valor ""Sim"" e tipo de deficiência-surdez não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado ""Não"" ou ""Não dispõe da informação"" no campo ""Docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+17;Tipo de deficiência - auditiva;;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiencia for informado com o valor ""Sim"" e tipo de deficiência-Auditiva não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado ""Não"" ou ""Não dispõe da informação"" no campo ""Docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+18;Tipo de deficiência - Física;;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiencia for informado com o valor ""Sim"" e tipo de deficiência-Física não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado ""Não"" ou ""Não dispõe da informação"" no campo ""Docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+19;Tipo de deficiência - Surdocegueira;;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência-Surdocegueira não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+20;Tipo de deficiência - Intelectual;;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência - Intelectual não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+21;Tipo de deficiência - Transtorno do espectro autista (TEA);;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiência for informado com o valor ""1-Sim"" e tipo de deficiência - Transtorno do espectro autista (TEA) não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+22;Tipo de deficiência - Altas habilidades ou superdotação;;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo docente com deficiência for informado com o valor ""1-Sim"" e tipo de deficiência - Altas habilidades ou superdotação não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para docente com deficiência"".
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Docente com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para docente com deficiência"".";;;;;;;;;;;;;;;;;;
+23;"Atuação do Docente
+- Ensino ";;1;Fixo;Numérico;Inteiro;Obrigatório;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: 0, 1"".
+";"Se esse campo for informado com a opção ""sim"", e o docente não tem curso vinculado com a opção ""Docente Regente"" ou ""Docente Conteudista"" então apresentar mensagem:
+""O docente deve ser vinculado a pelo menos um curso com a opção ""Docente - Regente"" ou ""Docente - Conteudista"" selecionada""
+";;;;;;;;;;;;;;;;;
+24;"Atuação do Docente
+- Pesquisa";;1;Fixo;Numérico;Inteiro;Obrigatório;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: 0, 1"".
+";;;;;;;;;;;;;;;;;;
+25;"Atuação do Docente
+- Extensão";;1;Fixo;Numérico;Inteiro;Obrigatório;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: 0, 1"".
+";;;;;;;;;;;;;;;;;;
+26;"Atuação do Docente
+- Gestão, planejamento e avaliação";;1;Fixo;Numérico;Inteiro;Obrigatório;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: 0, 1"".
+";;;;;;;;;;;;;;;;;;
+27;Bolsa Pesquisa;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+Se informado 'Sim' no campo Atuação do docente - Pesquisa e não for informado ""Bolsa de Pesquisa"", deve aparecer a mensagem:
+""Campo de preenchimento obrigatório quando informada a opção 'Sim' no campo Atuação do docente - Pesquisa'""
+Se informado 'Não' no campo Atuação do docente - Pesquisa e for informado ""Bolsa de Pesquisa"", deve aparecer a mensagem:
+""Somente é possível informar o campo Bolsa de pesquisa se o campo Atuação do docente - Pesquisa for informado 'Sim'"".";;;;;;;;;;;;;;;;;;
+28;Bolsa Extensão;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+Se informado 'Sim' no campo Atuação do docente - extensão e não for informado ""Bolsa extensão"", deve aparecer a mensagem:
+""Campo de preenchimento obrigatório quando informada a opção 'Sim' no campo Atuação do docente - extensão'""
+Se informado 'Não' no campo Atuação do docente - extensão e for informado ""Bolsa extensão"", deve aparecer a mensagem:
+""Somente é possível informar o campo Bolsa extensão se o campo Atuação do docente - Extensão for informado 'Sim'"".";;;;;;;;;;;;;;;;;;
+29;Escolaridade;;1;Fixo;Numérico;Inteiro;Obrigatório;"Informar apenas uma opção:
+1 - Sem formação de nível superior
+3 - Nível superior sem pós-graduação
+4 - Especialização
+5 - Mestrado
+6 - Doutorado
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: 1, 3 ,4 ,5 e 6"".
+Se for informado ""5 - Mestrado"" ou ""6 - Doutorado"" no campo Escolaridade e docente tiver idade menor ou igual a 18 anos, tendo como data referência o dia 31/12 do ano anterior ao Censo, apresentar a mensagem: ""Docente com mestrado ou doutorado não pode ter idade menor ou igual a 18 anos"".";;;;;;;;;;;;;;;;;;
+30;Tipo de vínculo;;1;Fixo;Numérico;Inteiro;Opcional (Obrigatório no Censo de 2026);"Informar apenas uma opção:
+Valores válidos:
+1. Servidor público civil ou militar
+2. Empregado com carteira assinada
+3. Empregado com contrato de trabalho temporário 
+4. Autônomo
+5. Microempreendedor Individual (MEI)
+6. Empresário Individual
+7. Voluntário
+8. Bolsista
+9. Sem vínculo empregatício por ser membro de congregação, ordem religiosa ou quaisquer outros que a eles se equiparem.
+10. Sem vínculo contratual (cooperação interinstitucional) 
+
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 1, 2, 3, 4, 5, 6, 7,8,9,10"".";;;;;;;;;;;;;;;;;;
+31;Tipo de consórcio, acordo ou programa de cooperação do docente sem vínculo contratual com a IES ;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+Valores válidos:
+1. Consórcio, rede ou outro arranjo interinstitucional de oferta de cursos
+2. Convênio, acordo ou programa de cooperação nacional 
+3. Convênio, acordo ou programa de cooperação internacional
+
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 1, 2, 3
+
+Se o campo ""Tipo de vínculo"" for informado com valor ""10 - Sem vínculo contratual (cooperação interinstitucional) "" E o campo Tipo de consórcio, acordo ou programa de cooperação do docente sem vínculo contratual com a IES "" não for informado, deverá apresentar a mensagem: ""Campo de preenchimento obrigatório quando o campo 'Tipo de vínculo' foi informado e esse campo não foi informado.""
+
+
+Se o campo ""Tipo de vínculo"" for informado com valor diferente ""10 - Sem vínculo contratual (cooperação interinstitucional) "" E o campo Tipo de consórcio, acordo ou programa de cooperação do docente sem vínculo contratual com a IES "" for informado, deverá apresentar a mensagem: ""Campo só deve ser preenchido se o campo ""Tipo de vínculo"" for informado com o valor "" 10 - Sem vínculo contratual (cooperação interinstitucional)'";;;;;;;;;;;;;;;;;;
+32;A função de conteudista é exercida em contrato específico (distinto do contrato de regência e/ou função de gestão)?;;1;Fixo;Numérico;Inteiro;Opcional (Condicional no Censo 2026);"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o campo ""A função de conteudista é exercida em contrato específico (distinto do contrato de regência e/ou função de gestão)? "" for informado E (o docente NÃO estiver vinculado como ""Docente - Conteudista"" OU (o docente estiver vinculado como ""Docente - Conteudista"" E NÃO estiver vinculado como ""Docente - Regente"" E NÃO tem atuação igual a Pesquisa NÃO tem atuação igual a Extensão NÃO tem atuação igual a Gestão Planejamento e Avaliação)), deverá apresentar a mensagem: ""O preenchimento deste campo é permitido apenas se o docente atuar como Conteudista em conjunto com o papel de Regente ou atuar com Pesquisa ou Extensão ou na Gestão Planejamento e Avaliação.""";;;;;;;;;;;;;;;;;;
+33;Tipo de vínculo - Exclusivo conteudista;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+Valores válidos:
+1. Servidor público civil ou militar
+2. Empregado com carteira assinada
+3. Empregado com contrato de trabalho temporário 
+4. Autônomo
+5. Microempreendedor Individual (MEI)
+6. Empresário Individual
+7. Voluntário
+8. Bolsista
+9. Sem vínculo empregatício por ser membro de congregação, ordem religiosa ou quaisquer outros que a eles se equiparem.
+10. Sem vínculo contratual (cooperação interinstitucional) 
+
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio,1, 2, 3, 4, 5, 6, 7,8,9,10"".
+
+Se o campo ""A função de conteudista é exercida em contrato específico (distinto do contrato de regência e/ou função de gestão)?"" for informado com ""Sim"" e o campo ""Tipo de vínculo - Exclusivo conteudista"" não for informado, deverá apresentar a mensagem: ""Campo de preenchimento obrigatório quando o campo 'A função de conteudista é exercida em contrato específico (distinto do contrato de regência e/ou função de gestão)?' for informado como 'Sim'"".
+ 
+Se o campo ""A função de conteudista é exercida em contrato específico (distinto do contrato de regência e/ou função de gestão)?"" for informado com valor diferente de ""Sim"" E o campo ""Tipo de vínculo - Exclusivo conteudista"" for informado, deverá apresentar a mensagem: ""O Campo só deve ser preenchido se o campo ""A função de conteudista é exercida em contrato específico (distinto do contrato de regência e/ou função de gestão)?"" for informado com 'Sim'"".";;;;;;;;;;;;;;;;;;
+34;Tipo de consórcio, acordo ou programa de cooperação do docente sem vínculo contratual com a IES - Exclusivo conteudista ;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+Valores válidos:
+1. Consórcio, rede ou outro arranjo interinstitucional de oferta de cursos
+2. Convênio, acordo ou programa de cooperação nacional 
+3. Convênio, acordo ou programa de cooperação internacional
+
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 1, 2, 3
+
+Se o campo ""Tipo de vínculo - Exclusivo conteudista"" for informado com valor ""10 - Sem vínculo contratual (cooperação interinstitucional) "" E o campo Tipo de consórcio, acordo ou programa de cooperação do docente sem vínculo contratual com a IES  - Exclusivo conteudista"" não for informado, deverá apresentar a mensagem: ""Campo de preenchimento obrigatório quando o campo 'Tipo de vínculo - Exclusivo conteudista' foi informado com a opção ""10 - Sem vínculo contratual (cooperação interinstitucional).""
+
+
+Se o campo ""Tipo de vínculo - Exclusivo conteudista"" for informado com valor diferente ""10 - Sem vínculo contratual (cooperação interinstitucional) "" E o campo Tipo de consórcio, acordo ou programa de cooperação do docente sem vínculo contratual com a IES - Exclusivo conteudista "" for informado, deverá apresentar a mensagem: ""Campo não pode ser preenchido pois o campo ""Tipo de vínculo - Exclusivo conteudista"" foi informado com o valor diferente de "" 10 - Sem vínculo contratual (cooperação interinstitucional)"".";;;;;;;;;;;;;;;;;;
+35;Regime de trabalho;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+Valores válidos:
+1. Tempo integral com DE
+2. Tempo Integral sem DE
+3. Tempo Parcial
+4. Horista
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 1, 2, 3, 4"".
+
+Se (o campo ""Atuação Docente - Pesquisa"" for informado com SIM OU o campo ""Atuação Docente - Extensão"" for informado com SIM OU o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com SIM OU o docente estiver vinculado como ""Docente - Regente"" em pelo menos um curso) E (o campo ""Tipo de vínculo"" for informado com valor diferente de ""10 - Sem vínculo contratual (cooperação interinstitucional) Ou o campo ""Tipo de vínculo"" não for informado) E o campo ""Regime de trabalho"" não for informado, deverá apresentar a mensagem:
+""Campo de preenchimento obrigatório quando o docente possui atuação (Pesquisa, Extensão ou Gestão) ou atua como Docente - Regente e o tipo de vínculo é diferente de Sem vínculo contratual (cooperação interinstitucional)""
+
+Se o campo ""Regime de trabalho"" for informado E ((o campo ""Atuação Docente - Pesquisa"" for informado com ""Não"" E o campo ""Atuação Docente - Extensão"" for informado com ""Não"" E o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Não"" E o docente não possuir vínculo a curso como ""Docente - Regente"") deverá apresentar a mensagem: ""Campo não deve ser preenchido se o Docente atua exclusivamente como docente - Conteudista.""
+ 
+Se o campo ""Regime de trabalho"" for informado E o campo ""Tipo de vínculo"" for informado com valor ""10 - Sem vínculo contratual (cooperação interinstitucional)) "", deverá apresentar a mensagem: ""Campo não deve ser preenchido para docente que possui o 'Tipo de vínculo' igual a ""10 - Sem vínculo contratual (cooperação interinstitucional).""";;;;;;;;;;;;;;;;;;
+36;Carga horária semanal do docente;;2;Variável;Numérico;Inteiro;Opcional (Condicional no Censo 2026);"Se o docente estiver vinculado a curso como ""Docente - Conteudista"" E não estiver vinculado a curso como ""Docente - Regente"" E o campo ""Atuação Docente - Pesquisa"" for informado com ""Não"" E o campo ""Atuação Docente - Extensão"" for informado com ""Não"" E o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Não"" E o campo ""Carga horária semanal do docente"" for informado, deverá apresentar a mensagem:
+ ""Campo não deve ser preenchido se o Docente atua exclusivamente como docente - Conteudista.""
+
+Se o campo ""Tipo de vínculo"" for preenchido com o valor ""10 - Sem vínculo contratual (cooperação interinstitucional)"" e o campo ""Carga horária semanal do docente"" for informado, apresentar mensagem:
+""Campo Carga horária semanal do docente não deve ser preenchido se o docente tem o tipo de vínculo igual a 10 - Sem vínculo contratual (cooperação interinstitucional)""";;;;;;;;;;;;;;;;;;
+37;Docente foi admitido ou iniciou suas atividades no ano de referência do Censo?;;1;Fixo;Numérico;Inteiro;Opcional (Condional no Censo 2026);"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o docente estiver vinculado a curso como ""Docente - Conteudista"" E não estiver vinculado a curso como ""Docente - Regente"" E o campo ""Atuação Docente - Pesquisa"" for informado com ""Não"" E o campo ""Atuação Docente - Extensão"" for informado com ""Não"" E o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Não"" E o campo ""Docente foi admitido ou iniciou suas atividades no ano de referência do Censo?"" for informado, deverá apresentar a mensagem:
+ ""Campo não deve ser preenchido se o Docente atua exclusivamente como docente - Conteudista.""";"Se (o campo ""Docente foi desligado ou encerrou suas atividades no ano de referência do Censo?"" for informado OU o campo ""O docente esteve afastado durante o ano de referência do Censo?"" for informado) E o campo ""Docente foi admitido ou iniciou suas atividades no ano de referência do Censo?"" não for informado, deverá apresentar a mensagem: ""Campo de preenchimento obrigatório, pois outro campo de situação (Desligamento ou Afastamento) foi informado.""";;;;;;;;;;;;;;;;;
+38;Docente foi desligado ou encerrou suas atividades no ano de referência do Censo? ;;1;Fixo;Numérico;Inteiro;Opcional (Condional no Censo 2026);"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o docente estiver vinculado a curso como ""Docente - Conteudista"" E não estiver vinculado a curso como ""Docente - Regente"" E o campo ""Atuação Docente - Pesquisa"" for informado com ""Não"" E o campo ""Atuação Docente - Extensão"" for informado com ""Não"" E o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Não"" E o campo ""Docente foi desligado ou encerrou suas atividades no ano de referência do Censo?"" for informado, deverá apresentar a mensagem:
+ ""Campo não deve ser preenchido se o Docente atua exclusivamente como docente - Conteudista.""";"Se (o campo ""Docente foi admitido ou iniciou suas atividades no ano de referência do Censo?"" for informado OU o campo ""O docente esteve afastado durante o ano de referência do Censo?"" for informado) E o campo ""Docente foi desligado ou encerrou suas atividades no ano de referência do Censo?"" não for informado, deverá apresentar a mensagem: ""Campo de preenchimento obrigatório, pois outro campo de situação (Admissão ou Afastamento) foi informado.""";;;;;;;;;;;;;;;;;
+39;O docente esteve afastado durante o ano de referência do Censo?;;1;Fixo;Numérico;Inteiro;Opcional (Condional no Censo 2026);"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se o docente estiver vinculado a curso como ""Docente - Conteudista"" E não estiver vinculado a curso como ""Docente - Regente"" E o campo ""Atuação Docente - Pesquisa"" for informado com ""Não"" E o campo ""Atuação Docente - Extensão"" for informado com ""Não"" E o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Não"" E o campo ""O docente esteve afastado durante o ano de referência do Censo?"" for informado, deverá apresentar a mensagem:
+ ""Campo não deve ser preenchido se o Docente atua exclusivamente como docente - Conteudista.""";"Se (o campo ""Docente foi admitido ou iniciou suas atividades no ano de referência do Censo?"" for informado OU o campo ""Docente foi desligado ou encerrou suas atividades no ano de referência do Censo?"" for informado) E o campo ""O docente esteve afastado durante o ano de referência do Censo?"" não for informado, deverá apresentar a mensagem: ""Campo de preenchimento obrigatório, pois outro campo de situação (Admissão ou Desligamento) foi informado.""";;;;;;;;;;;;;;;;;
+40;Docente substituto;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se (o campo ""Atuação Docente - Pesquisa"" for informado com ""Sim"" OU o campo ""Atuação Docente - Extensão"" for informado com ""Sim"" OU o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Sim"" OU o docente estiver vinculado como ""Docente - Regente"" em pelo menos um curso) E ((o campo ""Tipo de vínculo"" for informado com valor diferente de ""10 - Sem vínculo contratual (cooperação interinstitucional) OU o campo ""Tipo de vínculo"" não for informado)) E o campo ""Docente Substituto"" não for informado, deverá apresentar a mensagem:
+""Campo de preenchimento obrigatório quando o docente possui atuação (Pesquisa, Extensão ou Gestão) ou atua como Docente - Regente e o tipo de vínculo é diferente de ""10 - Sem vínculo contratual (cooperação interinstitucional)"".""
+
+Se o campo ""Docente substituto"" for informado E ((o campo ""Atuação Docente - Pesquisa"" for informado com ""Não"" E o campo ""Atuação Docente - Extensão"" for informado com ""Não"" E o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Não"" E o docente não possuir vínculo a curso como ""Docente - Regente) deverá apresentar a mensagem: ""Campo não deve ser preenchido se o Docente atua exclusivamente como docente - Conteudista.""
+ 
+Se o campo ""Docente substituto"" for informado E o campo ""Tipo de vínculo"" for informado com valor ""10 - Sem vínculo contratual (cooperação interinstitucional)) "", deverá apresentar a mensagem: ""Campo não deve ser preenchido para docente que possui o 'Tipo de vínculo' igual a ""10 - Sem vínculo contratual (cooperação interinstitucional).""";;;;;;;;;;;;;;;;;;
+41;Docente Visitante;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se (o campo ""Atuação Docente - Pesquisa"" for informado com ""Sim"" OU o campo ""Atuação Docente - Extensão"" for informado com ""Sim"" OU o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Sim"" OU o docente estiver vinculado como ""Docente - Regente"" em pelo menos um curso) E o campo ""Docente Visitante"" não for informado, deverá apresentar a mensagem:
+""Campo de preenchimento obrigatório quando o docente possui atuação (Pesquisa, Extensão ou Gestão) ou atua como Docente - Regente.""
+
+Se o campo ""Docente visitante"" for informado E o campo ""Atuação Docente - Pesquisa"" for informado com ""Não"" E o campo ""Atuação Docente - Extensão"" for informado com ""Não"" E o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Não"" E o docente não possuir vínculo a curso como ""Docente - Regente deverá apresentar a mensagem: ""Campo não deve ser preenchido se o Docente atua exclusivamente como docente - Conteudista.""";;;;;;;;;;;;;;;;;;
+42;Docente em exercício em 31/12 do ano do censo;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se (o campo ""Atuação Docente - Pesquisa"" for informado com ""Sim"" OU o campo ""Atuação Docente - Extensão"" for informado com ""Sim"" OU o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Sim"" OU o docente estiver vinculado como ""Docente - Regente"" em pelo menos um curso) E o campo ""Docente em exercício em 31/12 do ano do censo"" não for informado, deverá apresentar a mensagem:
+""Campo de preenchimento obrigatório quando o docente possui atuação (Pesquisa, Extensão ou Gestão) ou atua como Docente - Regente.""
+
+Se o campo ""Docente em exercício em 31/12 do ano do censo"" for informado E o campo ""Atuação Docente - Pesquisa"" for informado com ""Não"" E o campo ""Atuação Docente - Extensão"" for informado com ""Não"" E o campo ""Atuação Docente - Gestão, planejamento e avaliação"" for informado com ""Não"" E o docente não possuir vínculo a curso como ""Docente - Regente"", deverá apresentar a mensagem: ""Campo de preenchimento exclusivo se o docente possui atuação (Pesquisa, Extensão ou Gestão) ou atua como Docente - Regente.""
+
+Se o docente estiver vinculado exclusivamente como ""Docente - Conteudista"" E o campo ""Docente em exercício em 31/12 do ano do censo"" for informado, deverá apresentar a mensagem: ""Campo não deve ser preenchido se o Docente atua exclusivamente como docente - Conteudista.""";;;;;;;;;;;;;;;;;;
+VÍNCULO COM CURSOS  - REGISTRO 32;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;;2;Fixo;Numérico;Inteiro;Condicional;"Se o tipo do registro informado for diferente de 32 deverá aparecer a mensagem: ""Preencher com o valor 32"".
+";;;;;;;;;;;;;;;;;;
+2;Código do curso no INEP;;12;Variável;Numérico;Inteiro;Condicional;"Se o código do curso foi informado mais de uma vez no arquivo para o docente, deverá apresentar mensagem:
+""Vínculo do docente com código do curso já informado""
+
+Se o campo ""Atuação do Docente - Ensino"" for informados com a opção ""Sim"" e não for informado o campo Código do curso no INEP, deverá apresentar mensagem:
+""É obrigatório informar pelo menos um código de curso quando informado 'Sim' no campo ""Atuação do Docente - Ensino"".
+
+Se for informado o campo Código do curso no INEP e não for informado ""Sim"" em nenhum dos campos "" Atuação do Docente- Ensino"" ou ""Atuação do docente - Gestão, Planejamento e avaliação"", apresentar mensagem: ""O docente não pode ser vinculado a curso da IES pois a atuação do Docente não está marcada com Ensino ou Gestão planejamento e avaliação"".";"Se o código do curso informado não pertence à IES, deverá apresentar mensagem:
+""Código do curso informado inválido""
+
+Se o docente foi vinculado ao curso e os campos Docente Regente, Docente Conteudista e Docente Coordenador foram informados com não ou vazio então apresentar mensagem: 
+
+""Pelo menos uma categoria (Docente Regente, Docente Conteudista ou Docente Coordenador) do docente deve ser informada""";;;;;;;;;;;;;;;;;
+3;Docente Regente;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se esse campo for informado com a opção ""sim"" e a opção ""Atuação do Docente - Ensino"" foi informada com a opção ""não"", apresentar mensagem:
+Esse campo só deve ser preenchido com a opção ""sim"", se o campo ""Atuação do Docente - Ensino"" for marcado como ""Sim"".
+";;;;;;;;;;;;;;;;;;
+4;Docente Conteudista;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se esse campo for informado com a opção ""sim"" e a opção ""Atuação do Docente - Ensino"" foi informada com a opção ""não"", apresentar mensagem:
+Esse campo só deve ser preenchido com a opção ""sim"", se o campo ""Atuação do Docente - Ensino"" for marcado como ""Sim"".";;;;;;;;;;;;;;;;;;
+5;Docente Coordenador;;1;Fixo;Numérico;Inteiro;Condicional;"Informar apenas uma opção:
+0 - Não
+1 - Sim
+
+Se for informado um valor diferente, deve aparecer a mensagem ""Preencher com um dos valores: vazio, 0, 1"".
+
+Se esse campo for informado com a opção ""sim"" e a opção ""Atuação do Docente - Gestão, planejamento e avaliação"" foi informada com a opção ""não"", apresentar mensagem:
+Esse campo só deve ser preenchido com a opção ""sim"", se o campo ""Atuação do Docente - Gestão, planejamento e atuação"" for marcado como ""Sim"".";"Se o campo ""Atuação Docente - Ensino"" for preenchido com a opção ""Não"" e o campo ""Atuação do Docente - Gestão, planejamento e avaliação"" for preenchido com a opção "" Sim"" e houver curso vinculado e a opção ""Docente Coordenador"" não for informada com a opção ""Sim"" então apresentar mensagem: ""Se o docente atua com gestão, planejamento e avaliação e não atua com ensino, então deve ser marcado a opção 'Docente Coordenador'""";;;;;;;;;;;;;;;;;
+DATAS DE ADMISSÃO/INÍCIO - REGISTRO 33;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;;2;Fixo;Numérico;Inteiro;Condicional;"Se o tipo do registro informado for diferente de 33 deverá aparecer a mensagem: ""Preencher com o valor 33"".
+
+Se o campo ""Docente foi admitido ou iniciou suas atividades no ano de referência do Censo?"" for informado com valor ""1 - Sim"" E esse campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório quando informada a opção 'Sim' no campo 'Docente foi admitido ou iniciou suas atividades no ano de referência do Censo?'.""";;;;;;;;;;;;;;;;;;
+2;Data admissão;;8;Fixo;Data;-;Condicional;"Se a data for informada com uma data inválida, mensagem de erro deverá ser apresentada, ""Data inválida"".
+
+Se o campo ""Docente foi admitido ou iniciou suas atividades no ano de referência do Censo?"" for informado com valor ""0 - Não"" (ou não for informado) E esse campo  for informado, deverá apresentar a mensagem: ""Este campo só deve ser preenchido se a opção 'Sim' for informada no campo 'Docente foi admitido ou iniciou suas atividades no ano de referência do Censo?'.";"Considerando as datas informadas para o docente (admissão, desligamento, início de afastamento ou fim de afastamento) em ordem cronológica, se a data sendo validada for uma ""Data Admissão"" e houver uma data informada imediatamente anterior que seja outra ""Data Admissão"", deverá apresentar a mensagem: ""Não é permitido registrar essa 'Admissão', pois o docente já estava em situação ATIVA (devido a uma Admissão). O próximo evento pode ser apenas de 'Desligamento' ou 'Início de Afastamento'.""
+
+Considerando as datas informadas para o docente (admissão, desligamento, início de afastamento ou fim de afastamento) em ordem cronológica, se a data sendo validada for uma ""Data Admissão"" e houver uma data informada imediatamente anterior que seja uma ""Data de fim de afastamento"", deverá apresentar a mensagem: ""Não é permitido registrar  essa 'Admissão', pois o docente já estava em situação ATIVA (devido a um fim de afastamento). O próximo evento pode ser apenas de 'Desligamento' ou 'Início de Afastamento'.""
+
+Considerando as datas informadas para o docente (admissão, desligamento, início de afastamento ou fim de afastamento) em ordem cronológica, se a data sendo validada for uma ""Data Admissão"" e houver uma data informada imediatamente anterior que seja uma ""Data Início Afastamento"", deverá apresentar a mensagem:
+""Não é permitido registrar esta 'Admissão', pois o docente estava em situação AFASTADO. Eventos permitidos: 'Fim de Afastamento' ou 'Demissão'.""";;;;;;;;;;;;;;;;;
+DATAS DE DESLIGAMENTO/ENCERRAMENTO - REGISTRO 34;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;;2;Fixo;Numérico;Inteiro;Condicional;"Se o tipo do registro informado for diferente de 34 deverá aparecer a mensagem: ""Preencher com o valor 34"".
+
+Se o campo ""Docente foi desligado ou encerrou suas atividades no ano de referência do Censo? "" for informado com valor ""1 - Sim"" E esse campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório quando informada a opção 'Sim' no campo 'Docente foi desligado ou encerrou suas atividades no ano de referência do Censo? '.""";;;;;;;;;;;;;;;;;;
+2;Data desligamento;;8;Fixo;Data;-;Condicional;"Se a data for informada com uma data inválida, mensagem de erro deverá ser apresentada, ""Data inválida"".
+
+Se o campo ""Docente foi desligado ou encerrou suas atividades no ano de referência do Censo? "" for informado com valor ""0 - Não"" (ou não for informado) E esse campo  for informado, deverá apresentar a mensagem: ""Este campo só deve ser preenchido se a opção 'Sim' for informada no campo 'Docente foi desligado ou encerrou suas atividades no ano de referência do Censo? '.";"Considerando as datas informadas para o docente (admissão, desligamento, início de afastamento ou fim de afastamento) em ordem cronológica, se a data sendo validada for uma ""Data Desligamento"" e houver uma data informada imediatamente anterior que seja outra ""Data Desligamento"", deverá apresentar a mensagem: ""Não é permitido registrar esse 'Desligamento', pois o docente já estava em situação INATIVA (devido a um Desligamento). O próximo evento pode ser apenas de 'Admissão'.""";;;;;;;;;;;;;;;;;
+DATAS DE AFASTAMENTO - REGISTRO 35;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo do registro;;2;Fixo;Numérico;Inteiro;Condicional;"Se o tipo do registro informado for diferente de 35 deverá aparecer a mensagem: ""Preencher com o valor 35"".
+
+Se o campo ""O docente esteve afastado durante o ano de referência do Censo? "" for informado com valor ""1 - Sim"" E esse campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório quando informada a opção 'Sim' no campo 'O docente esteve afastado durante o ano de referência do Censo? '.""";"Se o campo ""O docente esteve afastado durante o ano de referência do Censo?"" for informado com valor ""1 - Sim"" E o campo ""Início afastamento"" não for informado E o campo ""Fim afastamento"" não for informado, deverá apresentar a mensagem: 
+""Pelo menos uma data (Início ou Fim) deve ser informada quando 'O docente esteve afastado durante o ano de referência do Censo?' for preenchido como 'Sim'.""
+
+Se os campos ""Data Início Afastamento"" e ""Data Fim Afastamento"" forem informados, e a duração do período (diferença entre a Data Fim e a Data Início) for igual ou inferior a 15 dias, deverá apresentar a mensagem: ""A duração do afastamento informado deve ser igual ou superior a 16 dias.""";;;;;;;;;;;;;;;;;
+2;Início afastamento;;8;Fixo;Data;-;Condicional;"Se a data for informada com uma data inválida, mensagem de erro deverá ser apresentada, ""Data inválida"".
+
+Se o campo ""O docente esteve afastado durante o ano de referência do Censo?"" for informado com valor ""0 - Não"" (ou não for informado) E esse campo  for informado, deverá apresentar a mensagem: ""Este campo só deve ser preenchido se a opção 'Sim' for informada no campo 'O docente esteve afastado durante o ano de referência do Censo?'.";"Considerando as datas informadas para o docente (admissão, desligamento, início de afastamento ou fim de afastamento) em ordem cronológica, se a data sendo validada for uma ""Data Início Afastamento"" e houver uma data informada imediatamente anterior que seja uma ""Data Demissão"", deverá apresentar a mensagem:
+""Não é permitido registrar este 'Início de Afastamento', pois o docente estava em situação INATIVA (devido a um 'Desligamento' anterior). O único evento permitido é uma 'Admissão'.""
+
+Considerando as datas informadas para o docente (admissão, desligamento, início de afastamento ou fim de afastamento) em ordem cronológica, se a data sendo validada for uma ""Data Início Afastamento"" e houver uma data informada imediatamente anterior que seja outra ""Data Início Afastamento"", deverá apresentar a mensagem:
+""Não é permitido registrar este 'Início de Afastamento', pois o docente já estava em situação AFASTADO. Eventos permitidos: 'Fim de Afastamento' ou 'Demissão'.""";;;;;;;;;;;;;;;;;
+2;Fim afastamento;;8;Fixo;Data;-;Condicional;"Se a data for informada com uma data inválida, mensagem de erro deverá ser apresentada, ""Data inválida"".
+
+Se o campo ""O docente esteve afastado durante o ano de referência do Censo?"" for informado com valor ""0 - Não"" (ou não for informado) E esse campo  for informado, deverá apresentar a mensagem: ""Este campo só deve ser preenchido se a opção 'Sim' for informada no campo 'O docente esteve afastado durante o ano de referência do Censo?'.";"Considerando as datas informadas para o docente (admissão, desligamento, início de afastamento ou fim de afastamento) em ordem cronológica, se a data sendo validada for uma ""Data Fim Afastamento"" e houver uma data informada imediatamente anterior que seja uma ""Data Admissão"", deverá apresentar a mensagem:
+""Não é permitido registrar este 'Fim de Afastamento', pois o docente estava em situação ATIVA (devido a uma 'Admissão' anterior). Eventos permitidos: 'Desligamento' ou 'Início de Afastamento'.""
+
+Considerando as datas informadas para o docente (admissão, desligamento, início de afastamento ou fim de afastamento) em ordem cronológica, se a data sendo validada for uma ""Data Fim Afastamento"" e houver uma data informada imediatamente anterior que seja outra ""Data Fim Afastamento"", deverá apresentar a mensagem:
+""Não é permitido registrar este 'Fim de Afastamento', pois o docente já estava em situação ATIVA (devido a um Fim de Afastamento' anterior). Eventos permitidos: 'Desligamento' ou 'Início de Afastamento'.""
+
+Considerando as datas informadas para o docente (admissão, desligamento, início de afastamento ou fim de afastamento) em ordem cronológica, se a data sendo validada for uma ""Data Fim Afastamento"" e houver uma data informada imediatamente anterior que seja uma ""Data Demissão"", deverá apresentar a mensagem:
+""Não é permitido registrar este 'Fim de Afastamento', pois o docente estava em situação INATIVA (devido a um 'Desligamento' anterior). O único evento permitido é uma 'Admissão'.""";;;;;;;;;;;;;;;;;

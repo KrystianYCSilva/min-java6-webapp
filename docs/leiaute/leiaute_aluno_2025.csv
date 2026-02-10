@@ -1,0 +1,1775 @@
+CENSO DA EDUCAÇÃO SUPERIOR 2025;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+LEIAUTE DE MIGRAÇÃO – ARQUIVO ALUNO;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#;Campo;Tamanho;"Fixo/
+Variável";Tipo;Inteiro/Decimal;Preenchimento ;1ª Etapa de Validação;2ª Etapa de Validação;;;;;;;;;;;;;;;;;;;;
+CABEÇALHO DO ARQUIVO - REGISTRO 40;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo de registro;2;Fixo;Numérico;Inteiro;Obrigatório;"Se o valor informado for diferente de 40, deverá aparecer a mensagem: ""Preencher com o valor 40"". ";;;;;;;;;;;;;;;;;;;;;
+2;ID da IES no INEP;12;Variável;Numérico;Inteiro;Obrigatório;"Se o ID da IES no INEP for diferente do Código da IES do usuário logado, deverá aparecer a mensagem: ""O usuário que enviou o arquivo deve estar vinculado a IES [cod da IES]"" ";"Se o ID da IES no INEP não estiver cadastrado na base de dados deverá aparecer a mensagem: ""ID da IES no INEP não está cadastrado na base de dados"".
+
+Se o usuário não possuir permissão a IES informada no campo ID da IES no INEP para realizar migração, deverá aparecer a mensagem: ""O usuário não possui acesso a IES informada"".";;;;;;;;;;;;;;;;;;;;
+REGISTRO DO ALUNO - REGISTRO 41;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo de registro;2;Fixo;Numérico;Inteiro;Obrigatório;"Se o valor informado for diferente de 41, deverá aparecer a mensagem: ""Preencher com o valor 41""";;;;;;;;;;;;;;;;;;;;;
+2;ID do aluno no INEP;14;Variável;Numérico;Inteiro;Opcional;O ID do Aluno é um informação opcional e não será gravada no banco de dados do Censo. A informação de ID do Aluno só é válida no arquivo de exportação.;;;;;;;;;;;;;;;;;;;;;
+3;Nome;120;Variável;Alfanumérico;-;Obrigatório;"Se valores inválidos forem informados deverá apresentar a mensagem: ""Nome informado inválido.""
+
+Todos os caracteres devem ser informados em letras.
+Não pode conter nada além de (A-Za-z).";Se o primeiro nome do aluno for diferente da informação do arquivo, deverá aparecer a mensagem: “O nome do aluno informado é diferente do nome correspondente a este CPF localizado na base de dados.”.;;;;;;;;;;;;;;;;;;;;
+4;CPF;11;Fixo;Alfanumérico;-;Obrigatório;"Se o CPF do aluno já foi informado em outra linha do arquivo, deverá aparecer a mensagem ""CPF já informado neste arquivo"".
+Se o valor do CPF não for válido, deverá aparecer a mensagem ""Preencher com CPF válido"".";"Se o CPF não for encontrado na base de dados, deverá aparecer a mensagem: ""CPF não encontrado na base de dados"". ";;;;;;;;;;;;;;;;;;;;
+5;Documento de estrangeiro ou                 passaporte;20;Variável;Alfanumérico;-;Opcional;"Se for informado o documento estrangeiro e a nacionalidade do aluno informada for diferente de ""Estrangeira"" apresentar mensagem ""Preenchimento e exclusivo para aluno estrangeiro""";;;;;;;;;;;;;;;;;;;;;
+6;Data de Nascimento;8;Fixo;Data;-;Obrigatório;"Se informado com a data superior ou igual a data corrente, mensagem de erro deverá ser apresentada, ""Data não pode ser igual ou posterior à data corrente.""
+
+Se a data de nascimento for informada com uma data inválida, mensagem de erro deverá ser apresentada, ""Data inválida"".";"Data nascimento deve ser idêntica ao encontrado na tabela do censo ou corporativa.  Caso contrário, apresentar mensagem ""A data de nascimento informada é diferente da data de nascimento correspondente a este CPF localizada na base de dados""
+
+Se o aluno informado tiver menos de 11 anos, apresentar mensagem: ""Aluno deve ter no mínimo 11 anos para ser informado no Censo.""";;;;;;;;;;;;;;;;;;;;
+7;Cor/Raça;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+1 - Branca
+2 - Preta
+3 - Parda
+4 - Amarela
+5 - Indígena
+6 - Não dispõe da informação*
+0 - Aluno não quis declarar cor/raça
+
+Se for informado um valor diferente, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1,2,3,4,5,6"".
+
+Se a opção 6 - Não dispõe da informação for informada para aluno ingressante de semestre a partir do ano de 2014, apresentará a mensagem: ""A opção “Não dispõe da informação” não pode ser informada para ingressantes com ano de ingresso posteriores a 2014""";"Avisos (o aluno será migrado sem alteração da cor/raça):
+
+Se a cor/raça já estiver definida com “preta, parda ou indígena” e com reserva de vagas – étnica e a cor/raça informada for diferente de vazio e da existente, deverá apresentar o aviso: “Não pode ser alterado. O aluno está vinculado a um programa de reserva de vagas étnico”.
+
+Se a cor/raça já está definida com “branca, amarela, preta, parda ou indígena” e sem reserva de vagas – étnica e a cor/raça informada for “Aluno não quis declarar cor/raça ou Não dispõe da informação”, deverá apresentar o aviso: ""Já foi declarado anteriormente que o aluno possui a cor/raça igual a <cor/raça existente>. Não será possível efetuar a alteração” 
+
+Se a cor/raça já está definida com “Aluno não quis declarar cor/raça” e sem reserva de vagas – étnica (em outra IES) e a cor/raça informada for “Não dispõe da informação”, deverá apresentar o aviso: “Já foi declarado anteriormente que o aluno possui a cor/raça igual a <cor/raça existente>. Não será possível efetuar a alteração”";;;;;;;;;;;;;;;;;;;;
+8;Nacionalidade;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+1 - Brasileira nata
+2 - Brasileira por naturalização
+3 - Estrangeira";"Aviso (o aluno será migrado sem alteração da nacionalidade):
+
+Se aluno com forma de ingresso ""Convênio PEC-G"" alterar nacionalidade, apresentar mensagem ""Não pode ser alterado. O aluno está vinculado com forma de ingresso 'Convênio PEC-G' em outra IES"".";;;;;;;;;;;;;;;;;;;;
+9;UF de nascimento;2;Fixo;Numérico;Inteiro;Condicional;"
+Se informada UF e a nacionalidade for diferente de ""Brasileira nata"", apresentar mensagem ""Preenchimento exclusivo para aluno brasileiro nato"".
+
+Se o código da UF não for um valor válido de acordo com a tabela corporativa de UF, deverá aparecer a mensagem: ""UF com código desconhecido"".
+
+
+";;;;;;;;;;;;;;;;;;;;;
+10;Município de nascimento;7;Fixo;Numérico;Inteiro;Opcional;"
+Se informado Município e a UF de nascimento não for informado, apresentar mensagem ""Somente é possível informar o município de nascimento, se informada a UF de nascimento do aluno.""
+
+Se informado o município de nascimento e a nacionalidade for diferente de ""Brasileira nata"", apresentar a mensagem ""Preenchimento exclusivo para aluno brasileiro nato"".
+
+Se o código do municipio não for um valor válido de acordo com a tabela corporativa de município, deverá aparecer a mensagem: ""Município com código desconhecido"".
+
+O município deve pertencer a UF informada no campo UF de nascimento. Caso contrário apresentar mensagem ""Município não pertence à UF"".";;;;;;;;;;;;;;;;;;;;;
+11;País de origem;3;Fixo;Alfanumérico;-;Obrigatório;"Se informada a opção “1 – Brasileira Nata"" no campo Nacionalidade e não for informado o país “BRA”, deverá aparecer a mensagem: ""Preencher com 'BRA' quando aluno for brasileiro nato.”.
+
+Se informada as opções ""2 - Brasileira por naturalização"" ou ""3 - Estrangeira"" no campo Nacionalidade e for informado o país ""BRA"", deverá aparecer a mensagem: ""Preencher com 'BRA' somente quando aluno for brasileiro nato."".
+
+Nos demais casos, deverá ser informado o código do País de acordo com a tabela corporativa de paises ISO-3166-1. Caso contrário, apresentar mensagem ""País não encontrado.""";;;;;;;;;;;;;;;;;;;;;
+12;"Aluno com Deficiência, Transtorno do espectro autista (TEA), altas habilidades ou superdotação
+";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+2 – Não dispõe da informação
+Caso seja informado valor diferente, apresentear a mensagem ""Preencher com um dos valores: 0,1,2""
+
+Os tipos de deficiência ""Cegueira"" ou ""Baixa visão"" ou ""Visão monocular"" ou ""Surdocegueira"", quando informados simultaneamente, apresenta a mensagem "" apresenta a mensagem: “Não é possível informar 'cegueira' ou 'Baixa visão"" ou ""visão monocular' ou 'surdocegueira' simultaneamente.”
+
+Os tipos de deficiência ""Surdez"" ou ""Deficiência auditiva"" ou ""Surdocegueira"", quando informados simultâneamente apresenta a mensagem, “Não é possível informar 'surdez' ou 'deficiência auditiva' ou 'surdocegueira' simultaneamente.”
+
+Os tipos de deficiência ""Cegueira"" ou ""Surdez"" ou ""Surdocegueira"", quando informados simultaneamente, apresenta a mensagem “Não é possível informar 'cegueira' ou 'surdez' ou 'surdocegueira' simultaneamente.”
+
+É necessário informar ao menos um ""Tipo de deficiência"" se marcado a opção ""1 - Sim"". Se nenhum dos campos de ""Tipo de deficiência"" possuírem valor igual a ""1 - Sim"", então deve apresentar mensagem: ""Pelo menos um Tipo de deficiência deve ser preenchido com '1 - Sim' quando o campo 'Deficiência, Transtorno do espectro autista (TEA), altas habilidades ou superdotação' é informado com '1 - Sim'.""";"Se o indicativo de Aluno com Deficiência informado é igual a Não ou Não dispõe da informação e existe pelo menos um vínculo, independente de IES, com marcação de programa de reserva de vaga - pessoa com deficiência e o aluno possui a deficiência, no censo, apresentar mensagem ""Não pode ser alterado. O aluno está vinculado a um programa de reserva de vagas para deficiente em outra IES.""";;;;;;;;;;;;;;;;;;;;
+13;Tipo de deficiência - Cegueira;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência-cegueira não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência"".";;;;;;;;;;;;;;;;;;;;;
+14;Tipo de deficiência - Baixa visão;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência Baixa visão não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência"".";;;;;;;;;;;;;;;;;;;;;
+15;Tipo de deficiência - Visão monocular;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência  visão monocular não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência"".";;;;;;;;;;;;;;;;;;;;;
+16;Tipo de deficiência - Surdez;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência-surdez não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência"".";;;;;;;;;;;;;;;;;;;;;
+17;Tipo de deficiência - auditiva;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência-Auditiva não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência"".";;;;;;;;;;;;;;;;;;;;;
+18;Tipo de deficiência - física;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência-Física não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência"".";;;;;;;;;;;;;;;;;;;;;
+19;Tipo de deficiência - Surdocegueira;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência-Surdocegueira não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência"".";;;;;;;;;;;;;;;;;;;;;
+20;Tipo de deficiência - Intelectual;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência-Intelectual não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência""."; ;;;;;;;;;;;;;;;;;;;;
+21;Tipo de deficiência - Transtorno do espectro autista (TEA);1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de Transtorno do espectro autista (TEA) não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência"".";;;;;;;;;;;;;;;;;;;;;
+22;Tipo de deficiência - Altas habilidades ou superdotação;1;Fixo;Numérico;Inteiro;Condicional;"Se o campo aluno com deficiencia for informado com o valor ""1-Sim"" e tipo de deficiência-Altas habilidades ou superdotação não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com deficiência"".
+
+Valores válidos:
+0 - Não
+1 - Sim
+Se o tipo de deficiência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".
+
+Se o tipo de deficiência for informado quando informado ""0-Não"" ou ""2 – Não dispõe da informação"" no campo ""Aluno com deficiência"", deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com deficiência"".";;;;;;;;;;;;;;;;;;;;;
+23;Tipo de escola que concluiu o Ensino Médio;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Privado
+1 - Público
+2 - Não dispõe da informação
+Se o campo Tipo de escola que concluiu o Ensino Médio não for informado ou informado com valor inválido, deverá apresentar a mensagem: ""Preencher com um dos valores: 0,1,2""";"Se for informada a opção 2 – Não dispõe da informação, aluno não é estrangeiro, o ano de ingresso for maior ou igual do que 2013 e a data de ingresso no Curso Origem for maior ou igual a 2013, deverá apresentar a mensagem: ""A opção 'Não dispõe da informação' somente poderá ser informada para vínculo com ano de ingresso menor que 2013 ou para alunos estrangeiros""";;;;;;;;;;;;;;;;;;;;
+REGISTRO DO VÍNCULO ALUNO COM CURSO - REGISTRO 42;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+1;Tipo de registro;2;Fixo;Numérico;Inteiro;Obrigatório;"Se o tipo do registro informado for diferente de 42 deverá aparecer a mensagem: ""Preencher com o valor 42"".";;;;;;;;;;;;;;;;;;;;;
+2;ID na IES - Identificação única do aluno na IES;20;Variável;Alfanumérico;-;Opcional;"Código do aluno na IES.
+Valores válidos: Alfanumérico (A-Z) (0 - 9)";;;;;;;;;;;;;;;;;;;;;
+3;Período de referência;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+1 - Primeiro semestre
+2 - Segundo semestre
+Se o período de referência for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),1,2"".
+
+Definição:
+Primeiro semestre – 01/01/ano do censo a 30/06/ano do censo.
+Segundo semestre – 01/07/ano do censo a 31/12/ano do censo.";"Se o campo Período de referência não for preenchido quando a IES é Universidade Federal, deverá apresentar a mensagem: ""Obrigatório informar se a informação refere-se ao 1° ou 2° período de referência"".
+
+Se o campo Período de referência for preenchido quando a IES não é Universidade Federal, deverá apresentar a mensagem: ""Período de referência somente poderá ser informado quando a IES é Universidade Federal""
+
+Se aluno possui vínculo no primeiro Período de referência como ""2- Cursando"" ou ""3 -Matrícula Transcada"" e não informar vínculo ao segundo semestre no mesmo curso, apresentar mensagem, ""Se o aluno possui vínculo ativo ('Cursando' ou 'Matrícula Trancada') no primeiro período de referência, deve possuir um vínculo no segundo período para o curso""
+
+Se informado no vínculo do segundo período data de ingresso igual ao primeiro semestre do ano do censo, em que o curso não é um curso vinculado a uma ABI com curso origem a ABI ou vinculado a mesma ABI, e não foi informado vínculo no primeiro período de referência no mesmo curso, apresentar mensagem,
+""É obrigatório possuir vínculo nesse mesmo curso no PRIMEIRO período de referência, pois a data de ingresso é referente ao PRIMEIRO período de referência.""";;;;;;;;;;;;;;;;;;;;
+4;Código do Curso;12;Variável;Numérico;Inteiro;Obrigatório;"Se o vínculo do curso já tiver sido informado com mesmo período de referência no arquivo, deverá apresentar a mensagem: ""Curso e semestre já informados""";"Código do Curso deve estar vinculado a IES. Caso contrário, apresentar mensagem ""Código informado inválido"".
+
+Curso deve ter sido informado como “Possui aluno vinculado no ano de referência”. Caso contrário, apresentar mensagem ""Curso informado como “Não possui aluno vinculado no ano de referência do Censo”.
+
+Se o curso não tiver sido preenchido, apresentar mensagem ""Curso não atualizado"".
+
+Se o aluno possuir vínculo no mesmo período de referência a um curso BI/LI e a um curso terminalidade do mesmo BI/LI, apresentar mensagem,
+""Um aluno não pode estar vinculado a um BI/LI e a um curso terminalidade correspondente no mesmo período de referência"".";;;;;;;;;;;;;;;;;;;;
+5;Código do pólo do curso a distância ;12;Variável;Numérico (tabela);Inteiro;Condicional;;"Se não informado o ""Código do polo do curso a distância no INEP"" e curso possuir ""Formato de oferta"" igual a ""curso a distância"", deverá a apresentar mensagem, ""Obrigatório informar quando o curso for a distância"".
+
+Código do polo deve ser um código de local de oferta válido. Caso contrário, apresentar mensagem, ""Código informado inválido"".
+
+Se o polo não estiver vinculado ao curso informado no campo ID do curso no INEP, apresentar mensagem, ""Polo não está vinculado ao curso informado"".
+
+Se informado ""Código do polo do curso a distância"" se o curso não possui o formato de oferta igual a ""Curso a Distância"" ou ""semipresencial"", apresentar mensagem ""Somente poderá ser informado quando o curso for a distância ou semipresencial"".
+
+Se o código do polo informado não estiver preenchido com a opção ""Sim"" no campo ""Local de oferta esteve em funcionamento?"", então apresentar mensagem: Polo deve estar com o campo ""Local de oferta esteve em funcionamento?"" preenchido com a opção ""Sim"".
+
+Se não informado o ""Código do polo do curso a distância no INEP"" e curso possuir ""Formato de oferta"" igual a ""semipresencial"", deverá a apresentar mensagem, ""Obrigatório informar quando o curso for semipresencial"".";;;;;;;;;;;;;;;;;;;;
+6;Turno do aluno;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+1.Matutino
+2.Vespertino
+3.Noturno
+4.Integral
+Se turno for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),1,2,3,4"".";"Se o campo turno do aluno não for preenchido quando o curso for de formato de oferta igual a presencial, deverá apresentar a mensagem: ""Obrigatório informar quando o curso for presencial"".
+
+Se o campo turno for preenchido quando o curso for de formato de oferta diferente de presencial, deverá apresentar a mensagem: ""Somente poderá ser informado quando o curso for presencial"" 
+
+Se informado o turno que não pertence ao curso, deverá apresentar mensagem de erro: ""O turno informado não pertence ao curso. Favor verificar o turno de funcionamento.""";;;;;;;;;;;;;;;;;;;;
+7;Situação de vínculo do aluno ao curso;1;Fixo;Numérico ;Inteiro;Obrigatório;"Valores válidos:
+2 – Cursando
+3 – Matrícula trancada
+4 – Desvinculado do curso
+5 - Transferência Interna
+6 – Formado
+7 – Falecido
+Se a Situação do vínculo for informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 2,3,4,5,6,7""
+
+Se a situação do vínculo do aluno for “6 - Formado” e o aluno tem idade menor que 13 anos com relação à data de referência do Censo (31/12/2016), deverá apresentar a mensagem: ""Idade do aluno formado não deve ser inferior a 13 anos.""";"--- Todos os cursos ---
+
+Se um vínculo em uma IES possuir situação do aluno igual a ""5 - Transferência Interna"" e não possuir outro vínculo com o curso de origem preenchido, deverá apresentar a mensagem: ""Existe um aluno com situação de vínculo igual a Transferido, portanto é necessário que exista outro vínculo com o curso origem preenchido.""
+
+--- Cursos ABI ---
+
+Se um aluno for vinculado simultaneamente a uma ABI e a um curso vinculado a essa mesma ABI, com situações de ""Cursando"" ou ""Matrícula trancada"" em ambos os cursos, deverá apresentar a mensagem: ""O aluno não pode ser vinculado, simultaneamente, a um curso ABI e a outro curso vinculado à essa ABI, com a situação Cursando ou Matrícula trancada em ambos""
+
+Se informada a opção ""6 – Formado"", quando o curso informado for do tipo Área Básica do curso, deverá apresentar a mensagem: “A opção “Formado” não pode ser informada quando o curso for do tipo Área Básica do curso.”
+
+
+---Para Universidade Federal:  
+
+""As situações Cursando e Matrícula Trancada não poderão ser informadas no vínculo do aluno no 2° semestre, se o curso estiver com situação de funcionamento extinto no e-MEC no ano de referência do Censo.""
+
+Se informado situação de vínculo ""Formado"" no vínculo no 1º semestre e possui vínculo no segundo semestre do mesmo curso, apresentar a mensagem ""Como o aluno possui o vínculo com situação Formado no Primeiro semestre, não é possível ter vínculo com o mesmo curso no Segundo semestre.""
+
+Se informado situação de vínculo ""Falecido"" em algum  vínculo no 1º semestre e possui vínculo no segundo semestre, apresentar a mensagem ""Como o aluno possui o vínculo com situação Falecido no Primeiro semestre, não é possível ter vínculo com qualquer curso no Segundo semestre.""
+
+Se o aluno, em uma IES, possuir um vínculo com um curso ABI e um outro com um curso vinculado à esta ABI, e em ambos os vínculos a situação seja 2- Cursando ou 3 - Matrícula Trancada, no mesmo semestre de referência, apresentar mensagem ""Aluno não pode estar com mais de um vínculo ativo (na situação de Cursando ou Matrícula Trancada) em ABI e curso vinculado a mesma ABI simultaneamente.""
+
+---Para demais IES: 
+
+""As situações Cursando e Matrícula trancada não poderão ser informadas quando o curso estiver com situação de funcionamento extinto no e-MEC no ano de referência do Censo.""
+
+Aluno com mais de um vínculo na mesma IES e possuir pelo menos uma situação Falecido, as situações dos outros vínculos devem ser: Transferência interna ou Formado ou Falecido. Caso contrário, deve apresentar mensagem: ""Aluno não pode possuir situação de vínculo igual a Falecido com algum curso e em outro curso uma situação diferente de Falecido ou Transferência Interna ou Formado.""";;;;;;;;;;;;;;;;;;;;
+8;Curso origem;12;Variável;Numérico;Inteiro;Condicional;"Se informado curso origem e o vínculo no curso do aluno possuir a situação “5 – Transferido para outro curso da mesma IES”, deverá apresentar a mensagem: ""Não é possível informar curso origem se a situação do vínculo é Transferido para outro curso da mesma IES.""
+
+Se o vínculo no curso de origem do aluno não possuir a situação “5 – Transferido para outro curso da mesma IES”, deverá apresentar a mensagem: ""Curso de origem informado inválido, pois a situação do vínculo no curso origem não é Transferido para outro curso da mesma IES.""
+
+Se o código informado no campo ""Código do Curso"" for o mesmo informado no campo ""Curso Origem"", no mesmo vínculo, apresentar mensagem, ""Códigos dos cursos de “origem” e de “destino” não podem ser iguais.""
+
+Caso um vínculo em uma IES possua situação do aluno igual a 5 (transferido para outro curso da mesma IES), e não houver outro vínculo dentro da mesma IES (no caso das Universidades Federais, também no mesmo período de referência) com o campo ""curso origem"" preenchido, apresentar mensagem ""Existe um aluno com situação de vínculo igual a Transferido, portanto é necessário que exista outro vínculo com o curso origem preenchido.""";"--- Todos os cursos ---
+Um vínculo de aluno com situação de transferência interna não pode possuir o campo ""Curso origem"" preenchido. Caso possua, apresentar mensagem: ""O campo curso origem não deve ser informado se a situação de vínculo do aluno for igual a Transferência Interna.""
+
+O vínculo de origem da transferência deve necessariamente possuir situação de vínculo do aluno igual a ""Transferência interna"". Caso seja diferente, apresentar mensagem: ""A situação do aluno no vínculo do curso de origem deve ser igual a Transferência Interna.""
+
+Os cursos de destino e de origem da transferência interna devem ser da mesma IES. Caso contrário, apresentar mensagem: ""Os cursos destino e origem devem pertencer à mesma IES.""
+
+--- Cursos ABI ---
+Se o semestre de ingresso no curso origem ABI for diferente do semestre de ingresso do curso vinculado à mesma ABI, deverá apresentar a mensagem: ""A data de ingresso do curso ""origem"" e do curso ""destino"", pertencentes ao mesmo grupo ABI, devem ser iguais""
+
+A transferência de um curso vinculado a uma ABI para essa mesma ABI não é permitido, apresentando a mensagem, ""Curso vinculado não pode ser curso origem de um curso ABI.""
+
+Se o semestre de ingresso no curso origem vinculado a ABI for diferente do semestre de ingresso do curso vinculado a mesma ABI (curso destino), deverá apresentar a mensagem: ""A data de ingresso do curso origem e destino, pertencentes ao mesmo grupo ABI, devem ser iguais"". 
+
+--- Demais Cursos (não ABI) ---
+Se a data de ingresso no curso de origem for posterior  a dade de ingresso do curso atual de destino, deverá apresentar a mensagem: ""A data de ingresso no curso de destino não pode ser anterior a data de ingresso do curso origem.""
+
+Se o curso não for ABI e for curso origem em mais de um vínculo do aluno, deverá apresentar a mensagem:  ""Somente é possível informar o curso origem em um único curso destino.""
+
+Para Univerdade Federal:
+As datas de ingresso nos cursos de “destino” devem ser do mesmo período de referência e ano de referência do censo. Caso contrário, apresentar mensagem, ""A data de ingresso do curso destino deve ser do mesmo semestre/ano em que a transferência ocorreu.""
+
+As transferências só podem ocorrer dentro do mesmo período de referência, ou seja, os vínculos de origem e de destino devem possuir o campo Período de referência iguais. Caso contrário, apresentar mensagem: ""Curso origem deve ser do mesmo semestre do curso atual.""
+
+
+Para demais IES:
+As datas de ingresso nos cursos de “destino” devem ser do mesmo ano de referência do censo. Caso contrário, apresentar a mensagem: ""A data de ingresso do curso destino deve ser do mesmo semestre/ano em que a transferência ocorreu.""
+
+Os campos ""código curso"" dos vínculos de “destino” e “origem” devem pertencer à mesma IES. Caso contrário, apresentar a mensagem, ""Os códigos de curso devem pertencer à mesma IES""";;;;;;;;;;;;;;;;;;;;
+9;Semestre de conclusão do curso;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+1 - Primeiro semestre
+2 - Segundo semestre
+Se o campo Semestre de conclusão do curso for informado com valor inválido, deverá apresentar a mensagem ""Preencher com um dos valores: (vazio),1,2""";"Se ""Semestre de conclusão do curso"" for informado para Universidade Federal, apresentar mensagem ""Não pode ser informado quando a IES é uma Universidade Federal""
+
+Para IES que não são Universidades Federais, se situação de vínculo do aluno é ""Formado"" e não for informado o ""Semestre de Conclusão do Curso"", apresentar mensagem ""Campo obrigatório quando a situação do vínculo do aluno for Formado""
+
+Para IES que não são Universidades Federais, se situação de vínculo do aluno é diferente de ""Formado"" e for informado o ""Semestre de Conclusão do Curso"", apresentar mensagem
+""Somente poderá ser informado quando a situação do vínculo do aluno for 'Formado'""
+
+Para IES que não são Universidades Federais, se o semestre de conclusão do aluno for igual ao 1º semestre do ano de referência e o semestre de ingresso for igual ao 2º semestre desse mesmo ano, apresentará a mensagem: ""Aluno ingressante do segundo semestre não pode ter situação 'Formado' no primeiro semestre do mesmo ano"". ";;;;;;;;;;;;;;;;;;;;
+10;Aluno PARFOR;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se o campo Aluno PARFOR for informado com valor inválido, deverá apresentar a mensagem: ""Preencher com um dos valores: (vazio),0,1""
+
+Se informado “Sim” no campo “Aluno PARFOR” e não for informado “Seleção para Vagas de Programas Especiais” na forma de ingresso/seleção, deverá apresentar a mensagem: ""Aluno PARFOR exige forma de ingresso 'Seleção para Vagas de Programas Especiais'""";"Se o campo Aluno PARFOR não for preenchido quando o curso possui grau acadêmico igual a ""Licenciatura"", deverá apresentar a mensagem: ""Obrigatório informar quando o curso possuir grau acadêmico igual a 'Licenciatura'"".
+
+Se o campo Aluno PARFOR for preenchido quando o curso não possui grau acadêmico igual a ""Licenciatura"", deverá apresentar a mensagem: ""Somente poderá ser informado quando o curso possuir grau acadêmico igual a 'Licenciatura'"" ";;;;;;;;;;;;;;;;;;;;
+11;Segunda Licenciatura / Formação pedagógica;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se o campo Segunda Licenciatura / Formação pedagógica for informado com valor inválido, deverá apresentar a mensagem: ""Preencher com um dos valores: (vazio),0,1""";"""Campo obrigatório quando o curso for de Licenciatura""
+
+Se informado o campo ""Segunda Licenciatura / Formação pedagógica"" e o Grau Acadêmico do curso não for ""Licenciatura"", a seguinte mensagem de erro deverá ser apresentada ""O campo Segunda Licenciatura / Formação pedagógica só pode ser informado se o curso for Licenciatura.""";;;;;;;;;;;;;;;;;;;;
+12;Tipo - Segunda Licenciatura / Formação pedagógica;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+1 - Segunda Licenciatura
+2 - Formação pedagógica
+Se o campo Tipo - Segunda Licenciatura / Formação pedagógica for informado com valor inválido, deverá apresentar a mensagem: ""Preencher com um dos valores: (vazio),0,1""
+
+Se informado o campo ""Tipo - Segunda Licenciatura / Formação pedagógica"" e não for informado o campo ""Segunda Licenciatura / Formação pedagógica"" como ""Sim"", a seguinte mensagem de erro deverá ser apresentada ""O campo ""Tipo - Segunda Licenciatura / Formação pedagógica"" só pode ser informado se o campo ""Segunda Licenciatura / Formação pedagógica"" for informado com ""Sim"".""
+
+Se o campo""Segunda Licenciatura / Formação pedagógica"" como ""Sim"" e ""Tipo - Segunda Licenciatura / Formação pedagógica"" não for informado, deverá apresentar a mensagem: ""Obrigatório informar o campo 'Tipo - Segunda Licenciatura / Formação pedagógica' se o campo 'Segunda Licenciatura / Formação pedagógica' for informado com 'Sim'  "".";;;;;;;;;;;;;;;;;;;;;
+13;Semestre de ingresso no curso;6;Fixo;Numérico;Inteiro;Obrigatório;"Deverá ser obrigatoriamente preenchido no seguinte formato ""01AAAA"" ou ""02AAAA"".   Exemplo: 01/2015 (jan - jun) ou 02/2015 (jul - dez) com a fração equivalente ao ano compreendida entre 1900 e 2099.
+Se não for informado o Semestre de ingresso corretamente, deverá ser apresentada a mensagem: ""Semestre de ingresso inválido. Informar no formato 01<ano> ou 02<ano> com o valor <ano> compreendido entre 1900 e 2099.""
+
+Se informado com data posterior a 31/12/<ano de referência do censo>, a seguinte mensagem de erro deverá ser apresentada: ""Semestre de ingresso informado deve ser anterior ou igual a data de referência do Censo (31/12/<ano de referência>)"". 
+
+Se a idade do aluno for menor que 13 anos, apresentar a mensagem ""Aluno deve ter idade igual ou superior a 13 anos no semestre de ingresso""
+
+Se a idade do aluno for maior que 110 anos, apresentar mensagem, ""Aluno deve ter idade inferior a 110 anos no semestre de ingresso.""";"--- Universidades Federais ---
+
+Para os ingressantes, o semestre de ingresso precisa ser validado com o período de referência. Se o semestre de ingresso for igual ao segundo período de referência, então não é possível que seja informado o vínculo no primeiro período: ""Não é possível informar o vínculo do aluno ao curso no primeiro período de referência, pois o semestre de ingresso é uma data do segundo período de referência.""
+
+Exceto quando o aluno é ingressante no 2º período de referência, se os semestres de ingresso forem diferentes entre os períodos de referência, apresentar mensagem, ""O semestre de ingresso no curso é diferente do que foi informado no mesmo curso no primeiro período de referência.""";;;;;;;;;;;;;;;;;;;;
+14;"Forma de ingresso/seleção 
+- Vestibular";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""";"--- Cursos vinculados a uma ABI em atividade ---
+""Aluno ingressante em curso vinculado a ABI não pode ter forma de ingresso por vagas novas (Vestibular, ENEM, Avaliação Seriada ou Seleção Simplificada).""";;;;;;;;;;;;;;;;;;;;
+15;"Forma de ingresso/seleção 
+- Enem";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""";"--- Cursos vinculados a uma ABI em atividade ---
+""Aluno ingressante em curso vinculado a ABI não pode ter forma de ingresso por vagas novas (Vestibular, ENEM, Avaliação Seriada ou Seleção Simplificada).""";;;;;;;;;;;;;;;;;;;;
+16;"Forma de ingresso/seleção 
+- Avaliação Seriada";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""";"--- Cursos vinculados a uma ABI em atividade ---
+""Aluno ingressante em curso vinculado a ABI não pode ter forma de ingresso por vagas novas (Vestibular, ENEM, Avaliação Seriada ou Seleção Simplificada).""";;;;;;;;;;;;;;;;;;;;
+17;"Forma de ingresso/seleção 
+- Seleção Simplificada";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""";"--- Cursos vinculados a uma ABI em atividade ---
+""Aluno ingressante em curso vinculado a ABI não pode ter forma de ingresso por vagas novas (Vestibular, ENEM, Avaliação Seriada ou Seleção Simplificada).""";;;;;;;;;;;;;;;;;;;;
+18;"Forma de ingresso/seleção 
+- Egresso BI/LI";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""
+
+Se alguma forma de ingresso/seleção for informada com o valor ""1 - Sim"" simultaneamente com a forma de ingresso/seleção ""Egresso BI/LI"", o sistema deve apresentar a mensagem: “Esta forma de seleção não pode ser informada simultaneamente com as demais”";"Se escolhido o valor “1 – Sim” na variável “Egresso de BI/LI” e o aluno estiver sendo vinculado a um curso diferente de “Terminalidade”, deve aparecer a mensagem: ""O curso selecionado não é um curso terminalidade""
+
+Se uma Instituição de Ensino Superior que não seja Universidade Federal informe a forma de egresso BI/LI com o valor ""1 - Sim"", deve aparecer a mensagem: ""Somente é possível informar a forma de ingresso 'Egresso de BI/LI', se a IES é uma Universidade Federal""
+
+Se no 2° período de referência, caso o aluno seja ingressante em curso terminalidade e for informado o valor o valor “1 – Sim” na forma de ingresso “Egresso de BI/LI” e o aluno não possui vínculo no 1º período de referência com situação de “Formado” no curso BI/LI correspondente à terminalidade, deve aparecer a mensagem: ""O aluno possui vínculo a um curso BI ou LI no primeiro semestre e sua situação é diferente de Formado""
+
+Se no 1º período de referência, caso o aluno seja ingressante em curso terminalidade e for informado o valor “1 – Sim” na forma de ingresso “Egresso de BI/LI”, e o aluno possui vínculo no 2º período de referência do ano anterior com situação de “Cursando” ou ""Matrícula Trancada"" no curso BI/LI correspondente à terminalidade e o vínculo do 2º período do ano anterior não foi excluído com motivo de ""Formado"", deve apresentar a mensagem: ""Não é possível selecionar a forma de ingresso ""Egresso de BI/LI"", pois no Censo anterior o aluno não foi informado no curso BI/LI com situação de Formado. Caso a situação do aluno tenha sido informado equivocadamente no Censo anterior, será necessário acessar o menu Anular vínculo, indicar o aluno e o curso BI/LI e selecionar o motivo da anulação.""
+
+Se um aluno for vinculado simultaneamente a um curso BI/LI e a um curso terminalidade (vinculado a esse curso BI/LI), com situações de ""Cursando"" ou ""Matrícula trancada"" em ambos os cursos, deverá apresentar a mensagem: ""Aluno não pode estar com mais de um vínculo ativo (na situação de Cursando ou Matrícula Trancada) em BI ou LI e em curso terminalidade vinculado a esse BI ou LI no mesmo período de referência.""";;;;;;;;;;;;;;;;;;;;
+19;"Forma de ingresso/seleção 
+- PEC-G";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, quando aluno de nacionalidade estrangeira, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+Quando informado 1 - Sim para forma de ingresso Convênio PEC-G e o aluno possui nacionalidade Brasileira ou Naturalizado, aparecer a mensagem: ""Preencher com um dos valores: 0""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""
+Se alguma forma de ingresso/seleção for informada com o valor ""1 - Sim"" simultaneamente com a forma de ingresso/seleção ""PEC-G"", o sistema deve apresentar a mensagem: “Esta forma de seleção não pode ser informada simultaneamente com as demais”";;;;;;;;;;;;;;;;;;;;;
+20;"Forma de ingresso/seleção 
+- Transferência Ex Officio";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""
+
+Se alguma forma de ingresso/seleção for informada com o valor ""1 - Sim"" simultaneamente com a forma de ingresso/seleção ""Transferência Ex Officio"", o sistema deve apresentar a mensagem: “Esta forma de seleção não pode ser informada simultaneamente com as demais”";;;;;;;;;;;;;;;;;;;;;
+21;"Forma de ingresso/seleção 
+- Decisão judicial";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""
+
+Se alguma forma de ingresso/seleção for informada com o valor ""1 - Sim"" simultaneamente com a forma de ingresso/seleção ""Decisão judicial"", o sistema deve apresentar a mensagem: “Esta forma de seleção não pode ser informada simultaneamente com as demais”";;;;;;;;;;;;;;;;;;;;;
+22;"Forma de ingresso 
+- Seleção para Vagas Remanescentes";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""
+
+Se alguma forma de ingresso/seleção for informada com o valor ""1 - Sim"" simultaneamente com a forma de ingresso/seleção ""Seleção para Vagas Remanescentes"", o sistema deve apresentar a mensagem: “Esta forma de seleção não pode ser informada simultaneamente com as demais”";;;;;;;;;;;;;;;;;;;;;
+23;"Forma de ingresso 
+- Seleção para Vagas de Programas Especiais";1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se a Forma de ingresso/seleção não for informada ou informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1""
+
+""Somente as formas de seleção 'Vestibular', 'Enem' e 'Seleção Simplificada' podem ser selecionadas simultaneamente""
+
+Se alguma forma de ingresso/seleção for informada com o valor ""1 - Sim"" simultaneamente com a forma de ingresso/seleção ""Seleção para Vagas de Programas Especiais"", o sistema deve apresentar a mensagem: “Esta forma de seleção não pode ser informada simultaneamente com as demais”";;;;;;;;;;;;;;;;;;;;;
+24;Mobilidade acadêmica;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+
+Se o campo Mobilidade acadêmica for informado com valor inválido, deverá apresentar a mensagem: ""Preencher com um dos valores: (vazio),0,1""";"----Universidades Federais----
+Se o campo Mobilidade acadêmica não for preenchido quando a situação do vínculo do aluno é ""Cursando"" ou ""Formado"", deverá apresentar a mensagem: ""Campo obrigatório quando o situação do aluno for 'Cursando' ou 'Formado'""
+
+Se o campo Mobilidade acadêmica for preenchido quando a situação do vínculo do aluno é diferente de ""Cursando"" ou “Formado”, deverá apresentar a mensagem: ""Somente é possível informar se a situação do aluno for 'Cursando' ou ‘Formado’”.
+
+---Demais IES---
+Se o campo Mobilidade acadêmica não por preenchido, deverá apresentar a mensagem: ""Campo obrigatório"".";;;;;;;;;;;;;;;;;;;;
+25;Tipo de mobilidade acadêmica;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+1 - Nacional
+2 - Internacional
+
+Se o campo Tipo de mobilidade acadêmica for informado com valor inválido, deverá apresentar a mensagem: ""Preencher com um dos valores: (vazio),1,2""
+
+Se o campo Tipo de mobilidade acadêmica for preenchido quando não informada a opção “1 - Sim” no campo Mobilidade acadêmica, deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com mobilidade acadêmica""
+
+Se o campo Tipo de mobilidade acadêmica não for preenchido quando informada a opção “1 - Sim” no campo Mobilidade acadêmica, deverá apresentar a mensagem: ""Campo obrigatório quando possuir mobilidade acadêmica"".";;;;;;;;;;;;;;;;;;;;;
+26;Mobilidade acadêmica Nacional - IES destino;12;Variável;Numérico;Inteiro;Condicional;"Se o campo IES destino for preenchido quando o campo Tipo de mobilidade acadêmica não for informado com a opção “1 - Nacional”, deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com mobilidade acadêmica 'Nacional'""
+
+Se o campo IES destino não for preenchido quando o campo Tipo de mobilidade acadêmica for informado com a opção “1 - Nacional”, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com mobilidade acadêmica 'Nacional'""
+
+Se o código da IES destino for igual ao código da IES do aluno, deverá apresentar a mensagem: ""O código da IES destino deve ser diferente do código da IES do aluno""";"Se o código da IES não for de uma IES com situação ativa no Censo, deverá apresentar a mensagem: ""IES destino informada inválida.""";;;;;;;;;;;;;;;;;;;;
+27;Mobilidade acadêmica Internacional - País destino;3;Fixo;Alfanumérico;-;Condicional;"Se o campo País destino não for preenchido quando informada qualquer opção no campo Tipo de mobilidade acadêmica internacional, deverá apresentar a mensagem: ""Preenchimento obrigatório para aluno com tipo de mobilidade acadêmica 'Internacional'""
+
+Se o campo País destino for preenchido quando o campo Tipo de mobilidade acadêmica internacional não for informado, deverá apresentar a mensagem: ""Preenchimento exclusivo para aluno com tipo de mobilidade acadêmica 'Internacional'""
+
+Se o código do país destino não for válido de acordo com a tabela corporativa de países, deverá aparecer a mensagem: ""País não encontrado"" 
+
+Se o código do País destino for igual a BRA, deverá apresentar a mensagem: ""Valor 'BRA' não permitido""";;;;;;;;;;;;;;;;;;;;;
+28;Financiamento estudantil;1;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+0 - Não
+1 - Sim
+Se o Financiamento estudantil for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""
+
+Se não for informado o Tipo de Financiamento Estudantil Reembolsável ou não Reembolsável com valor ""1-Sim"", quando informado com o valor ""1-Sim"" o Financiamento Estudantil, deverá ser apresentada a mensagem: ""É obrigatório especificar pelo menos um tipo financiamento estudantil"".";"Se não for informado o campo Financiamento Estudantil quando (curso gratuito = não) ou a IES não possuir (Categoria administrativa = Pública Federal) ou (Categoria administrativa = Pública Estadual e Organização acadêmica = Universidade),  deverá ser apresentada a mensagem: ""Campo obrigatório quando o curso não for gratuito ou para as IES que não possuem Categoria administrativa = Pública Federal ou não possuem Categoria administrativa = Pública Estadual e Organização acadêmica = Universidade""
+
+Se o campo for informado e o curso for gratutito, apresentar a mensagem ""Somente é possível informar se o curso não for gratuito""
+
+Se o campo for informado e a IES possuir Categoria administrativa = Pública Federal ou (Categoria administrativa = Pública Estadual e Organização acadêmica = Universidade), deverá ser apresentada a mensagem: ""Preenchimento exclusivo para as IES que não possuem Categoria administrativa = Pública Federal ou não possuem Categoria administrativa = Pública Estadual e Organização acadêmica = Universidade""";;;;;;;;;;;;;;;;;;;;
+29;"Financiamento Estudantil Reembolsável
+- FIES";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento  exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+30;"Financiamento Estudantil Reembolsável
+- Governo Estadual";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+31;"Financiamento Estudantil Reembolsável
+-Governo Municipal";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+32;"Financiamento Estudantil Reembolsável 
+- IES";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+33;"Financiamento Estudantil Reembolsável
+- Entidades externas";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+34;"Tipo de financiamento não reembolsável
+- ProUni integral";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+35;"Tipo de financiamento não reembolsável
+- ProUni parcial";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+36;"Tipo de financiamento não reembolsável
+- Entidades externas";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento  exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+37;"Tipo de financiamento não reembolsável
+- Governo estadual";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento  exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+38;"Tipo de financiamento não reembolsável
+- IES";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+39;"Tipo de financiamento não reembolsável
+- Governo municipal";1;Fixo;Numérico;Inteiro;Condicional;"Se o campo Financiamento Estudantil for informado com o valor ""1-Sim"" e este campo não for informado, deverá apresentar a mensagem: 
+""Preenchimento obrigatório para quando houver financiamento estudantil"".
+
+Se informado ""1-Sim"" e não informado a opção ""1-Sim"" no campo Financiamento estudantil, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver financiamento estudantil""
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Financiamento estudantil reembolsável for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+40;Apoio Social;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se o Apoio Social for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (0,1)""
+
+Se nenhum tipo de apoio social for informado com valor ""1-Sim"" e se informado ""1-Sim"" neste campo, deverá aparecer a mensagem: ""É obrigatório selecionar pelo menos um dos tipos quando estiver utilizando apoio social""";"
+
+";;;;;;;;;;;;;;;;;;;;
+41;"Tipo de apoio social
+- Alimentação";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Apoio Social, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver apoio social""
+
+Se o campo Apoio Social for informado com o valor ""1-Sim"" e
+este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para quando houver apoio social"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de apoio social for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+42;"Tipo de apoio social
+- Moradia";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Apoio Social, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver apoio social""
+
+Se o campo Apoio Social for informado com o valor ""1-Sim"" e
+este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para quando houver apoio social"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de apoio social for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+43;"Tipo de apoio social
+- Transporte";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Apoio Social, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver apoio social""
+
+Se o campo Apoio Social for informado com o valor ""1-Sim"" e
+este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para quando houver apoio social"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de apoio social for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+44;"Tipo de apoio social
+- Material didático";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Apoio Social, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver apoio social""
+
+Se o campo Apoio Social for informado com o valor ""1-Sim"" e
+este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para quando houver apoio social"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de apoio social for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+45;"Tipo de apoio social
+- Bolsa trabalho";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Apoio Social, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver apoio social""
+
+Se o campo Apoio Social for informado com o valor ""1-Sim"" e
+este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para quando houver apoio social"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de apoio social for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+46;"Tipo de apoio social
+- Bolsa permanência";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Apoio Social, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver apoio social""
+
+Se o campo Apoio Social for informado com o valor ""1-Sim"" e
+este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para quando houver apoio social"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de apoio social for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+47;Atividade extracurricular;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se Atividade extracurricular for informada com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: 0,1"".
+
+Se nenhum tipo de atividade extracurricular for informado com valor ""Sim"" e se informado ""Sim"" em Atividade Extracurricular, deverá aparecer mensagem. ""É obrigatório selecionar pelo menos um dos tipos quando houver atividade extracurricular"".";;;;;;;;;;;;;;;;;;;;;
+48;"Atividade extracurricular
+- Pesquisa";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Atividade extracurricular, deverá apresentar mensagem. ""Preenchimento exclusivo para quando houver atividade extracurricular"".
+
+Se este não for informado e informado a opção ""1-Sim"" na Atividade extracurricular, deverá ser aparesentada a mensagem: ""Preenchimento obrigatório para quando houver atividade extracurricular"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Atividade extracurricular for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".";;;;;;;;;;;;;;;;;;;;;
+49;"Bolsa/remuneração referente à atividade extracurricular
+- Pesquisa";1;Fixo;Numérico;Inteiro;Condicional;"Se informado a opção ""1-Sim em uma das opções do Tipo de atividade extracurricular e não for informado a Bolsa/remuneração referente à atividade extracurricular, deverá ser apresentada a mensagem: ""Preenchimento obrigatório para quando houver tipo de atividade extracurricular correspondente"".
+
+Se informado ""1-Sim"" para Bolsa/remuneração referente à atividade extracurricular- Pesquisa e informada a opção ""0 - Não"" no campo Tipo de Atividade extracurricular - Pesquisa, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver tipo de atividade extracurricular correspondente"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se a Bolsa/remuneração referente à atividade extracurricular for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".";"
+
+
+
+";;;;;;;;;;;;;;;;;;;;
+50;"Atividade extracurricular
+- Extensão";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Atividade extracurricular, deverá apresentar mensagem. ""Preenchimento obrigatório e exclusivo para quando houver atividade extracurricular"".
+
+Se este não for informado e informado a opção ""1-Sim"" na Atividade extracurricular, deverá ser aparesentada a mensagem: ""Preenchimento obrigatório e exclusivo para quando houver atividade extracurricular"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Atividade extracurricular for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".";;;;;;;;;;;;;;;;;;;;;
+51;"Bolsa/remuneração referente à atividade extracurricular
+- Extensão";1;Fixo;Numérico;Inteiro;Condicional;"Se informado a opção ""1-Sim em uma das opções do Tipo de atividade extracurricular e não for informado a Bolsa/remuneração referente à atividade extracurricular, deverá ser apresentada a mensagem: ""Preenchimento obrigatório para quando houver tipo de atividade extracurricular correspondente"".
+
+Se informado ""1-Sim"" para Bolsa/remuneração referente à atividade extracurricular- Extensão e informada a opção ""0 - Não"" no campo Tipo de Atividade extracurricular - Extensão, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver tipo de atividade extracurricular correspondente"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se a Bolsa/remuneração referente à atividade extracurricular for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".";;;;;;;;;;;;;;;;;;;;;
+52;"Atividade extracurricular
+- Monitoria";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Atividade extracurricular, deverá apresentar mensagem. ""Preenchimento exclusivo para quando houver atividade extracurricular"".
+
+Se este não for informado e informado a opção ""1-Sim"" na Atividade extracurricular, deverá ser aparesentada a mensagem: ""Preenchimento obrigatório para quando houver atividade extracurricular"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Atividade extracurricular for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".";;;;;;;;;;;;;;;;;;;;;
+53;"Bolsa/remuneração referente à atividade extracurricular
+- Monitoria";1;Fixo;Numérico;Inteiro;Condicional;"Se informado a opção ""1-Sim em uma das opções do Tipo de atividade extracurricular e não for informado a Bolsa/remuneração referente à atividade extracurricular, deverá ser apresentada a mensagem: ""Preenchimento obrigatório para quando houver tipo de atividade extracurricular correspondente"".
+
+Se informado ""1-Sim"" para Bolsa/remuneração referente à atividade extracurricular- Monitoria e informada a opção ""0 - Não"" no campo Tipo de Atividade extracurricular - Monitoria, deverá apresentar a mensagem: ""Preenchimento exclusivo  para quando houver tipo de atividade extracurricular correspondente"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se a Bolsa/remuneração referente à atividade extracurricular for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".";;;;;;;;;;;;;;;;;;;;;
+54;"Atividade extracurricular
+- Estágio não obrigatório";1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Atividade extracurricular, deverá apresentar mensagem. ""Preenchimento exclusivo para quando houver atividade extracurricular"".
+
+Se este não for informado e informado a opção ""1-Sim"" na Atividade extracurricular, deverá ser aparesentada a mensagem: ""Preenchimento obrigatório para quando houver atividade extracurricular"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se o Tipo de Atividade extracurricular for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".";;;;;;;;;;;;;;;;;;;;;
+55;"Bolsa/remuneração referente à atividade extracurricular
+- Estágio não obrigatório";1;Fixo;Numérico;Inteiro;Condicional;"Se informado a opção ""1-Sim em uma das opções do Tipo de atividade extracurricular e não for informado a Bolsa/remuneração referente à atividade extracurricular, deverá ser apresentada a mensagem: ""Preenchimento obrigatório para quando houver tipo de atividade extracurricular correspondente"".
+
+Se informado ""1-Sim"" para Bolsa/remuneração referente à atividade extracurricular- Estágio não obrigatório e informada a opção ""0 - Não"" no campo Tipo de Atividade extracurricular - Estágio não obrigatório, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver tipo de atividade extracurricular correspondente"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se a Bolsa/remuneração referente à atividade extracurricular for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1"".";;;;;;;;;;;;;;;;;;;;;
+56;Carga horária total do curso por aluno;5;Variável;Numérico;Inteiro;Obrigatório;Se o valor preenchido for maior que 15000 horas para qualquer curso, o sistema deve apresentar mensagem de erro: “Preencher com número inferior a 15000 horas-relógio”.;"Se o valor preenchido for menor que 1000 horas para cursos com grau acadêmico igual a “Bacharelado”, o sistema deve apresentar mensagem de erro: “O valor informado no campo carga horária total do curso por aluno deve ser igual ou maior que 1000 horas-relógio para cursos com grau acadêmico igual a Bacharelado”.
+
+Se o valor preenchido for menor que 500 horas para cursos com grau acadêmico igual a “Licenciatura” ou nível acadêmico igual a “Sequencial”, o sistema deve apresentar mensagem de erro: “O valor informado no campo carga horária total do curso por aluno deve ser igual ou maior que 500 horas-relógio para cursos com grau acadêmico igual a (Licenciatura ou Sequencial)”.
+
+Se o valor preenchido for menor que 800 horas para cursos com grau acadêmico igual a “Tecnológico”, o sistema deve apresentar mensagem de erro: “O valor informado no campo carga horária total do curso por aluno deve ser igual ou maior que 800 horas-relógio para cursos com grau acadêmico igual a Tecnológico”.
+
+";;;;;;;;;;;;;;;;;;;;
+57;Carga horária integralizada pelo aluno;5;Variável;Numérico;Inteiro;Obrigatório;"Se o valor preenchido for maior que 15.000 horas para qualquer curso, o sistema deve apresentar mensagem de erro: “Preencher com número inferior a 15000 horas-relógio"".
+
+
+Se o valor preenchido for menor que o informado para o aluno no campo “Carga horária total do curso por aluno” para alunos com situação igual a “Formado”, o sistema deve apresentar mensagem de erro: “A carga horária integralizada pelo aluno deve ser maior ou igual à carga horária total do curso por aluno para alunos com situação igual a 'Formado'”.";"Se o aluno se transferir de um curso ABI (área básica) para um curso vinculado a essa ABI, a ""carga horária integralizada"" do curso destino (curso vinculado) deverá ser maior ou igual ao valor informado no curso ABI (área básica) . O sistema deve apresentar mensagem de erro: “A carga horária integralizada pelo aluno deve ser maior ou igual ao informado no curso ABI”.
+
+Se a forma de ingresso/seleção do aluno for igual a ""Egresso BI/LI"", o valor informado em ""Carga horária integralizada pelo aluno"" deve ser maior que 0. O sistema deve apresentar mnesagem de erro: “Para 'Egressos de BI/LI' a carga horária integralizada deve ser maior que 0”.";;;;;;;;;;;;;;;;;;;;
+58;Ingressou por política de ação afirmativa ou por programa diferenciado de destinação de vagas?;1;Fixo;Numérico;Inteiro;Obrigatório;"Valores válidos:
+0 - Não
+1 - Sim
+Se o campo  ""Ingressou por política de ação afirmativa ou por programa diferenciado de destinação de vagas?"" for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (0,1)""
+
+Se nenhum Tipo de Ação Afirmativa for informado com valor ""1-Sim"" e se informado ""1-Sim"" neste campo, deverá aparecer a mensagem: ""É obrigatório selecionar pelo menos um dos tipos quando for informado que possui açãos afirmativas""";;;;;;;;;;;;;;;;;;;;;
+59;Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e informada a opção ""0 - Não"" no campo Ingressou por política de ação afirmativa ou por programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado sim no campo Ingressou por política de ação afirmativa ou por programa diferenciado de destinação de vagas?""
+
+Se o campo Ingressou por política de ação afirmativa ou por programa diferenciado de destinação de vagas? for informado com o valor ""1-Sim"" e
+este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório para quando for informado '1-Sim' no campo ""Ingressou por política de ação afirmativa ou por programa diferenciado de destinação de vagas?.""
+
+- Valores válidos:
+1 - Reserva de Vaga - Lei de Cotas (Lei nº 12.711 de 2012 e Lei nº 14.723 de 2023)
+2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas
+3 - Bonificação ou critérios diferenciados de pontuação em processo seletivo
+Se o Tipo de política de ação afirmativa for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),1,2,3""";"Se informada a opção '1 - Reserva de Vaga - Lei de Cotas (Lei nº 12.711 de 2012 e Lei nº 14.723 de 2023)' e a IES não for uma Instituição pública federal, deverá apresentar a mensagem: ""A opção ""Lei de Cotas"" não pode ser selecionada caso a IES não seja uma instituição pública federal.""";;;;;;;;;;;;;;;;;;;;
+60;Tipo de Ação Afirmativa - Lei de Cotas (Lei nº 12.711 de 2012 e Lei nº 14.723 de 2023);1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""1 - Reserva de Vaga - Lei de Cotas (Lei nº 12.711 de 2012 e Lei nº 14.723 de 2023)"" no campo tipo de política de ação afirmativa, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver infromado o campo Ingresso por política de ação afirmativa Reserva de Vaga - Lei de Cotas (Lei nº 12.711 de 2012 e Lei nº 14.723 de 2023)""
+
+Se o campo Reserva de Vaga - Lei de Cotas (Lei nº 12.711 de 2012 e Lei nº 14.723 de 2023) for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+1 - Aluno autodeclarado preto, pardo ou indígena, com renda familiar per capita igual ou inferior a 1 salário mínimo
+e que tenha cursado integralmente o ensino médio em escolas públicas
+2 - Aluno autodeclarado quilombola, com renda familiar per capita igual ou inferior a 1 salário mínimo e que tenha
+cursado integralmente o ensino médio em escolas públicas.
+3 - Aluno com deficiência, que tenha renda familiar per capita igual ou inferior a 1 salário mínimo e que tenha
+cursado integralmente o ensino médio em escolas públicas.
+4 - Aluno com renda familiar per capita igual ou inferior a 1 salário mínimo que tenha cursado integralmente o
+ensino médio em escolas públicas.
+5 - Aluno autodeclarado preto, pardo ou indígena, independentemente da renda, que tenha cursado integralmente
+o ensino médio em escolas públicas.
+6 - Aluno autodeclarado quilombola, independentemente da renda, que tenha cursado integralmente o ensino
+médio em escolas públicas.
+7 - Aluno com deficiência, independentemente da renda, que tenha cursado integralmente o ensino médio em
+escolas públicas.
+8 - Aluno que, independentemente da renda, tenha cursado integralmente o ensino médio em escolas públicas.
+
+Se este for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),1,2,3,4,5,6,7,8""";"Para as opções 1, 2, 3, 4, 5, 6, 7 e 8 é obrigatório ter preenchido o campo  Tipo de escola que concluiu o Ensino Médio com a opção escola pública '1 - Escola Pública'.
+
+Para as opções 1 e 5 é obrigatório ter preenchido no campo cor/raça com uma das opções ""2 -Preto"", ""3 - Pardo"" ou ""5 - Indígena"".
+
+Para as opções 3 e 7 é obrigatório ter preenchido no campo Aluno com Deficiência, Transtorno do espectro autista (TEA), altas habilidades ou superdotação como ""1 - Sim"", exceto a marcação exclusiva da opção ""Tipo de deficiência - Altas habilidades ou superdotação"". 
+
+Se qualquer uma das opções for informada e a IES não for uma instituição pública federal, deverá apresentar a mensagem:
+A opção ""Lei de Cotas"" não pode ser selecionada caso a IES não seja uma instituição pública federal.";;;;;;;;;;;;;;;;;;;;
+61;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Preto, Pardo e Indígena (PPI);1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";"Obrigatório ter preenchido no campo cor/raça com uma das opções ""2 -Preto"", ""3 - Pardo"" ou ""5 - Indígena"".";;;;;;;;;;;;;;;;;;;;
+62;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Renda;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+63;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Pessoa com deficiência;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";"Obrigatório ter preenchido no campo Aluno com Deficiência, Transtorno do espectro autista (TEA), altas habilidades ou superdotação como ""1 - Sim"", exceto a marcação exclusiva da opção ""Tipo de deficiência - Altas habilidades ou superdotação"". ";;;;;;;;;;;;;;;;;;;;
+64;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Estudante procedente de escola pública;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";"Obrigatório ter preenchido o campo  Tipo de escola que concluiu o Ensino Médio com a opção escola pública '1 - Escola Pública'.
+
+";;;;;;;;;;;;;;;;;;;;
+65;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Quilombola;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+66;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Estudante transgênero e/ou travesti;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+67;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Estudante internacional;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";"Obrigatório ter preenchido o campo Nacionalidade com a opção ""3 - Estrangeira"".
+";;;;;;;;;;;;;;;;;;;;
+68;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Refugiado, Apátrida ou Portador de visto humanitário;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+69;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Idoso;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+70;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Estudante pertencente a povos e comunidades tradicionais;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+71;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Medalhista em olimpíadas científicas e competições de conhecimento;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+72;Outras reservas de vagas OU Programa diferenciado de destinação de vagas - Outros tipos de reserva de vagas;1;Fixo;Numérico;Inteiro;Condicional;"Se informado ""1-Sim"" neste campo e não informada a opção ""2 -  Outras reservas de vagas OU Programa diferenciado de destinação de vagas"" no campo Tipo de política de ação afirmativa ou programa diferenciado de destinação de vagas?, deverá apresentar a mensagem: ""Preenchimento exclusivo para quando houver informado o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas""
+
+Se o campo Outras reservas de vagas OU Programa diferenciado de destinação de vagas for informado e este campo não for informado, deverá apresentar a mensagem: ""Preenchimento obrigatório"".
+
+- Valores válidos:
+0 - Não
+1 - Sim
+Se este campo for informado com algum valor diferente do especificado, deve aparecer a mensagem: ""Preencher com um dos valores: (vazio),0,1""";;;;;;;;;;;;;;;;;;;;;
+73;Justificativa;2;Fixo;Numérico;Inteiro;Condicional;"Valores válidos:
+1 - O aluno reingressou no mesmo curso.
+2 - O aluno reingressou no mesmo curso e o semestre de ingresso foi informado incorretamente no Censo anterior.
+3 - Situação do vínculo do aluno informada errada no Censo anterior.
+4 - Situação do vínculo e semestre de ingresso informados incorretamente no Censo anterior.
+5 - Curso ou local de oferta não carregado para o Censo anterior.
+6 - Curso em que o aluno estava vinculado não existe no Censo atual.
+7 - A IES não vinculou o aluno no Censo anterior.
+8 - Semestre de ingresso informado errado no Censo anterior.
+9 - Situação de vínculo informada errada, aluno formado no curso BI/LI correspondente no Censo Anterior
+10 - Aluno não informado no curso BI/LI correspondente no Censo Anterior.
+11 - Aluno concluiu o curso BI/LI correspondente até o ano de <ano censo atual -2>.
+12 - O aluno reingressou no mesmo curso. Situação de vínculo e semestre de ingresso informados errados no Censo anterior.";Verificar o Manual de Aluno na seção 1.3 - Justificar Aluno do Censo Anterior, nos quadros 2 a 4.;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
