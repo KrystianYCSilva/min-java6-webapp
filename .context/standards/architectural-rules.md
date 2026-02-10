@@ -7,6 +7,7 @@ triggers:
   - camadas
   - dependencia
   - sql
+  - hibernate
 last_updated: 2026-02-10
 ---
 # Regras Arquiteturais
@@ -20,6 +21,7 @@ last_updated: 2026-02-10
 5. Classes `model` nao devem depender de `web` nem de `dao`.
 6. Novos fluxos autenticados devem passar por `AuthFilter`.
 7. Mudancas de schema devem manter compatibilidade com seeds e testes.
+8. DAOs devem abrir conexao via `HibernateConnectionProvider` (sem `DriverManager` direto).
 
 ## Direcao de dependencias permitida
 
@@ -42,3 +44,4 @@ last_updated: 2026-02-10
 1. Codigo de producao deve seguir Java 6.
 2. Evitar recursos de Java 7+ no pacote `src/main/java`.
 3. O `web.xml` legado e obrigatorio (`failOnMissingWebXml=true`).
+4. Versao Hibernate deve permanecer na linha compativel com Java 6 (`4.2.x`).

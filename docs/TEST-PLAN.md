@@ -8,6 +8,10 @@ Dependencias de teste no `pom.xml`:
 - `org.mockito:mockito-all:1.10.19`
 - `org.seleniumhq.selenium:selenium-java:2.53.1`
 
+Dependencias de persistencia em producao (tambem exercitadas nos testes de integracao):
+- `org.hibernate:hibernate-core:4.2.21.Final`
+- `org.hibernate:hibernate-entitymanager:4.2.21.Final`
+
 Controle de cobertura:
 - `org.jacoco:jacoco-maven-plugin:0.8.8`
 - Gate de cobertura minima (linha): `80%`
@@ -17,6 +21,10 @@ Infra de apoio:
 - `src/test/java/br/gov/inep/censo/support/TestDatabaseSupport.java`
   - reinicializa H2 em memoria;
   - executa `schema.sql`, `seed.sql`, `seed_layout.sql`, `seed_layout_ies_docente.sql` e `seed_municipio.sql`.
+- `src/main/java/br/gov/inep/censo/config/HibernateConnectionProvider.java`
+  - abre conexoes JDBC via `SessionFactory` Hibernate;
+  - resolve `Dialect` por URL (H2/PostgreSQL/MySQL/DB2);
+  - preserva o contrato atual dos DAOs legados.
 
 ## 2. Camada 1 - Unitarios (base da piramide)
 
@@ -36,7 +44,7 @@ Casos cobertos:
 
 ## 3. Camada 2 - Integracao (meio da piramide)
 
-### 3.1 DAO + persistencia JDBC
+### 3.1 DAO + persistencia Hibernate/JDBC (hibrida)
 
 Classes:
 - `src/test/java/br/gov/inep/censo/dao/AlunoDAOTest.java`
@@ -52,6 +60,7 @@ Fluxos validados:
 4. Persistir e consultar Docente/IES com campos complementares.
 5. Validar tabela de apoio `municipio` por codigo e UF.
 6. Validar contagem de linhas com DBUnit.
+7. Validar DAOs com conexao provida pelo Hibernate sem regressao funcional.
 
 ### 3.2 Servicos com banco
 

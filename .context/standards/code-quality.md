@@ -23,6 +23,7 @@ last_updated: 2026-02-10
 1. Sem lambda, stream, try-with-resources ou APIs apos Java 6 em producao.
 2. Fechar recursos JDBC de forma explicita (usar infraestrutura existente em `AbstractJdbcDao`).
 3. Evitar `catch` vazio; sempre registrar contexto do erro e propagar de forma controlada.
+4. Em DAO, obter conexao apenas por `HibernateConnectionProvider`.
 
 ## Regras de seguranca e validacao
 
@@ -35,7 +36,7 @@ last_updated: 2026-02-10
 
 1. `web`: parse de parametros, validacao basica e roteamento de resposta.
 2. `service`: regras de negocio, orquestracao e invariantes de dominio.
-3. `dao`: SQL, mapeamento e transacao local.
+3. `dao`: SQL, mapeamento e transacao local sobre conexao gerenciada por Hibernate.
 4. `util`: funcoes reutilizaveis sem estado de request.
 
 ## Definicao de pronto para alteracao de codigo

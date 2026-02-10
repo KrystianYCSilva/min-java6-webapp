@@ -1,6 +1,6 @@
 package br.gov.inep.censo.dao;
 
-import br.gov.inep.censo.config.ConnectionFactory;
+import br.gov.inep.censo.config.HibernateConnectionProvider;
 import br.gov.inep.censo.model.OpcaoDominio;
 
 import java.sql.Connection;
@@ -26,7 +26,7 @@ public class OpcaoDAO extends AbstractJdbcDao {
         List<OpcaoDominio> itens = new ArrayList<OpcaoDominio>();
 
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_LISTAR_POR_CATEGORIA);
             statement.setString(1, categoria);
             resultSet = statement.executeQuery();
@@ -179,7 +179,7 @@ public class OpcaoDAO extends AbstractJdbcDao {
 
         StringBuilder resumo = new StringBuilder();
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(sql);
             statement.setLong(1, fkValue.longValue());
             statement.setString(2, categoria);
@@ -212,7 +212,7 @@ public class OpcaoDAO extends AbstractJdbcDao {
                 "INNER JOIN dominio_opcao o ON o.id = r.opcao_id " +
                 "WHERE r." + colunaFk + " = ? AND o.categoria = ? ORDER BY o.nome";
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(sql);
             statement.setLong(1, fkValue.longValue());
             statement.setString(2, categoria);
@@ -242,7 +242,7 @@ public class OpcaoDAO extends AbstractJdbcDao {
                 "INNER JOIN dominio_opcao o ON o.id = r.opcao_id " +
                 "WHERE r." + colunaFk + " = ? AND o.categoria = ? ORDER BY o.nome";
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(sql);
             statement.setLong(1, fkValue.longValue());
             statement.setString(2, categoria);

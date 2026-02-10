@@ -1,6 +1,6 @@
 package br.gov.inep.censo.dao;
 
-import br.gov.inep.censo.config.ConnectionFactory;
+import br.gov.inep.censo.config.HibernateConnectionProvider;
 import br.gov.inep.censo.model.LayoutCampo;
 
 import java.sql.Connection;
@@ -29,7 +29,7 @@ public class LayoutCampoDAO extends AbstractJdbcDao {
         List<LayoutCampo> campos = new ArrayList<LayoutCampo>();
 
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_LISTAR_POR_MODULO);
             statement.setString(1, modulo);
             resultSet = statement.executeQuery();
@@ -243,7 +243,7 @@ public class LayoutCampoDAO extends AbstractJdbcDao {
 
         String sql = "SELECT layout_campo_id, valor FROM " + tabela + " WHERE " + colunaFk + " = ?";
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(sql);
             statement.setLong(1, fkValue.longValue());
             resultSet = statement.executeQuery();
@@ -269,7 +269,7 @@ public class LayoutCampoDAO extends AbstractJdbcDao {
                 "FROM " + tabela + " v INNER JOIN layout_campo c ON c.id = v.layout_campo_id " +
                 "WHERE v." + colunaFk + " = ? AND c.modulo = ?";
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(sql);
             statement.setLong(1, fkValue.longValue());
             statement.setString(2, modulo);

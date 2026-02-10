@@ -31,6 +31,7 @@ Carregar apenas contexto necessario para cada tarefa, reduzindo latencia, custo 
 4. Pedido de desenho/planejamento: carregar `_meta/project-overview.md` + `_meta/key-decisions.md`.
 5. Pedido envolvendo registros 11/31 ou enums novos: carregar `knowledge/domain-concepts.md` + `docs/ARCHITECTURE.md`.
 6. Pedido envolvendo municipios/UF: carregar `knowledge/domain-concepts.md` + `src/main/resources/db/seed_municipio.sql`.
+7. Pedido envolvendo Hibernate/persistencia: carregar `_meta/tech-stack.md` + `patterns/architecture.md` + `_meta/key-decisions.md`.
 
 ## Formato de handoff entre agentes
 

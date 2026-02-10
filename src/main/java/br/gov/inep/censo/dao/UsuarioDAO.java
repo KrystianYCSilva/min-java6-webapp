@@ -1,6 +1,6 @@
 package br.gov.inep.censo.dao;
 
-import br.gov.inep.censo.config.ConnectionFactory;
+import br.gov.inep.censo.config.HibernateConnectionProvider;
 import br.gov.inep.censo.model.Usuario;
 import br.gov.inep.censo.util.PasswordUtil;
 
@@ -22,7 +22,7 @@ public class UsuarioDAO {
         ResultSet resultSet = null;
 
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_BUSCA_LOGIN);
             statement.setString(1, login);
 

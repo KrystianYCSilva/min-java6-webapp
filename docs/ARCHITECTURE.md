@@ -18,7 +18,7 @@ O sistema segue arquitetura em camadas com separacao clara de responsabilidades:
 
 1. `web`: entrada HTTP, navegacao e renderizacao JSP.
 2. `service`: regras de negocio, validacoes e import/export TXT pipe.
-3. `dao`: persistencia JDBC e SQL.
+3. `dao`: persistencia SQL com conexao JDBC gerenciada por Hibernate 4.2.
 4. `model`: entidades e enums de dominio.
 5. `util`: utilitarios transversais (hash, validacoes, mapeamento).
 
@@ -28,8 +28,9 @@ flowchart LR
     B --> C[CsrfFilter]
     C --> D[Servlets]
     D --> E[Services]
-    E --> F[DAOs]
-    F --> G[(H2 Database)]
+    E --> F[DAOs SQL]
+    F --> I[HibernateConnectionProvider / SessionFactory]
+    I --> G[(H2 Database)]
     D --> H[JSP Views]
 ```
 
@@ -44,7 +45,7 @@ flowchart LR
 | Modelo | `br.gov.inep.censo.model` | Entidades persistidas | `Aluno`, `Curso`, `CursoAluno`, `Docente`, `Ies`, `Municipio`, `Usuario` |
 | Dominio auxiliar | `br.gov.inep.censo.domain` | Constantes de dominio/layout | `CategoriasOpcao`, `ModulosLayout` |
 | Utilitarios | `br.gov.inep.censo.util` | Funcoes de apoio reutilizaveis | `ValidationUtils`, `PasswordUtil`, `RequestFieldMapper` |
-| Configuracao | `br.gov.inep.censo.config` | Infra de banco e bootstrap | `ConnectionFactory`, `DatabaseBootstrapListener` |
+| Configuracao | `br.gov.inep.censo.config` | Infra de banco, bootstrap e persistencia | `ConnectionFactory`, `HibernateConnectionProvider`, `DatabaseBootstrapListener` |
 
 ## 4. Fluxos Principais
 
@@ -63,7 +64,7 @@ flowchart LR
 1. Servlet recebe acao (`lista`, `form`, `salvar`, `mostrar`, `excluir`, `importar`, `exportar`).
 2. `AbstractActionServlet` despacha a acao para comando registrado (`Map<String, ActionCommand>`).
 3. Service valida regras e consistencia.
-4. DAO executa operacao JDBC no H2.
+4. DAO executa SQL usando `Connection` fornecida por `HibernateConnectionProvider`.
 5. JSP renderiza saida com escape HTML via `ViewUtils.e(...)`.
 6. Servlet encaminha para JSP de lista, formulario ou visualizacao.
 
@@ -112,17 +113,18 @@ Scripts de banco:
 
 ## 6. Decisoes Arquiteturais Relevantes
 
-1. JDBC puro para controle explicito de SQL e compatibilidade com Java 6.
-2. Monolito em camadas para simplicidade de manutencao em stack legado.
-3. Modelagem de campos de layout por metadados para suportar evolucao de leiaute.
-4. Sessao HTTP + filtro para autenticacao sem dependencia externa.
-5. Tabela de apoio `municipio` para validar consistencia de UF/codigo de municipio em `Docente` e `IES`.
-6. Builder Pattern para construcao de entidades com muitos campos de formulario (`Aluno`, `Curso`, `CursoAluno`, `Docente`, `Ies`).
-7. Camada `web` consumindo `service` para acesso a dados de tela, evitando dependencia direta de DAO.
-8. Synchronizer Token Pattern para CSRF em operacoes mutaveis de `/app/*`.
-9. Output Encoding centralizado com `ViewUtils.e(...)` para mitigar XSS refletido/armazenado em JSP.
-10. Migração progressiva de hash de senha: compatibilidade legado + rehash automatico para PBKDF2.
-11. Command Pattern no web layer para despacho de `acao` sem cadeias extensas de `if/else`.
+1. Hibernate 4.2 (compativel com Java 6) introduzido como primeiro framework de acesso ao banco.
+2. SQL de negocio permanece nos DAOs na fase atual da migracao para preservar comportamento legado.
+3. Monolito em camadas para simplicidade de manutencao em stack legado.
+4. Modelagem de campos de layout por metadados para suportar evolucao de leiaute.
+5. Sessao HTTP + filtro para autenticacao sem dependencia externa.
+6. Tabela de apoio `municipio` para validar consistencia de UF/codigo de municipio em `Docente` e `IES`.
+7. Builder Pattern para construcao de entidades com muitos campos de formulario (`Aluno`, `Curso`, `CursoAluno`, `Docente`, `Ies`).
+8. Camada `web` consumindo `service` para acesso a dados de tela, evitando dependencia direta de DAO.
+9. Synchronizer Token Pattern para CSRF em operacoes mutaveis de `/app/*`.
+10. Output Encoding centralizado com `ViewUtils.e(...)` para mitigar XSS refletido/armazenado em JSP.
+11. Migracao progressiva de hash de senha: compatibilidade legado + rehash automatico para PBKDF2.
+12. Command Pattern no web layer para despacho de `acao` sem cadeias extensas de `if/else`.
 
 ## 7. Qualidade, Build e Testes
 
@@ -150,12 +152,15 @@ Qualidade:
 2. Mudancas de schema exigem sincronizacao entre SQL, DAO, service e testes.
 3. Acoplamento entre importacao/exportacao e metadados de layout exige regressao cuidadosa.
 4. Seguranca depende de manter `ViewUtils.e(...)` em toda saida JSP e `_csrf` em todo `POST` de `/app/*`.
+5. Pool embutido do Hibernate e adequado para desenvolvimento, mas nao para producao.
 
 ## 9. Referencias no repositorio
 
 1. `README.md`
 2. `docs/TEST-PLAN.md`
-3. `src/main/java/br/gov/inep/censo/web`
-4. `src/main/java/br/gov/inep/censo/service`
-5. `src/main/java/br/gov/inep/censo/dao`
-6. `src/main/resources/db`
+3. `docs/HIBERNATE-MIGRATION.md`
+4. `src/main/java/br/gov/inep/censo/web`
+5. `src/main/java/br/gov/inep/censo/service`
+6. `src/main/java/br/gov/inep/censo/dao`
+7. `src/main/java/br/gov/inep/censo/config`
+8. `src/main/resources/db`

@@ -1,6 +1,6 @@
 package br.gov.inep.censo.dao;
 
-import br.gov.inep.censo.config.ConnectionFactory;
+import br.gov.inep.censo.config.HibernateConnectionProvider;
 import br.gov.inep.censo.domain.CategoriasOpcao;
 import br.gov.inep.censo.model.CursoAluno;
 
@@ -61,7 +61,7 @@ public class CursoAlunoDAO extends AbstractJdbcDao {
         ResultSet generatedKeys = null;
 
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
 
@@ -131,7 +131,7 @@ public class CursoAlunoDAO extends AbstractJdbcDao {
 
         List<CursoAluno> itens = new ArrayList<CursoAluno>();
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_LISTA);
             resultSet = statement.executeQuery();
 

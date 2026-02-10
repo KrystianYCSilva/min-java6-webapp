@@ -1,6 +1,6 @@
 package br.gov.inep.censo.dao;
 
-import br.gov.inep.censo.config.ConnectionFactory;
+import br.gov.inep.censo.config.HibernateConnectionProvider;
 import br.gov.inep.censo.domain.CategoriasOpcao;
 import br.gov.inep.censo.domain.ModulosLayout;
 import br.gov.inep.censo.model.Aluno;
@@ -58,7 +58,7 @@ public class AlunoDAO extends AbstractJdbcDao {
         ResultSet generatedKeys = null;
 
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             connection.setAutoCommit(false);
 
             statement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -94,7 +94,7 @@ public class AlunoDAO extends AbstractJdbcDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             connection.setAutoCommit(false);
 
             statement = connection.prepareStatement(SQL_UPDATE);
@@ -123,7 +123,7 @@ public class AlunoDAO extends AbstractJdbcDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_BY_ID);
             statement.setLong(1, id.longValue());
             resultSet = statement.executeQuery();
@@ -145,7 +145,7 @@ public class AlunoDAO extends AbstractJdbcDao {
         List<Aluno> alunos = new ArrayList<Aluno>();
 
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_LISTA);
             resultSet = statement.executeQuery();
 
@@ -171,7 +171,7 @@ public class AlunoDAO extends AbstractJdbcDao {
         List<Aluno> alunos = new ArrayList<Aluno>();
 
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_PAGINADO);
             statement.setInt(1, size);
             statement.setInt(2, offset);
@@ -192,7 +192,7 @@ public class AlunoDAO extends AbstractJdbcDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_COUNT);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -213,7 +213,7 @@ public class AlunoDAO extends AbstractJdbcDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             connection.setAutoCommit(false);
 
             statement = connection.prepareStatement(

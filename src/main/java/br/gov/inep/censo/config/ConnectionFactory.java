@@ -26,18 +26,46 @@ public final class ConnectionFactory {
     }
 
     public static synchronized void configure(String url, String user, String password) {
+        boolean changed = false;
+
         if (url != null && url.trim().length() > 0) {
-            jdbcUrl = url.trim();
+            String normalizedUrl = url.trim();
+            if (!normalizedUrl.equals(jdbcUrl)) {
+                jdbcUrl = normalizedUrl;
+                changed = true;
+            }
         }
         if (user != null) {
-            jdbcUser = user;
+            if (!user.equals(jdbcUser)) {
+                jdbcUser = user;
+                changed = true;
+            }
         }
         if (password != null) {
-            jdbcPassword = password;
+            if (!password.equals(jdbcPassword)) {
+                jdbcPassword = password;
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            HibernateConnectionProvider.invalidate();
         }
     }
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
+    }
+
+    public static synchronized String getJdbcUrl() {
+        return jdbcUrl;
+    }
+
+    public static synchronized String getJdbcUser() {
+        return jdbcUser;
+    }
+
+    public static synchronized String getJdbcPassword() {
+        return jdbcPassword;
     }
 }

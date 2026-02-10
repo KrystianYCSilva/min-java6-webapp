@@ -7,6 +7,7 @@ triggers:
   - fluxo
   - servlet
   - jdbc
+  - hibernate
 last_updated: 2026-02-10
 ---
 # Blueprint de Arquitetura
@@ -31,7 +32,8 @@ HTTP Request
   -> CsrfFilter (apenas POST em /app/*)
   -> Servlet (web, despacho por Command)
   -> Service (regra de negocio)
-  -> DAO (JDBC + SQL)
+  -> DAO (SQL legado)
+  -> HibernateConnectionProvider (SessionFactory)
   -> H2 / tabelas
   -> Service
   -> Servlet
@@ -42,7 +44,7 @@ HTTP Response (JSP com output escaping via ViewUtils.e)
 
 1. DAO Pattern para isolamento de SQL.
 2. Service Layer para invariantes de negocio.
-3. Template base para operacoes JDBC (`AbstractJdbcDao`).
+3. Bridge de persistencia via Hibernate (`HibernateConnectionProvider`) para abertura de conexao.
 4. Filter para controle de autenticacao de sessao.
 5. Builder Pattern para montagem de entidades com muitos campos vindos de formulario.
 6. Synchronizer Token Pattern para protecao CSRF em operacoes mutaveis.
@@ -64,4 +66,5 @@ HTTP Response (JSP com output escaping via ViewUtils.e)
 2. Mudancas de schema impactam DAO, service e testes em cascata.
 3. Dependencias devem ser unidirecionais para evitar acoplamento ciclico.
 4. Validacao de UF/municipio em `DocenteService` e `IesService` depende da tabela `municipio`.
-5. `CursoAluno` segue padrao de telas separadas de listagem e formulario para legibilidade.
+5. Pool interno do Hibernate e aceitavel para desenvolvimento, mas nao para producao.
+6. `CursoAluno` segue padrao de telas separadas de listagem e formulario para legibilidade.

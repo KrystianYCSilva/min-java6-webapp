@@ -48,7 +48,7 @@ public class DatabaseBootstrapListener implements ServletContextListener {
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
-        // Sem recursos globais para finalizar.
+        HibernateConnectionProvider.shutdown();
     }
 
     private void executeSqlScript(Connection connection, String resourcePath) throws IOException, SQLException {

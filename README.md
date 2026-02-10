@@ -3,7 +3,8 @@
 Prototipo funcional com:
 - Java 6 (JDK 1.6)
 - Servlet 2.5 / JSP
-- JDBC puro
+- Hibernate ORM 4.2 (compativel com Java 6)
+- SQL legado nos DAOs (via conexao gerenciada pelo Hibernate)
 - Tomcat 6/7
 - Maven 3.2.5 (compatibilidade de projeto)
 - H2 embarcado
@@ -13,7 +14,7 @@ Prototipo funcional com:
 ### Camadas
 - `web` (Servlets): recebe request/response e delega para servicos.
 - `service`: validacoes e regras de negocio.
-- `dao`: persistencia JDBC.
+- `dao`: persistencia SQL sobre conexao gerenciada por Hibernate (`SessionFactory`).
 - `model`: entidades de dominio.
 - `util`: utilitarios de seguranca/validacao/mapeamento de request.
 
@@ -28,6 +29,7 @@ Prototipo funcional com:
 - DAO Pattern (`AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`, etc.).
 - Service Layer (`AlunoService`, `CursoService`, `CursoAlunoService`, `DocenteService`, `IesService`, `AuthService`).
 - Template-style base JDBC (`AbstractJdbcDao`) para fechar recursos e bind nulo.
+- Bridge de persistencia via `HibernateConnectionProvider` (Hibernate como primeiro framework de dados).
 
 ## Modelagem de banco
 
@@ -62,7 +64,7 @@ Categorias carregadas em `seed.sql`:
 - `seed_municipio.sql` pre-carrega a tabela de apoio de municipios.
 
 ## Fluxo funcional
-- Login via `LoginServlet` com hash SHA-256.
+- Login via `LoginServlet` com hash PBKDF2 e compatibilidade com SHA-256 legado.
 - `AuthFilter` protege `/app/*`.
 - Menu com acesso aos modulos:
   - Aluno
@@ -102,7 +104,8 @@ mvn -Dmaven.repo.local=.m2/repository -Dmaven.compiler.source=1.7 -Dmaven.compil
 
 Cobertura:
 - JaCoCo com gate minimo de `80%` (linha) para `dao`, `service` e `util`.
-- Resultado atual da suite: acima do gate (incluindo novos testes de `DocenteService`, `IesService` e DAOs de `Docente`/`IES`/`Municipio`).
+- Resultado atual da suite: acima do gate, com DAOs rodando sobre conexao gerenciada por Hibernate.
 
 Consulte `docs/TEST-PLAN.md` para detalhes da piramide de testes e roteiro E2E.
 Consulte `docs/ARCHITECTURE.md` para visao arquitetural detalhada do sistema.
+Consulte `docs/HIBERNATE-MIGRATION.md` para detalhes da introducao do Hibernate.

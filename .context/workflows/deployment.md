@@ -49,6 +49,8 @@ mvn clean package
 1. Erro de compilacao por versao de JDK.
 2. Falha de autenticacao por seed ausente.
 3. Pagina de erro por incompatibilidade de schema/seed.
+4. Configuracao JDBC invalida para `HibernateConnectionProvider` (driver/url/dialect).
+5. Uso de pool embutido do Hibernate em ambiente de producao sem ajuste de datasource.
 
 ## Checklist antes de entregar
 

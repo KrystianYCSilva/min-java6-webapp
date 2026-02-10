@@ -1,6 +1,6 @@
 package br.gov.inep.censo.dao;
 
-import br.gov.inep.censo.config.ConnectionFactory;
+import br.gov.inep.censo.config.HibernateConnectionProvider;
 import br.gov.inep.censo.model.Municipio;
 
 import java.sql.Connection;
@@ -23,7 +23,7 @@ public class MunicipioDAO extends AbstractJdbcDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement("SELECT 1 FROM municipio WHERE codigo = ?");
             statement.setString(1, codigo.trim());
             resultSet = statement.executeQuery();
@@ -43,7 +43,7 @@ public class MunicipioDAO extends AbstractJdbcDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(
                     "SELECT 1 FROM municipio WHERE codigo = ? AND codigo_uf = ?");
             statement.setString(1, codigo.trim());
@@ -67,7 +67,7 @@ public class MunicipioDAO extends AbstractJdbcDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(
                     "SELECT codigo, nome, codigo_uf, nome_uf FROM municipio WHERE codigo_uf = ? ORDER BY nome");
             statement.setInt(1, codigoUf.intValue());

@@ -1,6 +1,6 @@
 package br.gov.inep.censo.dao;
 
-import br.gov.inep.censo.config.ConnectionFactory;
+import br.gov.inep.censo.config.HibernateConnectionProvider;
 import br.gov.inep.censo.domain.ModulosLayout;
 import br.gov.inep.censo.model.Ies;
 
@@ -65,7 +65,7 @@ public class IesDAO extends AbstractJdbcDao {
         PreparedStatement statement = null;
         ResultSet generatedKeys = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             preencherCampos(statement, ies);
@@ -96,7 +96,7 @@ public class IesDAO extends AbstractJdbcDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(SQL_UPDATE);
             preencherCampos(statement, ies);
@@ -122,7 +122,7 @@ public class IesDAO extends AbstractJdbcDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_BY_ID);
             statement.setLong(1, id.longValue());
             resultSet = statement.executeQuery();
@@ -143,7 +143,7 @@ public class IesDAO extends AbstractJdbcDao {
         ResultSet resultSet = null;
         List<Ies> itens = new ArrayList<Ies>();
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_LISTA);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -167,7 +167,7 @@ public class IesDAO extends AbstractJdbcDao {
         ResultSet resultSet = null;
         List<Ies> itens = new ArrayList<Ies>();
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_PAGINADO);
             statement.setInt(1, size);
             statement.setInt(2, offset);
@@ -188,7 +188,7 @@ public class IesDAO extends AbstractJdbcDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             statement = connection.prepareStatement(SQL_COUNT);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -209,7 +209,7 @@ public class IesDAO extends AbstractJdbcDao {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = ConnectionFactory.getConnection();
+            connection = HibernateConnectionProvider.getConnection();
             connection.setAutoCommit(false);
             layoutCampoDAO.removerValoresIes(connection, id);
             statement = connection.prepareStatement("DELETE FROM ies WHERE id = ?");

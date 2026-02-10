@@ -7,6 +7,7 @@ triggers:
   - jacoco
   - integracao
   - e2e
+  - hibernate
 last_updated: 2026-02-10
 ---
 # Estrategia de Testes
@@ -14,7 +15,7 @@ last_updated: 2026-02-10
 ## Padrao de piramide
 
 1. Base: testes unitarios (`util`, `enums`, validacoes de service).
-2. Meio: integracao (`dao`, `service` com banco H2 e DBUnit).
+2. Meio: integracao (`dao`, `service` com banco H2, DBUnit e conexao via Hibernate).
 3. Topo: E2E Selenium (ativacao explicita quando ambiente estiver pronto).
 
 ## Cobertura e gate
@@ -42,9 +43,10 @@ mvn -De2e.baseUrl=http://localhost:8080/censo-superior-2025 -Dtest=CensoE2ETest 
 1. Mudanca em `util`: atualizar teste unitario correspondente.
 2. Mudanca em regra de `service`: adicionar/ajustar teste de service.
 3. Mudanca em SQL/DAO: atualizar teste de integracao DAO.
-4. Mudanca em autenticacao/filtro: atualizar teste de `AuthFilter`.
-5. Mudanca de fluxo ponta a ponta: considerar ajuste de E2E.
-6. Mudanca em registros `11` ou `31`: incluir cobertura de import/export TXT pipe e validacoes de municipio/UF.
+4. Mudanca em infraestrutura Hibernate (`config` de persistencia): executar suite completa `dao` + `service`.
+5. Mudanca em autenticacao/filtro: atualizar teste de `AuthFilter`.
+6. Mudanca de fluxo ponta a ponta: considerar ajuste de E2E.
+7. Mudanca em registros `11` ou `31`: incluir cobertura de import/export TXT pipe e validacoes de municipio/UF.
 
 ## Politica de estabilidade
 
