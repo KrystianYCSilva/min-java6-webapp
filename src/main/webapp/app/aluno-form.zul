@@ -3,7 +3,7 @@
     <style src="/css/pdf-like.css"/>
 
     <window id="winAlunoForm" apply="br.gov.inep.censo.web.zk.modulo.AlunoComposer"
-            border="normal" width="1100px" sclass="sheet" position="center,top">
+            border="normal" width="100%" sclass="sheet" position="center,top">
         <vbox spacing="10px" width="100%">
             <label value="Aluno" sclass="official-tag"/>
             <label id="lblTituloFormAluno" style="font-size:22px;font-weight:bold;"/>
@@ -68,3 +68,4 @@
         </vbox>
     </window>
 </zk>
+

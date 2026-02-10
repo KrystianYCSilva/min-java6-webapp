@@ -3,7 +3,7 @@
     <style src="/css/pdf-like.css"/>
 
     <window id="winDocenteView" apply="br.gov.inep.censo.web.zk.modulo.DocenteComposer"
-            border="normal" width="1020px" sclass="sheet" position="center,top">
+            border="normal" width="100%" sclass="sheet" position="center,top">
         <vbox spacing="10px" width="100%">
             <label value="Docente" sclass="official-tag"/>
             <label value="Visualizar Docente" style="font-size:22px;font-weight:bold;"/>
@@ -44,3 +44,4 @@
         </vbox>
     </window>
 </zk>
+

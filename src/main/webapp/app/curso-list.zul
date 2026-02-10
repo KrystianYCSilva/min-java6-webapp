@@ -3,7 +3,7 @@
     <style src="/css/pdf-like.css"/>
 
     <window id="winCursoList" apply="br.gov.inep.censo.web.zk.modulo.CursoComposer"
-            border="normal" width="1200px" sclass="sheet" position="center,top">
+            border="normal" width="100%" sclass="sheet" position="center,top">
         <vbox spacing="10px" width="100%">
             <label value="Curso" sclass="official-tag"/>
             <label value="Listagem de Cursos (Registro 21)" style="font-size:22px;font-weight:bold;"/>
@@ -42,3 +42,4 @@
         </vbox>
     </window>
 </zk>
+

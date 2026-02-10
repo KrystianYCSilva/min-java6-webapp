@@ -1,65 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-    <style src="/css/pdf-like.css"/>
     <style src="/css/app-shell.css"/>
 
     <window id="winShell" apply="br.gov.inep.censo.web.zk.menu.MenuComposer"
             border="none" width="100%" height="100%" sclass="shell-root">
-        <borderlayout width="100%" height="100%" sclass="shell-layout">
-            <north size="72px" border="none" splittable="false" collapsible="false">
-                <hbox sclass="shell-header" hflex="1" vflex="1" pack="justify" align="center">
-                    <vbox spacing="2px">
-                        <label value="Censo da Educacao Superior 2025" sclass="shell-title"/>
-                        <label value="Painel Operacional" sclass="shell-subtitle"/>
+        <vbox width="100%" height="100%" spacing="0">
+            <hbox sclass="shell-header" width="100%" widths="72%,28%" align="center">
+                <vbox spacing="2px">
+                    <label value="Censo da Educacao Superior 2025" sclass="shell-title"/>
+                    <label value="Painel Operacional" sclass="shell-subtitle"/>
+                </vbox>
+
+                <hbox sclass="shell-user-actions" width="100%" spacing="12px" pack="end" align="center">
+                    <vbox spacing="1px" sclass="shell-userbox">
+                        <label id="lblUsuarioHeader" sclass="shell-user-name"/>
+                        <label id="lblUsuarioLogin" sclass="shell-user-login"/>
+                    </vbox>
+                    <button id="btnSairHeader" label="Sair" sclass="shell-logout"/>
+                </hbox>
+            </hbox>
+
+            <hbox sclass="shell-body" width="100%" spacing="0" valign="top">
+                <vbox sclass="shell-sidebar" width="260px" spacing="8px">
+                    <label value="Navegacao" sclass="shell-nav-title"/>
+                    <label id="btnNavHome" value="Home" sclass="shell-nav-item"/>
+                    <label id="btnNavAluno" value="Modulo Aluno" sclass="shell-nav-item"/>
+                    <label id="btnNavCurso" value="Modulo Curso" sclass="shell-nav-item"/>
+                    <label id="btnNavCursoAluno" value="Registro 42 - CursoAluno" sclass="shell-nav-item"/>
+                    <label id="btnNavDocente" value="Modulo Docente" sclass="shell-nav-item"/>
+                    <label id="btnNavIes" value="Modulo IES" sclass="shell-nav-item"/>
+                </vbox>
+
+                <vbox sclass="shell-main" width="100%" spacing="0">
+                    <vbox sclass="shell-content-wrap" width="100%">
+                        <include id="incMain" width="100%"/>
                     </vbox>
 
-                    <hbox spacing="16px" align="center">
-                        <vbox spacing="1px" sclass="shell-userbox">
-                            <label id="lblUsuarioHeader" sclass="shell-user-name"/>
-                            <label id="lblUsuarioLogin" sclass="shell-user-login"/>
-                        </vbox>
-                        <button id="btnSairHeader" label="Sair" sclass="btn"/>
+                    <hbox sclass="shell-footer" width="100%" align="center" pack="center">
+                        <label id="lblFooter"/>
                     </hbox>
-                </hbox>
-            </north>
-
-            <west size="250px" border="normal" splittable="false" collapsible="false">
-                <vbox sclass="shell-sidebar" hflex="1" vflex="1" spacing="8px">
-                    <label value="Navegacao" sclass="shell-nav-title"/>
-
-                    <button id="btnNavHome" label="Home" sclass="shell-nav-btn"/>
-                    <button id="btnNavAluno" label="Modulo Aluno" sclass="shell-nav-btn"/>
-                    <button id="btnNavCurso" label="Modulo Curso" sclass="shell-nav-btn"/>
-                    <button id="btnNavCursoAluno" label="Registro 42 - CursoAluno" sclass="shell-nav-btn"/>
-                    <button id="btnNavDocente" label="Modulo Docente" sclass="shell-nav-btn"/>
-                    <button id="btnNavIes" label="Modulo IES" sclass="shell-nav-btn"/>
                 </vbox>
-            </west>
+            </hbox>
+        </vbox>
 
-            <center border="none" autoscroll="true">
-                <div sclass="shell-content-wrap">
-                    <include id="incMain"/>
-                </div>
-            </center>
-
-            <south size="44px" border="none" splittable="false" collapsible="false">
-                <hbox sclass="shell-footer" hflex="1" vflex="1" align="center" pack="center">
-                    <label id="lblFooter"/>
-                </hbox>
-            </south>
-        </borderlayout>
-
-        <window id="winSub" mode="modal" closable="true" visible="false"
-                width="92%" height="88%" border="normal" sclass="shell-subwindow"
+        <window id="winSub" mode="overlapped" position="center" closable="true" sizable="true" visible="false"
+                width="95%" height="90%" border="normal" sclass="shell-subwindow" contentStyle="overflow:auto;"
                 title="Detalhes">
             <vbox width="100%" height="100%" spacing="6px">
                 <hbox pack="justify" align="center" sclass="shell-subheader">
                     <label id="lblSubTitle" sclass="shell-subtitle-main"/>
-                    <button id="btnCloseSub" label="Fechar" sclass="btn-outline"/>
                 </hbox>
-                <div sclass="shell-subcontent" hflex="1" vflex="1">
-                    <include id="incSub"/>
-                </div>
+                <vbox sclass="shell-subcontent" width="100%">
+                    <include id="incSub" width="100%"/>
+                </vbox>
             </vbox>
         </window>
     </window>

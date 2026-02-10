@@ -3,7 +3,7 @@
     <style src="/css/pdf-like.css"/>
 
     <window id="winIesForm" apply="br.gov.inep.censo.web.zk.modulo.IesComposer"
-            border="normal" width="1150px" sclass="sheet" position="center,top">
+            border="normal" width="100%" sclass="sheet" position="center,top">
         <vbox spacing="10px" width="100%">
             <label value="IES" sclass="official-tag"/>
             <label id="lblTituloFormIes" style="font-size:22px;font-weight:bold;"/>
@@ -39,3 +39,4 @@
         </vbox>
     </window>
 </zk>
+

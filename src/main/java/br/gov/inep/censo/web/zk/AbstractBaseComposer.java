@@ -1,6 +1,7 @@
 package br.gov.inep.censo.web.zk;
 
 import br.gov.inep.censo.util.ValidationUtils;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Checkbox;
@@ -20,19 +21,27 @@ public abstract class AbstractBaseComposer extends GenericForwardComposer {
     private static final long serialVersionUID = 1L;
 
     protected HttpServletRequest currentRequest() {
-        return (HttpServletRequest) Executions.getCurrent().getNativeRequest();
+        Execution execution = Executions.getCurrent();
+        if (execution == null) {
+            return null;
+        }
+        Object nativeRequest = execution.getNativeRequest();
+        if (!(nativeRequest instanceof HttpServletRequest)) {
+            return null;
+        }
+        return (HttpServletRequest) nativeRequest;
     }
 
     protected HttpSession currentSession(boolean create) {
-        return currentRequest().getSession(create);
-    }
-
-    protected String contextPath() {
-        return currentRequest().getContextPath();
+        HttpServletRequest request = currentRequest();
+        if (request == null) {
+            return null;
+        }
+        return request.getSession(create);
     }
 
     protected void redirect(String relativePath) {
-        Executions.sendRedirect(contextPath() + relativePath);
+        Executions.sendRedirect(relativePath);
     }
 
     protected void goShell(String view) {
@@ -57,7 +66,9 @@ public abstract class AbstractBaseComposer extends GenericForwardComposer {
 
     protected void putFlash(String key, String value) {
         HttpSession session = currentSession(true);
-        session.setAttribute(key, value);
+        if (session != null) {
+            session.setAttribute(key, value);
+        }
     }
 
     protected String consumeFlash(String key) {

@@ -6,6 +6,7 @@ import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -17,10 +18,14 @@ public class MenuComposer extends AbstractBaseComposer {
 
     private Label lblUsuarioHeader;
     private Label lblUsuarioLogin;
-    private Label lblSubTitle;
     private Label lblFooter;
+    private Label btnNavHome;
+    private Label btnNavAluno;
+    private Label btnNavCurso;
+    private Label btnNavCursoAluno;
+    private Label btnNavDocente;
+    private Label btnNavIes;
     private Include incMain;
-    private Include incSub;
     private Window winSub;
     private String currentView = "dashboard";
 
@@ -37,21 +42,33 @@ public class MenuComposer extends AbstractBaseComposer {
             return;
         }
 
-        lblUsuarioHeader.setValue(usuario.getNome());
-        lblUsuarioLogin.setValue(usuario.getLogin());
-        lblFooter.setValue("Censo Superior 2025 | Versao 2.0.0 | Frontend ZK 3.6.2 MVC");
+        setLabelValue(lblUsuarioHeader, usuario.getNome());
+        setLabelValue(lblUsuarioLogin, usuario.getLogin());
+        setLabelValue(lblFooter, "Censo Superior 2025 | Versao 2.0.0 | Frontend ZK 3.6.2 MVC");
 
-        String view = normalizeView(trimToNull(currentRequest().getParameter("view")));
+        HttpServletRequest request = currentRequest();
+        String viewParam = request != null ? request.getParameter("view") : null;
+        String view = normalizeView(trimToNull(viewParam));
         currentView = view;
-        incMain.setSrc(resolveMainSrc(view));
+        updateActiveNavigation(view);
+        if (incMain != null) {
+            incMain.setSrc(resolveMainSrc(view));
+        }
 
-        String sub = normalizeSub(trimToNull(currentRequest().getParameter("sub")));
-        String id = trimToNull(currentRequest().getParameter("id"));
+        String subParam = request != null ? request.getParameter("sub") : null;
+        String idParam = request != null ? request.getParameter("id") : null;
+        String sub = normalizeSub(trimToNull(subParam));
+        String id = trimToNull(idParam);
         if (sub != null) {
             openSubWindow(sub, id);
         } else {
-            winSub.setVisible(false);
-            incSub.setSrc((String) null);
+            if (winSub != null) {
+                winSub.setVisible(false);
+            }
+            Include includeSub = resolveSubInclude();
+            if (includeSub != null) {
+                includeSub.setSrc((String) null);
+            }
         }
     }
 
@@ -87,12 +104,34 @@ public class MenuComposer extends AbstractBaseComposer {
         redirect("/login.zul?logout=1");
     }
 
-    public void onClick$btnCloseSub() {
+    public void onClose$winSub() {
         goShell(currentView);
     }
 
-    public void onClose$winSub() {
-        goShell(currentView);
+    private void setLabelValue(Label label, String value) {
+        if (label != null) {
+            label.setValue(trimToEmpty(value));
+        }
+    }
+
+    private void updateActiveNavigation(String view) {
+        setNavItemState(btnNavHome, "dashboard".equals(view));
+        setNavItemState(btnNavAluno, "aluno-list".equals(view));
+        setNavItemState(btnNavCurso, "curso-list".equals(view));
+        setNavItemState(btnNavCursoAluno, "curso-aluno-list".equals(view));
+        setNavItemState(btnNavDocente, "docente-list".equals(view));
+        setNavItemState(btnNavIes, "ies-list".equals(view));
+    }
+
+    private void setNavItemState(Label item, boolean active) {
+        if (item == null) {
+            return;
+        }
+        if (active) {
+            item.setSclass("shell-nav-item shell-nav-item-active");
+        } else {
+            item.setSclass("shell-nav-item");
+        }
     }
 
     private void openSubWindow(String sub, String id) {
@@ -103,13 +142,40 @@ public class MenuComposer extends AbstractBaseComposer {
         if (id != null) {
             src = src + "?id=" + id;
         }
-        lblSubTitle.setValue(resolveSubTitle(sub));
-        incSub.setSrc(src);
-        try {
-            winSub.doModal();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        Label labelSubTitle = resolveSubTitleLabel();
+        if (labelSubTitle != null) {
+            labelSubTitle.setValue(resolveSubTitle(sub));
+        }
+
+        Include includeSub = resolveSubInclude();
+        if (includeSub != null) {
+            includeSub.setSrc(src);
+        }
+
+        if (winSub != null) {
             winSub.setVisible(true);
+        }
+    }
+
+    private Include resolveSubInclude() {
+        if (winSub == null) {
+            return null;
+        }
+        try {
+            return (Include) winSub.getFellow("incSub");
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    private Label resolveSubTitleLabel() {
+        if (winSub == null) {
+            return null;
+        }
+        try {
+            return (Label) winSub.getFellow("lblSubTitle");
+        } catch (RuntimeException e) {
+            return null;
         }
     }
 

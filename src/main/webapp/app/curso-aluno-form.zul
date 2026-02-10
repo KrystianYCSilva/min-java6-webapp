@@ -3,7 +3,7 @@
     <style src="/css/pdf-like.css"/>
 
     <window id="winCursoAlunoForm" apply="br.gov.inep.censo.web.zk.modulo.CursoAlunoComposer"
-            border="normal" width="1250px" sclass="sheet" position="center,top">
+            border="normal" width="100%" sclass="sheet" position="center,top">
         <vbox spacing="10px" width="100%">
             <label value="Modulo Vinculo" sclass="official-tag"/>
             <label value="Formulario de Vinculo Aluno x Curso (Registro 42)" style="font-size:22px;font-weight:bold;"/>
@@ -75,3 +75,4 @@
         </vbox>
     </window>
 </zk>
+
