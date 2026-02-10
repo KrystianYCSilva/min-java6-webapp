@@ -61,31 +61,12 @@ body {
 }
 
 .top-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
     margin-bottom: 18px;
 }
 
 .btn,
 .btn-outline {
-    display: inline-block;
-    padding: 8px 14px;
-    text-decoration: none;
-    border: 1px solid var(--line);
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.btn {
-    background: var(--accent);
-    color: #fff;
-    border-color: #001e2d;
-}
-
-.btn-outline {
-    background: transparent;
-    color: var(--ink);
+    margin-right: 6px;
 }
 
 .menu-grid {
@@ -188,21 +169,21 @@ h3 {
     border: 1px solid #7b7b7b;
 }
 
-table {
+.table-wrap table {
     border-collapse: collapse;
     width: 100%;
     min-width: 760px;
 }
 
-th,
-td {
+.table-wrap th,
+.table-wrap td {
     border: 1px solid #7b7b7b;
     padding: 8px;
     text-align: left;
     font-size: 13px;
 }
 
-th {
+.table-wrap th {
     background: #ececec;
     text-transform: uppercase;
     letter-spacing: 0.5px;

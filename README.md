@@ -1,114 +1,103 @@
 # Censo Superior 2025 - WebApp Java 6
 
 Prototipo funcional com:
-- Java 6 (JDK 1.6)
-- Servlet 2.5 / JSP
-- Hibernate ORM 4.2 (compativel com Java 6)
-- JPA nos DAOs (`EntityManager` + `EntityTransaction` + JPQL/SQL nativo)
-- Mapeamento ORM por anotacoes JPA `javax.persistence` (`@Entity`, `@Table`, `@Column`)
+- Java 6 (codigo-fonte compativel)
+- Servlet 2.5
+- ZK Framework 3.6.2 (frontend MVC com Composer)
+- Hibernate ORM 4.2 + JPA (`EntityManager`)
+- Entidades anotadas com `javax.persistence`
 - Tomcat 6/7
-- Maven 3.2.5 (compatibilidade de projeto)
+- Maven 3.x
 - H2 embarcado
 
-## Arquitetura (Padrao Ouro para legado)
+## Versao 2.0.0
 
-### Camadas
-- `web` (Servlets): recebe request/response e delega para servicos.
-- `service`: validacoes e regras de negocio.
-- `dao`: persistencia JPA sobre `EntityManagerFactory`.
+A versao `2.0.0-SNAPSHOT` consolida o frontend ZK 3.6.2 em MVC e remove o frontend legado JSP/Servlet.
+
+Principais pontos:
+- shell autenticado em `app/menu.zul` com `header + sidebar + center + footer`;
+- navegacao centralizada por querystring (`view` para conteudo principal, `sub` para sub-window modal);
+- telas de cadastro/visualizacao abertas em sub-window modal para melhorar UX;
+- camada `service/dao/model` JPA preservada.
+
+## Arquitetura em camadas
+
+- `web/zk`: composers MVC de navegacao e interacao de tela.
+- `web/filter`: autenticacao de acesso a `/app/*`.
+- `service`: regras de negocio e validacoes.
+- `dao`: persistencia JPA (`EntityManager`/`EntityTransaction`).
 - `model`: entidades de dominio.
-- `util`: utilitarios de seguranca/validacao/mapeamento de request.
+- `util`: utilitarios de seguranca e validacao.
 
-### Principios SOLID aplicados
-- `S` (Single Responsibility): cada camada com responsabilidade unica.
-- `O` (Open/Closed): campos multivalorados modelados por catalogo (`dominio_opcao`) sem adicionar novas colunas.
-- `L` (Liskov): modelos e servicos sem herancas fragilizadas.
-- `I` (Interface Segregation): servicos e utilitarios pequenos e focados.
-- `D` (Dependency Inversion): servlets dependem de servicos, nao de SQL direto.
-
-### Padroes de projeto utilizados
-- DAO Pattern (`AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`, etc.).
+Padroes utilizados:
+- DAO Pattern (`AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`).
 - Service Layer (`AlunoService`, `CursoService`, `CursoAlunoService`, `DocenteService`, `IesService`, `AuthService`).
-- Template transacional JPA (`AbstractJpaDao`) para padronizar `EntityManager`/`EntityTransaction`.
-- ORM mapping por classes anotadas e unidade JPA (`META-INF/persistence.xml` + `javax.persistence`).
-- Bridge de persistencia via `HibernateConnectionProvider` (boot e ciclo de vida de `EntityManagerFactory`).
+- Template transacional JPA (`AbstractJpaDao`).
+- Builder Pattern para entidades extensas (`Aluno`, `Curso`, `CursoAluno`, `Docente`, `Ies`).
+- MVC Composer (ZK 3.6.2) para web.
+
+## Rotas principais
+
+Publicas:
+- `/home.zul`
+- `/login.zul`
+
+Autenticadas (`AuthFilter`):
+- `/app/menu.zul?view=dashboard`
+- `/app/menu.zul?view=aluno-list`
+- `/app/menu.zul?view=curso-list`
+- `/app/menu.zul?view=curso-aluno-list`
+- `/app/menu.zul?view=docente-list`
+- `/app/menu.zul?view=ies-list`
+
+Sub-window modal (parametro `sub`):
+- `sub=aluno-form`, `sub=aluno-view`
+- `sub=curso-form`, `sub=curso-view`
+- `sub=curso-aluno-form`
+- `sub=docente-form`, `sub=docente-view`
+- `sub=ies-form`, `sub=ies-view`
 
 ## Modelagem de banco
 
-### Tabelas principais
+Tabelas principais:
 - `usuario`
 - `aluno` (Registro 41)
 - `curso` (Registro 21)
 - `curso_aluno` (Registro 42)
 - `docente` (Registro 31)
-- `ies` (Registro 11 - laboratorio)
-- `municipio` (tabela de apoio para validacao de UF/codigo)
+- `ies` (Registro 11)
+- `municipio`
 
-### Tabelas auxiliares 1..N (normalizacao)
+Tabelas auxiliares:
 - `dominio_opcao`
-- `aluno_opcao`
-- `curso_opcao`
-- `curso_aluno_opcao`
+- `aluno_opcao`, `curso_opcao`, `curso_aluno_opcao`
+- `layout_campo`
+- `aluno_layout_valor`, `curso_layout_valor`, `curso_aluno_layout_valor`, `docente_layout_valor`, `ies_layout_valor`
 
-Categorias carregadas em `seed.sql`:
-- `ALUNO_TIPO_DEFICIENCIA`
-- `CURSO_RECURSO_TECNOLOGIA_ASSISTIVA`
-- `CURSO_ALUNO_TIPO_FINANCIAMENTO`
-- `CURSO_ALUNO_APOIO_SOCIAL`
-- `CURSO_ALUNO_ATIVIDADE_EXTRACURRICULAR`
-- `CURSO_ALUNO_RESERVA_VAGA`
+## Build e testes
 
-### Cobertura de todos os campos de leiaute
-- `layout_campo` guarda os metadados dos CSVs (Registros 11, 21, 31, 41 e 42).
-- `aluno_layout_valor`, `curso_layout_valor`, `curso_aluno_layout_valor`, `docente_layout_valor`, `ies_layout_valor` guardam valores complementares.
-- `seed_layout.sql` contem os layouts base de aluno/curso/curso-aluno.
-- `seed_layout_ies_docente.sql` contem os layouts de docente e IES.
-- `seed_municipio.sql` pre-carrega a tabela de apoio de municipios.
-
-## Fluxo funcional
-- Login via `LoginServlet` com hash PBKDF2 e compatibilidade com SHA-256 legado.
-- `AuthFilter` protege `/app/*`.
-- Menu com acesso aos modulos:
-  - Aluno
-  - Curso
-  - CursoAluno (Registro 42)
-  - Docente (Registro 31)
-  - IES (Registro 11)
-- Listagens paginadas dos modulos com acoes:
-  - `Alterar`
-  - `Mostrar`
-  - `Excluir`
-  - `Exportar TXT` por item
-- Operacoes em lote de Aluno, Curso, Docente e IES:
-  - importacao de TXT separado por `|`
-  - exportacao total em TXT separado por `|`
-- `CursoAluno` organizado em telas separadas de lista e formulario (`curso-aluno-list.jsp` e `curso-aluno-form.jsp`).
-
-## Build e execucao
-
-### Build
+Build:
 ```bash
 mvn clean package
 ```
 
-Observacao: em JDKs modernos, `source/target 1.6` pode exigir JDK 6/7 para empacotamento completo.
+Em JDK moderno (sem toolchain Java 6/7), use:
+```bash
+mvn '-Dmaven.compiler.source=1.7' '-Dmaven.compiler.target=1.7' clean package
+```
 
-### Credencial inicial
+Testes:
+```bash
+mvn '-Dmaven.compiler.source=1.7' '-Dmaven.compiler.target=1.7' test
+```
+
+## Credencial inicial
+
 - Login: `admin`
 - Senha: `admin123`
 
-## Testes
+## Referencias
 
-Execucao recomendada no workspace:
-```bash
-mvn -Dmaven.repo.local=.m2/repository -Dmaven.compiler.source=1.7 -Dmaven.compiler.target=1.7 test
-```
-
-Cobertura:
-- JaCoCo com gate minimo de `80%` (linha) para `dao`, `service` e `util`.
-- Resultado atual da suite: acima do gate, com DAOs rodando em JPA (`EntityManager`/`EntityTransaction`) e entidades JPA anotadas.
-
-Consulte `docs/TEST-PLAN.md` para detalhes da piramide de testes e roteiro E2E.
-Consulte `docs/ARCHITECTURE.md` para visao arquitetural detalhada do sistema.
-Consulte `docs/HIBERNATE-MIGRATION.md` para historico da migracao de persistencia.
-Consulte `docs/HIBERNATE-NATIVE-WHAT-CHANGED.md` para o historico da fase Hibernate nativo anterior.
+- `docs/ARCHITECTURE.md`
+- `docs/TEST-PLAN.md`
+- `docs/HIBERNATE-MIGRATION.md`

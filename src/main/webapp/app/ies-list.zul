@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <style src="/css/pdf-like.css"/>
+
+    <window id="winIesList" apply="br.gov.inep.censo.web.zk.modulo.IesComposer"
+            border="normal" width="100%" sclass="sheet" position="center,top">
+        <vbox spacing="10px" width="100%">
+            <label value="IES" sclass="official-tag"/>
+            <label value="Listagem de IES (Registro 11 - Laboratorio)" style="font-size:22px;font-weight:bold;"/>
+            <label value="Total de registros:"/>
+            <label id="lblTotalListIes" style="font-weight:bold;"/>
+
+            <label id="lblErroListIes" sclass="alert" visible="false"/>
+            <label id="lblFlashListIes" sclass="ok" visible="false"/>
+
+            <hbox spacing="8px" sclass="top-actions">
+                <button id="btnNovoListIes" label="Incluir via Formulario" sclass="btn"/>
+                <button id="btnExportarListIes" label="Exportar TXT (pipe)" sclass="btn-outline"/>
+                <button id="btnMenuListIes" label="Menu" sclass="btn-outline"/>
+            </hbox>
+
+            <label value="Importar TXT pipe (1 registro por linha, leiaute Registro 11)"/>
+            <textbox id="txtImportacaoListIes" multiline="true" rows="5" width="100%"/>
+            <button id="btnImportarListIes" label="Importar TXT" sclass="btn"/>
+
+            <listbox id="lstIes" width="100%" mold="paging" pageSize="10">
+                <listhead sizable="true">
+                    <listheader label="ID" width="70px"/>
+                    <listheader label="ID IES INEP" width="100px"/>
+                    <listheader label="Nome Laboratorio" width="220px"/>
+                    <listheader label="Registro" width="120px"/>
+                    <listheader label="Tipo" width="180px"/>
+                    <listheader label="UF" width="180px"/>
+                    <listheader label="Municipio" width="120px"/>
+                    <listheader label="Acoes" width="300px"/>
+                </listhead>
+            </listbox>
+
+            <hbox spacing="8px" sclass="top-actions">
+                <button id="btnPaginaAnteriorIes" label="Pagina Anterior" sclass="btn-outline"/>
+                <label id="lblPaginacaoListIes"/>
+                <button id="btnPaginaProximaIes" label="Proxima Pagina" sclass="btn-outline"/>
+            </hbox>
+        </vbox>
+    </window>
+</zk>
+

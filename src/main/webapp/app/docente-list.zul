@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <style src="/css/pdf-like.css"/>
+
+    <window id="winDocenteList" apply="br.gov.inep.censo.web.zk.modulo.DocenteComposer"
+            border="normal" width="100%" sclass="sheet" position="center,top">
+        <vbox spacing="10px" width="100%">
+            <label value="Docente" sclass="official-tag"/>
+            <label value="Listagem de Docentes (Registro 31)" style="font-size:22px;font-weight:bold;"/>
+            <label value="Total de registros:"/>
+            <label id="lblTotalListDocente" style="font-weight:bold;"/>
+
+            <label id="lblErroListDocente" sclass="alert" visible="false"/>
+            <label id="lblFlashListDocente" sclass="ok" visible="false"/>
+
+            <hbox spacing="8px" sclass="top-actions">
+                <button id="btnNovoListDocente" label="Incluir via Formulario" sclass="btn"/>
+                <button id="btnExportarListDocente" label="Exportar TXT (pipe)" sclass="btn-outline"/>
+                <button id="btnMenuListDocente" label="Menu" sclass="btn-outline"/>
+            </hbox>
+
+            <label value="Importar TXT pipe (1 registro por linha, leiaute Registro 31)"/>
+            <textbox id="txtImportacaoListDocente" multiline="true" rows="5" width="100%"/>
+            <button id="btnImportarListDocente" label="Importar TXT" sclass="btn"/>
+
+            <listbox id="lstDocentes" width="100%" mold="paging" pageSize="10">
+                <listhead sizable="true">
+                    <listheader label="ID" width="70px"/>
+                    <listheader label="ID Docente IES" width="120px"/>
+                    <listheader label="Nome" width="260px"/>
+                    <listheader label="CPF" width="110px"/>
+                    <listheader label="Nascimento" width="120px"/>
+                    <listheader label="Nacionalidade" width="180px"/>
+                    <listheader label="Acoes" width="300px"/>
+                </listhead>
+            </listbox>
+
+            <hbox spacing="8px" sclass="top-actions">
+                <button id="btnPaginaAnteriorDocente" label="Pagina Anterior" sclass="btn-outline"/>
+                <label id="lblPaginacaoListDocente"/>
+                <button id="btnPaginaProximaDocente" label="Proxima Pagina" sclass="btn-outline"/>
+            </hbox>
+        </vbox>
+    </window>
+</zk>
+

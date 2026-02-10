@@ -23,7 +23,7 @@ public class AuthFilterTest {
     @Before
     public void setUp() throws Exception {
         authFilter = new AuthFilter();
-        authFilter.init(newFilterConfig("/login"));
+        authFilter.init(newFilterConfig("/login.zul"));
     }
 
     @Test
@@ -37,7 +37,7 @@ public class AuthFilterTest {
 
         authFilter.doFilter(request, response, chain);
 
-        Assert.assertEquals("/censo/login", redirectHolder[0]);
+        Assert.assertEquals("/censo/login.zul", redirectHolder[0]);
         Assert.assertFalse(chainCalled[0]);
     }
 

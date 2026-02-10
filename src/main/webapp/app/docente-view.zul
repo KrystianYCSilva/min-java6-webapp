@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <style src="/css/pdf-like.css"/>
+
+    <window id="winDocenteView" apply="br.gov.inep.censo.web.zk.modulo.DocenteComposer"
+            border="normal" width="100%" sclass="sheet" position="center,top">
+        <vbox spacing="10px" width="100%">
+            <label value="Docente" sclass="official-tag"/>
+            <label value="Visualizar Docente" style="font-size:22px;font-weight:bold;"/>
+
+            <hbox spacing="8px" sclass="top-actions">
+                <button id="btnVoltarViewDocente" label="Voltar para Listagem" sclass="btn-outline"/>
+                <button id="btnEditarViewDocente" label="Alterar" sclass="btn-outline"/>
+            </hbox>
+
+            <grid width="100%">
+                <columns>
+                    <column width="34%"/>
+                    <column width="66%"/>
+                </columns>
+                <rows>
+                    <row><label value="ID"/><label id="lblViewDocenteId"/></row>
+                    <row><label value="ID Docente IES"/><label id="lblViewDocenteIdIes"/></row>
+                    <row><label value="Nome"/><label id="lblViewDocenteNome"/></row>
+                    <row><label value="CPF"/><label id="lblViewDocenteCpf"/></row>
+                    <row><label value="Documento estrangeiro"/><label id="lblViewDocenteDocumento"/></row>
+                    <row><label value="Data de nascimento"/><label id="lblViewDocenteNascimento"/></row>
+                    <row><label value="Cor/Raca"/><label id="lblViewDocenteCorRaca"/></row>
+                    <row><label value="Nacionalidade"/><label id="lblViewDocenteNacionalidade"/></row>
+                    <row><label value="Pais"/><label id="lblViewDocentePais"/></row>
+                    <row><label value="UF"/><label id="lblViewDocenteUf"/></row>
+                    <row><label value="Municipio"/><label id="lblViewDocenteMunicipio"/></row>
+                    <row><label value="Deficiencia/TEA/altas habilidades"/><label id="lblViewDocenteDeficiencia"/></row>
+                </rows>
+            </grid>
+
+            <label value="Campos complementares do leiaute" style="font-weight:bold;"/>
+            <listbox id="lstViewCamposDocente" width="100%">
+                <listhead>
+                    <listheader label="Campo" width="55%"/>
+                    <listheader label="Valor" width="45%"/>
+                </listhead>
+            </listbox>
+        </vbox>
+    </window>
+</zk>
+

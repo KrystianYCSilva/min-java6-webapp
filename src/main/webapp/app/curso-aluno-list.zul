@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <style src="/css/pdf-like.css"/>
+
+    <window id="winCursoAlunoList" apply="br.gov.inep.censo.web.zk.modulo.CursoAlunoComposer"
+            border="normal" width="100%" sclass="sheet" position="center,top">
+        <vbox spacing="10px" width="100%">
+            <label value="Modulo Vinculo" sclass="official-tag"/>
+            <label value="Listagem de Vinculos Aluno x Curso (Registro 42)" style="font-size:22px;font-weight:bold;"/>
+
+            <label id="lblErroListCursoAluno" sclass="alert" visible="false"/>
+            <label id="lblFlashListCursoAluno" sclass="ok" visible="false"/>
+
+            <hbox spacing="8px" sclass="top-actions">
+                <button id="btnNovoListCursoAluno" label="Incluir via Formulario" sclass="btn"/>
+                <button id="btnMenuListCursoAluno" label="Menu" sclass="btn-outline"/>
+            </hbox>
+
+            <listbox id="lstCursoAluno" width="100%">
+                <listhead sizable="true">
+                    <listheader label="ID" width="60px"/>
+                    <listheader label="Periodo" width="80px"/>
+                    <listheader label="Aluno" width="180px"/>
+                    <listheader label="ID Aluno IES" width="110px"/>
+                    <listheader label="Curso" width="170px"/>
+                    <listheader label="Codigo Curso E-MEC" width="120px"/>
+                    <listheader label="Turno" width="60px"/>
+                    <listheader label="Situacao" width="70px"/>
+                    <listheader label="Semestre Ingresso" width="120px"/>
+                    <listheader label="Financiamentos" width="130px"/>
+                    <listheader label="Apoio Social" width="120px"/>
+                    <listheader label="Atividades" width="120px"/>
+                    <listheader label="Reservas" width="120px"/>
+                </listhead>
+            </listbox>
+        </vbox>
+    </window>
+</zk>
+

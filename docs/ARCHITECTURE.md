@@ -2,96 +2,89 @@
 
 ## 1. Objetivo
 
-Descrever a arquitetura do `censo-superior-webapp`, um monolito web Java 6 para cadastro e processamento dos registros do Censo Superior.
+Descrever a arquitetura atual do `censo-superior-webapp` (v2.0.0), um monolito Java 6 em camadas com frontend ZK 3.6.2 no padrao MVC.
 
-Modulos atuais:
-
+Modulos:
 1. `Aluno` (Registro 41)
 2. `Curso` (Registro 21)
 3. `CursoAluno` (Registro 42)
 4. `Docente` (Registro 31)
 5. `IES` (Registro 11 - laboratorio)
 
-## 2. Visao Arquitetural
+## 2. Visao arquitetural
 
-O sistema segue arquitetura em camadas com separacao clara de responsabilidades:
+A arquitetura segue camadas com responsabilidade explicita:
 
-1. `web`: entrada HTTP, navegacao e renderizacao JSP.
-2. `service`: regras de negocio, validacoes e import/export TXT pipe.
-3. `dao`: persistencia JPA (`EntityManager`/`EntityTransaction`) com JPQL e SQL nativo quando necessario.
-4. `model`: entidades e enums de dominio.
-5. `util`: utilitarios transversais (hash, validacoes, mapeamento).
+1. `web/zk`: composers MVC e paginas `.zul`.
+2. `web/filter`: seguranca de acesso a `/app/*`.
+3. `service`: regras de negocio, validacoes e import/export TXT pipe.
+4. `dao`: persistencia JPA (`EntityManager`, `EntityTransaction`).
+5. `model`: entidades e enums de dominio.
+6. `util`: utilitarios transversais.
 
 ```mermaid
 flowchart LR
-    A[Browser] --> B[AuthFilter]
-    B --> C[CsrfFilter]
-    C --> D[Servlets]
+    A[Browser] --> B[AuthFilter /app/*]
+    B --> C[ZK Pages *.zul]
+    C --> D[ZK MVC Composers]
     D --> E[Services]
     E --> F[DAOs JPA]
-    F --> I[AbstractJpaDao / EntityManagerFactory]
-    I --> G[(H2 Database)]
-    D --> H[JSP Views]
+    F --> G[AbstractJpaDao / EntityManagerFactory]
+    G --> H[(H2 Database)]
 ```
 
-## 3. Estrutura de Componentes
+## 3. Estrutura de componentes
 
 | Camada | Pacote principal | Responsabilidade | Exemplos |
 | --- | --- | --- | --- |
-| Web | `br.gov.inep.censo.web` | Controller HTTP e roteamento | `AbstractActionServlet`, `AlunoServlet`, `CursoServlet`, `CursoAlunoServlet`, `DocenteServlet`, `IesServlet` |
-| Filtro | `br.gov.inep.censo.web.filter` | Protecao de rotas autenticadas e anti-CSRF | `AuthFilter`, `CsrfFilter` |
-| Service | `br.gov.inep.censo.service` | Regra de negocio e orquestracao | `AlunoService`, `CursoService`, `CursoAlunoService`, `DocenteService`, `IesService` |
-| DAO | `br.gov.inep.censo.dao` | CRUD, transacao e consulta com JPA | `AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`, `MunicipioDAO` |
+| Web ZK | `br.gov.inep.censo.web.zk` | Controllers MVC de tela | `LoginComposer`, `HomeComposer`, `MenuComposer`, `DashboardComposer`, `AlunoComposer`, `CursoComposer`, `CursoAlunoComposer`, `DocenteComposer`, `IesComposer` |
+| Filtro | `br.gov.inep.censo.web.filter` | Protecao de rotas autenticadas | `AuthFilter` |
+| Service | `br.gov.inep.censo.service` | Regra de negocio e orquestracao | `AlunoService`, `CursoService`, `CursoAlunoService`, `DocenteService`, `IesService`, `AuthService` |
+| DAO | `br.gov.inep.censo.dao` | CRUD e consulta com JPA | `AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`, `MunicipioDAO` |
 | Modelo | `br.gov.inep.censo.model` | Entidades persistidas | `Aluno`, `Curso`, `CursoAluno`, `Docente`, `Ies`, `Municipio`, `Usuario` |
 | Dominio auxiliar | `br.gov.inep.censo.domain` | Constantes de dominio/layout | `CategoriasOpcao`, `ModulosLayout` |
-| Utilitarios | `br.gov.inep.censo.util` | Funcoes de apoio reutilizaveis | `ValidationUtils`, `PasswordUtil`, `RequestFieldMapper` |
-| Configuracao | `br.gov.inep.censo.config` | Infra de banco, bootstrap e persistencia | `ConnectionFactory`, `HibernateConnectionProvider`, `DatabaseBootstrapListener` |
+| Utilitarios | `br.gov.inep.censo.util` | Apoio reutilizavel | `ValidationUtils`, `PasswordUtil`, `RequestFieldMapper` |
+| Configuracao | `br.gov.inep.censo.config` | Bootstrap e infraestrutura de banco | `ConnectionFactory`, `HibernateConnectionProvider`, `DatabaseBootstrapListener` |
 
-## 4. Fluxos Principais
+## 4. Frontend ZK 2.0.0
 
-### 4.1 Autenticacao
+### 4.1 Shell autenticado
 
-1. Usuario acessa `login.jsp`.
-2. `LoginServlet` valida credencial via `AuthService`.
-3. Senha e validada por `PasswordUtil` com formato PBKDF2 (`PBKDF2$iter$salt$hash`) e compatibilidade com hash legado SHA-256.
-4. Em login bem-sucedido com hash legado, o sistema faz upgrade transparente para PBKDF2.
-5. Sessao HTTP recebe `usuarioLogado`.
-6. `AuthFilter` protege `/app/*` e redireciona sem sessao.
-7. `CsrfFilter` valida token para requisicoes `POST` em `/app/*`.
+- arquivo: `src/main/webapp/app/menu.zul`
+- layout: `header + sidebar + center + footer`
+- `center` usa `<include id="incMain"/>` para tela principal
+- sub-window modal usa `<include id="incSub"/>` para cadastro/visualizacao
 
-### 4.2 Operacoes de modulo
+### 4.2 Contrato de navegacao
 
-1. Servlet recebe acao (`lista`, `form`, `salvar`, `mostrar`, `excluir`, `importar`, `exportar`).
-2. `AbstractActionServlet` despacha a acao para comando registrado (`Map<String, ActionCommand>`).
-3. Service valida regras e consistencia.
-4. DAO executa operacoes em `EntityManager` JPA (JPQL e SQL nativo para tabelas auxiliares).
-5. JSP renderiza saida com escape HTML via `ViewUtils.e(...)`.
-6. Servlet encaminha para JSP de lista, formulario ou visualizacao.
+- `view` define a tela principal (`dashboard`, `aluno-list`, `curso-list`, `curso-aluno-list`, `docente-list`, `ies-list`)
+- `sub` define modal (`aluno-form`, `aluno-view`, `curso-form`, `curso-view`, `curso-aluno-form`, `docente-form`, `docente-view`, `ies-form`, `ies-view`)
+- `id` carrega registro para alteracao/visualizacao
 
-Observacao: `CursoAluno` foi separado em `curso-aluno-list.jsp` e `curso-aluno-form.jsp` para melhorar legibilidade.
+Exemplos:
+1. `/app/menu.zul?view=dashboard`
+2. `/app/menu.zul?view=aluno-list`
+3. `/app/menu.zul?view=aluno-list&sub=aluno-form&id=10`
 
-### 4.3 Importacao e exportacao TXT pipe
+### 4.3 Autenticacao
 
-1. Entrada no formato pipe (`|`).
-2. Services fazem parse e mapeamento por registro (`11`, `21`, `31`, `41`, `42`).
-3. Persistencia cobre campos fixos e complementares de layout.
-4. Exportacao gera TXT individual ou em lote.
-5. Registro `10` pode ser usado como cabecalho no fluxo de importacao de `IES`.
+1. Usuario acessa `login.zul`.
+2. `LoginComposer` autentica via `AuthService`.
+3. Sessao HTTP recebe `usuarioLogado`.
+4. `AuthFilter` protege `/app/*` e redireciona para `/login.zul` sem sessao.
 
-## 5. Persistencia e Modelo de Dados
+## 5. Persistencia e modelo de dados
 
 Tabelas centrais:
-
 1. `usuario`
 2. `aluno` (Registro 41)
 3. `curso` (Registro 21)
 4. `curso_aluno` (Registro 42)
 5. `docente` (Registro 31)
 6. `ies` (Registro 11)
-7. `municipio` (tabela de apoio)
+7. `municipio`
 
 Tabelas auxiliares:
-
 1. `dominio_opcao`
 2. `aluno_opcao`
 3. `curso_opcao`
@@ -103,66 +96,51 @@ Tabelas auxiliares:
 9. `docente_layout_valor`
 10. `ies_layout_valor`
 
-Scripts de banco:
-
+Scripts:
 1. `src/main/resources/db/schema.sql`
 2. `src/main/resources/db/seed.sql`
 3. `src/main/resources/db/seed_layout.sql`
 4. `src/main/resources/db/seed_layout_ies_docente.sql`
 5. `src/main/resources/db/seed_municipio.sql`
 
-## 6. Decisoes Arquiteturais Relevantes
+## 6. Decisoes arquiteturais
 
-1. Hibernate 4.2 (compativel com Java 6) adotado como base de persistencia com entidades anotadas em JPA (`javax.persistence`).
-2. Mapeamento ORM por classes anotadas e unidade JPA (`META-INF/persistence.xml`) para manter contrato Java 6 com bootstrap padrao.
-3. Monolito em camadas para simplicidade de manutencao em stack legado.
-4. Modelagem de campos de layout por metadados para suportar evolucao de leiaute.
-5. Sessao HTTP + filtro para autenticacao sem dependencia externa.
-6. Tabela de apoio `municipio` para validar consistencia de UF/codigo de municipio em `Docente` e `IES`.
-7. Builder Pattern para construcao de entidades com muitos campos de formulario (`Aluno`, `Curso`, `CursoAluno`, `Docente`, `Ies`).
-8. Camada `web` consumindo `service` para acesso a dados de tela, evitando dependencia direta de DAO.
-9. Synchronizer Token Pattern para CSRF em operacoes mutaveis de `/app/*`.
-10. Output Encoding centralizado com `ViewUtils.e(...)` para mitigar XSS refletido/armazenado em JSP.
-11. Migracao progressiva de hash de senha: compatibilidade legado + rehash automatico para PBKDF2.
-12. Command Pattern no web layer para despacho de `acao` sem cadeias extensas de `if/else`.
-13. DAOs migrados para `EntityManager` com transacoes `RESOURCE_LOCAL`, mantendo SQL nativo apenas nas tabelas auxiliares de alto volume.
+1. Hibernate 4.2 + JPA (`javax.persistence`) para manter compatibilidade Java 6.
+2. Frontend unificado em ZK 3.6.2 MVC, removendo JSP/servlets de tela.
+3. Navegacao por shell unico com includes (`incMain`/`incSub`) para reduzir acoplamento de rotas.
+4. Camadas `service` e `dao` mantidas para isolamento de regra de negocio e persistencia.
+5. Builder Pattern nas entidades principais para reduzir acoplamento de construcao.
+6. Metadados de leiaute (`layout_campo`) para suportar evolucao de campos sem alterar modelo central.
 
-## 7. Qualidade, Build e Testes
+## 7. Qualidade, build e testes
 
 Build:
-
 ```bash
 mvn clean package
 ```
 
-Testes (workspace atual):
-
+Em JDK moderno:
 ```bash
-mvn -Dmaven.repo.local=.m2/repository -Dmaven.compiler.source=1.7 -Dmaven.compiler.target=1.7 test
+mvn '-Dmaven.compiler.source=1.7' '-Dmaven.compiler.target=1.7' test
 ```
 
 Qualidade:
-
 1. JaCoCo com gate minimo de 80% de cobertura de linha.
-2. Escopo do gate: pacotes `dao`, `service` e `util`.
-3. Suite com testes unitarios, integracao e E2E (E2E desativado por padrao).
+2. Escopo do gate: `dao`, `service` e `util`.
+3. E2E mantido como `@Ignore` por padrao.
 
-## 8. Restricoes e Riscos
+## 8. Restricoes e riscos
 
-1. Stack legado (Servlet 2.5, JSP 2.1, Java 6) limita uso de recursos modernos.
-2. Mudancas de schema exigem sincronizacao entre mapeamentos JPA, DAO, service e testes.
-3. Acoplamento entre importacao/exportacao e metadados de layout exige regressao cuidadosa.
-4. Seguranca depende de manter `ViewUtils.e(...)` em toda saida JSP e `_csrf` em todo `POST` de `/app/*`.
-5. Pool embutido do Hibernate e adequado para desenvolvimento, mas nao para producao.
+1. Stack legado (Servlet 2.5, Java 6) limita upgrades de bibliotecas.
+2. Mudancas de schema exigem alinhamento entre DAO/Service/Testes.
+3. Import/export depende de metadados corretos do leiaute oficial.
+4. Pool interno do Hibernate e adequado para desenvolvimento, nao para producao.
 
-## 9. Referencias no repositorio
+## 9. Referencias
 
 1. `README.md`
 2. `docs/TEST-PLAN.md`
 3. `docs/HIBERNATE-MIGRATION.md`
-4. `docs/HIBERNATE-NATIVE-WHAT-CHANGED.md`
-5. `src/main/java/br/gov/inep/censo/web`
-6. `src/main/java/br/gov/inep/censo/service`
-7. `src/main/java/br/gov/inep/censo/dao`
-8. `src/main/java/br/gov/inep/censo/config`
-9. `src/main/resources/db`
+4. `src/main/java/br/gov/inep/censo/web/zk`
+5. `src/main/webapp/WEB-INF/zk.xml`
+6. `src/main/webapp/app/menu.zul`

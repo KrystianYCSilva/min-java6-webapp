@@ -18,7 +18,7 @@ public class AuthFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         loginPath = filterConfig.getInitParameter("loginPath");
         if (loginPath == null || loginPath.trim().length() == 0) {
-            loginPath = "/login";
+            loginPath = "/login.zul";
         }
     }
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <style src="/css/pdf-like.css"/>
+
+    <window id="winHome" apply="br.gov.inep.censo.web.zk.home.HomeComposer"
+            border="normal" width="900px" sclass="sheet" position="center,top">
+        <vbox spacing="10px" width="100%">
+            <label value="Documento Oficial" sclass="official-tag"/>
+            <label value="Censo da Educacao Superior 2025" style="font-size:28px;font-weight:bold;"/>
+            <label value="Versao 2.0.0 - Frontend ZK 3.6.2 em padrao MVC"/>
+
+            <label id="lblFlash" sclass="ok" visible="false"/>
+
+            <label value="Este ambiente simula os modulos de coleta para Aluno, Curso, CursoAluno, Docente e IES, preservando regras de negocio na camada de servicos/JPA."/>
+
+            <hbox spacing="10px" sclass="top-actions">
+                <button id="btnEntrar" label="Entrar no Sistema" sclass="btn"/>
+                <button id="btnMenu" label="Ir para Menu (requer login)" sclass="btn-outline"/>
+            </hbox>
+
+            <label value="Stack: Tomcat 6/7, Java 6, Servlet 2.5, Hibernate/JPA e ZK 3.6.2." sclass="footer-note"/>
+        </vbox>
+    </window>
+</zk>
