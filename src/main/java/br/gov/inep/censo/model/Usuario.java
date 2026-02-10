@@ -25,6 +25,9 @@ public class Usuario implements Serializable {
     @Column(name = "nome", nullable = false, length = 120)
     private String nome;
 
+    @Column(name = "senha_hash", nullable = false, length = 255)
+    private String senhaHash;
+
     @Column(name = "ativo", nullable = false)
     private boolean ativo;
 
@@ -50,6 +53,14 @@ public class Usuario implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getSenhaHash() {
+        return senhaHash;
+    }
+
+    public void setSenhaHash(String senhaHash) {
+        this.senhaHash = senhaHash;
     }
 
     public boolean isAtivo() {
