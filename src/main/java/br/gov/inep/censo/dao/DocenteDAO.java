@@ -2,10 +2,9 @@ package br.gov.inep.censo.dao;
 
 import br.gov.inep.censo.domain.ModulosLayout;
 import br.gov.inep.censo.model.Docente;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
-import java.io.Serializable;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,7 @@ import java.util.Map;
 /**
  * DAO do modulo Docente (Registro 31), incluindo campos complementares de leiaute.
  */
-public class DocenteDAO extends AbstractHibernateDao {
+public class DocenteDAO extends AbstractJpaDao {
 
     private final LayoutCampoDAO layoutCampoDAO;
 
@@ -26,10 +25,15 @@ public class DocenteDAO extends AbstractHibernateDao {
     }
 
     public Long salvar(final Docente docente, final Map<Long, String> camposComplementares) throws SQLException {
-        return executeInTransaction(new SessionWork<Long>() {
-            public Long execute(Session session) throws SQLException {
-                Long docenteId = toLong(session.save(docente));
-                layoutCampoDAO.salvarValoresDocente(session, docenteId, camposComplementares);
+        return executeInTransaction(new EntityManagerWork<Long>() {
+            public Long execute(EntityManager entityManager) throws SQLException {
+                entityManager.persist(docente);
+                entityManager.flush();
+                Long docenteId = docente.getId();
+                if (docenteId == null) {
+                    throw new SQLException("Falha ao gerar ID para docente.");
+                }
+                layoutCampoDAO.salvarValoresDocente(entityManager, docenteId, camposComplementares);
                 return docenteId;
             }
         });
@@ -39,10 +43,10 @@ public class DocenteDAO extends AbstractHibernateDao {
         if (docente == null || docente.getId() == null) {
             throw new IllegalArgumentException("Docente/ID nao informado para atualizacao.");
         }
-        executeInTransaction(new SessionWork<Void>() {
-            public Void execute(Session session) {
-                session.merge(docente);
-                layoutCampoDAO.substituirValoresDocente(session, docente.getId(), camposComplementares);
+        executeInTransaction(new EntityManagerWork<Void>() {
+            public Void execute(EntityManager entityManager) {
+                entityManager.merge(docente);
+                layoutCampoDAO.substituirValoresDocente(entityManager, docente.getId(), camposComplementares);
                 return null;
             }
         });
@@ -52,18 +56,19 @@ public class DocenteDAO extends AbstractHibernateDao {
         if (id == null) {
             return null;
         }
-        return executeInSession(new SessionWork<Docente>() {
-            public Docente execute(Session session) {
-                return (Docente) session.get(Docente.class, id);
+        return executeInEntityManager(new EntityManagerWork<Docente>() {
+            public Docente execute(EntityManager entityManager) {
+                return entityManager.find(Docente.class, id);
             }
         });
     }
 
     public List<Docente> listar() throws SQLException {
-        return executeInSession(new SessionWork<List<Docente>>() {
-            public List<Docente> execute(Session session) {
-                Query query = session.createQuery("from Docente d order by d.nome");
-                return query.list();
+        return executeInEntityManager(new EntityManagerWork<List<Docente>>() {
+            public List<Docente> execute(EntityManager entityManager) {
+                TypedQuery<Docente> query = entityManager.createQuery(
+                        "select d from Docente d order by d.nome", Docente.class);
+                return query.getResultList();
             }
         });
     }
@@ -73,20 +78,22 @@ public class DocenteDAO extends AbstractHibernateDao {
         final int size = normalizePageSize(tamanhoPagina);
         final int offset = (page - 1) * size;
 
-        return executeInSession(new SessionWork<List<Docente>>() {
-            public List<Docente> execute(Session session) {
-                Query query = session.createQuery("from Docente d order by d.nome");
+        return executeInEntityManager(new EntityManagerWork<List<Docente>>() {
+            public List<Docente> execute(EntityManager entityManager) {
+                TypedQuery<Docente> query = entityManager.createQuery(
+                        "select d from Docente d order by d.nome", Docente.class);
                 query.setFirstResult(offset);
                 query.setMaxResults(size);
-                return query.list();
+                return query.getResultList();
             }
         });
     }
 
     public int contar() throws SQLException {
-        return executeInSession(new SessionWork<Integer>() {
-            public Integer execute(Session session) {
-                Long total = (Long) session.createQuery("select count(d.id) from Docente d").uniqueResult();
+        return executeInEntityManager(new EntityManagerWork<Integer>() {
+            public Integer execute(EntityManager entityManager) {
+                Long total = entityManager.createQuery("select count(d.id) from Docente d", Long.class)
+                        .getSingleResult();
                 return Integer.valueOf(total == null ? 0 : total.intValue());
             }
         }).intValue();
@@ -96,14 +103,14 @@ public class DocenteDAO extends AbstractHibernateDao {
         if (id == null) {
             return;
         }
-        executeInTransaction(new SessionWork<Void>() {
-            public Void execute(Session session) {
-                Docente docente = (Docente) session.get(Docente.class, id);
+        executeInTransaction(new EntityManagerWork<Void>() {
+            public Void execute(EntityManager entityManager) {
+                Docente docente = entityManager.find(Docente.class, id);
                 if (docente == null) {
                     return null;
                 }
-                layoutCampoDAO.removerValoresDocente(session, id);
-                session.delete(docente);
+                layoutCampoDAO.removerValoresDocente(entityManager, id);
+                entityManager.remove(docente);
                 return null;
             }
         });
@@ -117,13 +124,4 @@ public class DocenteDAO extends AbstractHibernateDao {
         return layoutCampoDAO.carregarValoresDocentePorNumero(docenteId, ModulosLayout.DOCENTE_31);
     }
 
-    private Long toLong(Serializable id) throws SQLException {
-        if (id == null) {
-            throw new SQLException("Falha ao gerar ID para docente.");
-        }
-        if (id instanceof Number) {
-            return Long.valueOf(((Number) id).longValue());
-        }
-        return Long.valueOf(id.toString());
-    }
 }

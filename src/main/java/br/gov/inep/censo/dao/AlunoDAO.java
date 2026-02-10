@@ -3,10 +3,9 @@ package br.gov.inep.censo.dao;
 import br.gov.inep.censo.domain.CategoriasOpcao;
 import br.gov.inep.censo.domain.ModulosLayout;
 import br.gov.inep.censo.model.Aluno;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
-import java.io.Serializable;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ import java.util.Map;
 /**
  * DAO do modulo Aluno (Registro 41), incluindo opcoes normalizadas e campos complementares.
  */
-public class AlunoDAO extends AbstractHibernateDao {
+public class AlunoDAO extends AbstractJpaDao {
 
     private final OpcaoDAO opcaoDAO;
     private final LayoutCampoDAO layoutCampoDAO;
@@ -30,11 +29,16 @@ public class AlunoDAO extends AbstractHibernateDao {
 
     public Long salvar(final Aluno aluno, final long[] opcaoIds, final Map<Long, String> camposComplementares)
             throws SQLException {
-        return executeInTransaction(new SessionWork<Long>() {
-            public Long execute(Session session) throws SQLException {
-                Long alunoId = toLong(session.save(aluno));
-                opcaoDAO.salvarVinculosAluno(session, alunoId, opcaoIds);
-                layoutCampoDAO.salvarValoresAluno(session, alunoId, camposComplementares);
+        return executeInTransaction(new EntityManagerWork<Long>() {
+            public Long execute(EntityManager entityManager) throws SQLException {
+                entityManager.persist(aluno);
+                entityManager.flush();
+                Long alunoId = aluno.getId();
+                if (alunoId == null) {
+                    throw new SQLException("Falha ao gerar ID para aluno.");
+                }
+                opcaoDAO.salvarVinculosAluno(entityManager, alunoId, opcaoIds);
+                layoutCampoDAO.salvarValoresAluno(entityManager, alunoId, camposComplementares);
                 return alunoId;
             }
         });
@@ -45,11 +49,11 @@ public class AlunoDAO extends AbstractHibernateDao {
         if (aluno == null || aluno.getId() == null) {
             throw new IllegalArgumentException("Aluno/ID nao informado para atualizacao.");
         }
-        executeInTransaction(new SessionWork<Void>() {
-            public Void execute(Session session) throws SQLException {
-                session.merge(aluno);
-                opcaoDAO.substituirVinculosAluno(session, aluno.getId(), opcaoIds);
-                layoutCampoDAO.substituirValoresAluno(session, aluno.getId(), camposComplementares);
+        executeInTransaction(new EntityManagerWork<Void>() {
+            public Void execute(EntityManager entityManager) throws SQLException {
+                entityManager.merge(aluno);
+                opcaoDAO.substituirVinculosAluno(entityManager, aluno.getId(), opcaoIds);
+                layoutCampoDAO.substituirValoresAluno(entityManager, aluno.getId(), camposComplementares);
                 return null;
             }
         });
@@ -59,25 +63,26 @@ public class AlunoDAO extends AbstractHibernateDao {
         if (id == null) {
             return null;
         }
-        return executeInSession(new SessionWork<Aluno>() {
-            public Aluno execute(Session session) throws SQLException {
-                Aluno aluno = (Aluno) session.get(Aluno.class, id);
+        return executeInEntityManager(new EntityManagerWork<Aluno>() {
+            public Aluno execute(EntityManager entityManager) throws SQLException {
+                Aluno aluno = entityManager.find(Aluno.class, id);
                 if (aluno == null) {
                     return null;
                 }
-                hydrateResumo(session, aluno);
+                hydrateResumo(entityManager, aluno);
                 return aluno;
             }
         });
     }
 
     public List<Aluno> listar() throws SQLException {
-        return executeInSession(new SessionWork<List<Aluno>>() {
-            public List<Aluno> execute(Session session) throws SQLException {
-                Query query = session.createQuery("from Aluno a order by a.nome");
-                List<Aluno> alunos = query.list();
+        return executeInEntityManager(new EntityManagerWork<List<Aluno>>() {
+            public List<Aluno> execute(EntityManager entityManager) throws SQLException {
+                TypedQuery<Aluno> query = entityManager.createQuery(
+                        "select a from Aluno a order by a.nome", Aluno.class);
+                List<Aluno> alunos = query.getResultList();
                 for (int i = 0; i < alunos.size(); i++) {
-                    hydrateResumo(session, alunos.get(i));
+                    hydrateResumo(entityManager, alunos.get(i));
                 }
                 return alunos;
             }
@@ -89,14 +94,15 @@ public class AlunoDAO extends AbstractHibernateDao {
         final int size = normalizePageSize(tamanhoPagina);
         final int offset = (page - 1) * size;
 
-        return executeInSession(new SessionWork<List<Aluno>>() {
-            public List<Aluno> execute(Session session) throws SQLException {
-                Query query = session.createQuery("from Aluno a order by a.nome");
+        return executeInEntityManager(new EntityManagerWork<List<Aluno>>() {
+            public List<Aluno> execute(EntityManager entityManager) throws SQLException {
+                TypedQuery<Aluno> query = entityManager.createQuery(
+                        "select a from Aluno a order by a.nome", Aluno.class);
                 query.setFirstResult(offset);
                 query.setMaxResults(size);
-                List<Aluno> alunos = query.list();
+                List<Aluno> alunos = query.getResultList();
                 for (int i = 0; i < alunos.size(); i++) {
-                    hydrateResumo(session, alunos.get(i));
+                    hydrateResumo(entityManager, alunos.get(i));
                 }
                 return alunos;
             }
@@ -104,9 +110,10 @@ public class AlunoDAO extends AbstractHibernateDao {
     }
 
     public int contar() throws SQLException {
-        return executeInSession(new SessionWork<Integer>() {
-            public Integer execute(Session session) {
-                Long total = (Long) session.createQuery("select count(a.id) from Aluno a").uniqueResult();
+        return executeInEntityManager(new EntityManagerWork<Integer>() {
+            public Integer execute(EntityManager entityManager) {
+                Long total = entityManager.createQuery("select count(a.id) from Aluno a", Long.class)
+                        .getSingleResult();
                 return Integer.valueOf(total == null ? 0 : total.intValue());
             }
         }).intValue();
@@ -116,15 +123,15 @@ public class AlunoDAO extends AbstractHibernateDao {
         if (id == null) {
             return;
         }
-        executeInTransaction(new SessionWork<Void>() {
-            public Void execute(Session session) throws SQLException {
-                Aluno aluno = (Aluno) session.get(Aluno.class, id);
+        executeInTransaction(new EntityManagerWork<Void>() {
+            public Void execute(EntityManager entityManager) throws SQLException {
+                Aluno aluno = entityManager.find(Aluno.class, id);
                 if (aluno == null) {
                     return null;
                 }
-                opcaoDAO.removerVinculosAluno(session, id);
-                layoutCampoDAO.removerValoresAluno(session, id);
-                session.delete(aluno);
+                opcaoDAO.removerVinculosAluno(entityManager, id);
+                layoutCampoDAO.removerValoresAluno(entityManager, id);
+                entityManager.remove(aluno);
                 return null;
             }
         });
@@ -146,18 +153,8 @@ public class AlunoDAO extends AbstractHibernateDao {
         return layoutCampoDAO.carregarValoresAlunoPorNumero(alunoId, ModulosLayout.ALUNO_41);
     }
 
-    private void hydrateResumo(Session session, Aluno aluno) throws SQLException {
+    private void hydrateResumo(EntityManager entityManager, Aluno aluno) throws SQLException {
         aluno.setTiposDeficienciaResumo(
-                opcaoDAO.resumirAluno(session, aluno.getId(), CategoriasOpcao.ALUNO_TIPO_DEFICIENCIA));
-    }
-
-    private Long toLong(Serializable id) throws SQLException {
-        if (id == null) {
-            throw new SQLException("Falha ao gerar ID para aluno.");
-        }
-        if (id instanceof Number) {
-            return Long.valueOf(((Number) id).longValue());
-        }
-        return Long.valueOf(id.toString());
+                opcaoDAO.resumirAluno(entityManager, aluno.getId(), CategoriasOpcao.ALUNO_TIPO_DEFICIENCIA));
     }
 }

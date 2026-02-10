@@ -2,10 +2,9 @@ package br.gov.inep.censo.dao;
 
 import br.gov.inep.censo.domain.ModulosLayout;
 import br.gov.inep.censo.model.Ies;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
-import java.io.Serializable;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,7 @@ import java.util.Map;
 /**
  * DAO do modulo IES com foco no Registro 11 (laboratorio) e campos complementares.
  */
-public class IesDAO extends AbstractHibernateDao {
+public class IesDAO extends AbstractJpaDao {
 
     private final LayoutCampoDAO layoutCampoDAO;
 
@@ -26,10 +25,15 @@ public class IesDAO extends AbstractHibernateDao {
     }
 
     public Long salvar(final Ies ies, final Map<Long, String> camposComplementares) throws SQLException {
-        return executeInTransaction(new SessionWork<Long>() {
-            public Long execute(Session session) throws SQLException {
-                Long iesId = toLong(session.save(ies));
-                layoutCampoDAO.salvarValoresIes(session, iesId, camposComplementares);
+        return executeInTransaction(new EntityManagerWork<Long>() {
+            public Long execute(EntityManager entityManager) throws SQLException {
+                entityManager.persist(ies);
+                entityManager.flush();
+                Long iesId = ies.getId();
+                if (iesId == null) {
+                    throw new SQLException("Falha ao gerar ID para IES.");
+                }
+                layoutCampoDAO.salvarValoresIes(entityManager, iesId, camposComplementares);
                 return iesId;
             }
         });
@@ -39,10 +43,10 @@ public class IesDAO extends AbstractHibernateDao {
         if (ies == null || ies.getId() == null) {
             throw new IllegalArgumentException("IES/ID nao informada para atualizacao.");
         }
-        executeInTransaction(new SessionWork<Void>() {
-            public Void execute(Session session) {
-                session.merge(ies);
-                layoutCampoDAO.substituirValoresIes(session, ies.getId(), camposComplementares);
+        executeInTransaction(new EntityManagerWork<Void>() {
+            public Void execute(EntityManager entityManager) {
+                entityManager.merge(ies);
+                layoutCampoDAO.substituirValoresIes(entityManager, ies.getId(), camposComplementares);
                 return null;
             }
         });
@@ -52,18 +56,19 @@ public class IesDAO extends AbstractHibernateDao {
         if (id == null) {
             return null;
         }
-        return executeInSession(new SessionWork<Ies>() {
-            public Ies execute(Session session) {
-                return (Ies) session.get(Ies.class, id);
+        return executeInEntityManager(new EntityManagerWork<Ies>() {
+            public Ies execute(EntityManager entityManager) {
+                return entityManager.find(Ies.class, id);
             }
         });
     }
 
     public List<Ies> listar() throws SQLException {
-        return executeInSession(new SessionWork<List<Ies>>() {
-            public List<Ies> execute(Session session) {
-                Query query = session.createQuery("from Ies i order by i.nomeLaboratorio");
-                return query.list();
+        return executeInEntityManager(new EntityManagerWork<List<Ies>>() {
+            public List<Ies> execute(EntityManager entityManager) {
+                TypedQuery<Ies> query = entityManager.createQuery(
+                        "select i from Ies i order by i.nomeLaboratorio", Ies.class);
+                return query.getResultList();
             }
         });
     }
@@ -73,20 +78,22 @@ public class IesDAO extends AbstractHibernateDao {
         final int size = normalizePageSize(tamanhoPagina);
         final int offset = (page - 1) * size;
 
-        return executeInSession(new SessionWork<List<Ies>>() {
-            public List<Ies> execute(Session session) {
-                Query query = session.createQuery("from Ies i order by i.nomeLaboratorio");
+        return executeInEntityManager(new EntityManagerWork<List<Ies>>() {
+            public List<Ies> execute(EntityManager entityManager) {
+                TypedQuery<Ies> query = entityManager.createQuery(
+                        "select i from Ies i order by i.nomeLaboratorio", Ies.class);
                 query.setFirstResult(offset);
                 query.setMaxResults(size);
-                return query.list();
+                return query.getResultList();
             }
         });
     }
 
     public int contar() throws SQLException {
-        return executeInSession(new SessionWork<Integer>() {
-            public Integer execute(Session session) {
-                Long total = (Long) session.createQuery("select count(i.id) from Ies i").uniqueResult();
+        return executeInEntityManager(new EntityManagerWork<Integer>() {
+            public Integer execute(EntityManager entityManager) {
+                Long total = entityManager.createQuery("select count(i.id) from Ies i", Long.class)
+                        .getSingleResult();
                 return Integer.valueOf(total == null ? 0 : total.intValue());
             }
         }).intValue();
@@ -96,14 +103,14 @@ public class IesDAO extends AbstractHibernateDao {
         if (id == null) {
             return;
         }
-        executeInTransaction(new SessionWork<Void>() {
-            public Void execute(Session session) {
-                Ies ies = (Ies) session.get(Ies.class, id);
+        executeInTransaction(new EntityManagerWork<Void>() {
+            public Void execute(EntityManager entityManager) {
+                Ies ies = entityManager.find(Ies.class, id);
                 if (ies == null) {
                     return null;
                 }
-                layoutCampoDAO.removerValoresIes(session, id);
-                session.delete(ies);
+                layoutCampoDAO.removerValoresIes(entityManager, id);
+                entityManager.remove(ies);
                 return null;
             }
         });
@@ -117,13 +124,4 @@ public class IesDAO extends AbstractHibernateDao {
         return layoutCampoDAO.carregarValoresIesPorNumero(iesId, ModulosLayout.IES_11);
     }
 
-    private Long toLong(Serializable id) throws SQLException {
-        if (id == null) {
-            throw new SQLException("Falha ao gerar ID para IES.");
-        }
-        if (id instanceof Number) {
-            return Long.valueOf(((Number) id).longValue());
-        }
-        return Long.valueOf(id.toString());
-    }
 }

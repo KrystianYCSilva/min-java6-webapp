@@ -2,21 +2,26 @@ package br.gov.inep.censo.dao;
 
 import br.gov.inep.censo.model.Usuario;
 import br.gov.inep.censo.util.PasswordUtil;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.sql.SQLException;
+import java.util.List;
 
-public class UsuarioDAO extends AbstractHibernateDao {
+public class UsuarioDAO extends AbstractJpaDao {
 
     public Usuario autenticar(final String login, final String senhaPlainText) throws SQLException {
-        return executeInTransaction(new SessionWork<Usuario>() {
-            public Usuario execute(Session session) {
-                Query query = session.createSQLQuery(
+        return executeInTransaction(new EntityManagerWork<Usuario>() {
+            public Usuario execute(EntityManager entityManager) {
+                Query query = entityManager.createNativeQuery(
                         "SELECT id, login, nome, senha_hash, ativo FROM usuario WHERE login = :login");
-                query.setString("login", login);
+                query.setParameter("login", login);
 
-                Object rowObject = query.uniqueResult();
+                List rows = query.getResultList();
+                if (rows == null || rows.isEmpty()) {
+                    return null;
+                }
+                Object rowObject = rows.get(0);
                 if (!(rowObject instanceof Object[])) {
                     return null;
                 }
@@ -36,10 +41,10 @@ public class UsuarioDAO extends AbstractHibernateDao {
                 }
 
                 if (PasswordUtil.needsRehash(senhaHash)) {
-                    Query updateQuery = session.createSQLQuery(
+                    Query updateQuery = entityManager.createNativeQuery(
                             "UPDATE usuario SET senha_hash = :senhaHash WHERE id = :id");
-                    updateQuery.setString("senhaHash", PasswordUtil.hashPassword(senhaPlainText));
-                    updateQuery.setLong("id", usuarioId.longValue());
+                    updateQuery.setParameter("senhaHash", PasswordUtil.hashPassword(senhaPlainText));
+                    updateQuery.setParameter("id", usuarioId.longValue());
                     updateQuery.executeUpdate();
                 }
 

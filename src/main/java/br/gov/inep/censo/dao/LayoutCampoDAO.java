@@ -1,11 +1,11 @@
 package br.gov.inep.censo.dao;
 
 import br.gov.inep.censo.model.LayoutCampo;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,166 +13,167 @@ import java.util.Map;
 /**
  * DAO para metadados de leiaute e valores complementares de campos.
  */
-public class LayoutCampoDAO extends AbstractHibernateDao {
+public class LayoutCampoDAO extends AbstractJpaDao {
 
     public List<LayoutCampo> listarPorModulo(final String modulo) throws SQLException {
-        return executeInSession(new SessionWork<List<LayoutCampo>>() {
-            public List<LayoutCampo> execute(Session session) {
-                Query query = session.createQuery(
-                        "from LayoutCampo l where l.modulo = :modulo order by l.numeroCampo");
-                query.setString("modulo", modulo);
-                return query.list();
+        return executeInEntityManager(new EntityManagerWork<List<LayoutCampo>>() {
+            public List<LayoutCampo> execute(EntityManager entityManager) {
+                TypedQuery<LayoutCampo> query = entityManager.createQuery(
+                        "select l from LayoutCampo l where l.modulo = :modulo order by l.numeroCampo",
+                        LayoutCampo.class);
+                query.setParameter("modulo", modulo);
+                return query.getResultList();
             }
         });
     }
 
-    public void salvarValoresAluno(Session session, Long alunoId, Map<Long, String> valores) {
-        salvarValores(session, "aluno_layout_valor", "aluno_id", alunoId, valores);
+    public void salvarValoresAluno(EntityManager entityManager, Long alunoId, Map<Long, String> valores) {
+        salvarValores(entityManager, "aluno_layout_valor", "aluno_id", alunoId, valores);
     }
 
-    public void salvarValoresCurso(Session session, Long cursoId, Map<Long, String> valores) {
-        salvarValores(session, "curso_layout_valor", "curso_id", cursoId, valores);
+    public void salvarValoresCurso(EntityManager entityManager, Long cursoId, Map<Long, String> valores) {
+        salvarValores(entityManager, "curso_layout_valor", "curso_id", cursoId, valores);
     }
 
-    public void salvarValoresCursoAluno(Session session, Long cursoAlunoId, Map<Long, String> valores) {
-        salvarValores(session, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId, valores);
+    public void salvarValoresCursoAluno(EntityManager entityManager, Long cursoAlunoId, Map<Long, String> valores) {
+        salvarValores(entityManager, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId, valores);
     }
 
-    public void salvarValoresDocente(Session session, Long docenteId, Map<Long, String> valores) {
-        salvarValores(session, "docente_layout_valor", "docente_id", docenteId, valores);
+    public void salvarValoresDocente(EntityManager entityManager, Long docenteId, Map<Long, String> valores) {
+        salvarValores(entityManager, "docente_layout_valor", "docente_id", docenteId, valores);
     }
 
-    public void salvarValoresIes(Session session, Long iesId, Map<Long, String> valores) {
-        salvarValores(session, "ies_layout_valor", "ies_id", iesId, valores);
+    public void salvarValoresIes(EntityManager entityManager, Long iesId, Map<Long, String> valores) {
+        salvarValores(entityManager, "ies_layout_valor", "ies_id", iesId, valores);
     }
 
-    public void substituirValoresAluno(Session session, Long alunoId, Map<Long, String> valores) {
-        removerValores(session, "aluno_layout_valor", "aluno_id", alunoId);
-        salvarValoresAluno(session, alunoId, valores);
+    public void substituirValoresAluno(EntityManager entityManager, Long alunoId, Map<Long, String> valores) {
+        removerValores(entityManager, "aluno_layout_valor", "aluno_id", alunoId);
+        salvarValoresAluno(entityManager, alunoId, valores);
     }
 
-    public void substituirValoresCurso(Session session, Long cursoId, Map<Long, String> valores) {
-        removerValores(session, "curso_layout_valor", "curso_id", cursoId);
-        salvarValoresCurso(session, cursoId, valores);
+    public void substituirValoresCurso(EntityManager entityManager, Long cursoId, Map<Long, String> valores) {
+        removerValores(entityManager, "curso_layout_valor", "curso_id", cursoId);
+        salvarValoresCurso(entityManager, cursoId, valores);
     }
 
-    public void substituirValoresCursoAluno(Session session, Long cursoAlunoId, Map<Long, String> valores) {
-        removerValores(session, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId);
-        salvarValoresCursoAluno(session, cursoAlunoId, valores);
+    public void substituirValoresCursoAluno(EntityManager entityManager, Long cursoAlunoId, Map<Long, String> valores) {
+        removerValores(entityManager, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId);
+        salvarValoresCursoAluno(entityManager, cursoAlunoId, valores);
     }
 
-    public void substituirValoresDocente(Session session, Long docenteId, Map<Long, String> valores) {
-        removerValores(session, "docente_layout_valor", "docente_id", docenteId);
-        salvarValoresDocente(session, docenteId, valores);
+    public void substituirValoresDocente(EntityManager entityManager, Long docenteId, Map<Long, String> valores) {
+        removerValores(entityManager, "docente_layout_valor", "docente_id", docenteId);
+        salvarValoresDocente(entityManager, docenteId, valores);
     }
 
-    public void substituirValoresIes(Session session, Long iesId, Map<Long, String> valores) {
-        removerValores(session, "ies_layout_valor", "ies_id", iesId);
-        salvarValoresIes(session, iesId, valores);
+    public void substituirValoresIes(EntityManager entityManager, Long iesId, Map<Long, String> valores) {
+        removerValores(entityManager, "ies_layout_valor", "ies_id", iesId);
+        salvarValoresIes(entityManager, iesId, valores);
     }
 
-    public void removerValoresAluno(Session session, Long alunoId) {
-        removerValores(session, "aluno_layout_valor", "aluno_id", alunoId);
+    public void removerValoresAluno(EntityManager entityManager, Long alunoId) {
+        removerValores(entityManager, "aluno_layout_valor", "aluno_id", alunoId);
     }
 
-    public void removerValoresCurso(Session session, Long cursoId) {
-        removerValores(session, "curso_layout_valor", "curso_id", cursoId);
+    public void removerValoresCurso(EntityManager entityManager, Long cursoId) {
+        removerValores(entityManager, "curso_layout_valor", "curso_id", cursoId);
     }
 
-    public void removerValoresCursoAluno(Session session, Long cursoAlunoId) {
-        removerValores(session, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId);
+    public void removerValoresCursoAluno(EntityManager entityManager, Long cursoAlunoId) {
+        removerValores(entityManager, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId);
     }
 
-    public void removerValoresDocente(Session session, Long docenteId) {
-        removerValores(session, "docente_layout_valor", "docente_id", docenteId);
+    public void removerValoresDocente(EntityManager entityManager, Long docenteId) {
+        removerValores(entityManager, "docente_layout_valor", "docente_id", docenteId);
     }
 
-    public void removerValoresIes(Session session, Long iesId) {
-        removerValores(session, "ies_layout_valor", "ies_id", iesId);
+    public void removerValoresIes(EntityManager entityManager, Long iesId) {
+        removerValores(entityManager, "ies_layout_valor", "ies_id", iesId);
     }
 
     public Map<Long, String> carregarValoresAlunoPorCampoId(final Long alunoId) throws SQLException {
-        return executeInSession(new SessionWork<Map<Long, String>>() {
-            public Map<Long, String> execute(Session session) {
-                return carregarValoresPorCampoId(session, "aluno_layout_valor", "aluno_id", alunoId);
+        return executeInEntityManager(new EntityManagerWork<Map<Long, String>>() {
+            public Map<Long, String> execute(EntityManager entityManager) {
+                return carregarValoresPorCampoId(entityManager, "aluno_layout_valor", "aluno_id", alunoId);
             }
         });
     }
 
     public Map<Long, String> carregarValoresCursoPorCampoId(final Long cursoId) throws SQLException {
-        return executeInSession(new SessionWork<Map<Long, String>>() {
-            public Map<Long, String> execute(Session session) {
-                return carregarValoresPorCampoId(session, "curso_layout_valor", "curso_id", cursoId);
+        return executeInEntityManager(new EntityManagerWork<Map<Long, String>>() {
+            public Map<Long, String> execute(EntityManager entityManager) {
+                return carregarValoresPorCampoId(entityManager, "curso_layout_valor", "curso_id", cursoId);
             }
         });
     }
 
     public Map<Long, String> carregarValoresCursoAlunoPorCampoId(final Long cursoAlunoId) throws SQLException {
-        return executeInSession(new SessionWork<Map<Long, String>>() {
-            public Map<Long, String> execute(Session session) {
-                return carregarValoresPorCampoId(session, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId);
+        return executeInEntityManager(new EntityManagerWork<Map<Long, String>>() {
+            public Map<Long, String> execute(EntityManager entityManager) {
+                return carregarValoresPorCampoId(entityManager, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId);
             }
         });
     }
 
     public Map<Long, String> carregarValoresDocentePorCampoId(final Long docenteId) throws SQLException {
-        return executeInSession(new SessionWork<Map<Long, String>>() {
-            public Map<Long, String> execute(Session session) {
-                return carregarValoresPorCampoId(session, "docente_layout_valor", "docente_id", docenteId);
+        return executeInEntityManager(new EntityManagerWork<Map<Long, String>>() {
+            public Map<Long, String> execute(EntityManager entityManager) {
+                return carregarValoresPorCampoId(entityManager, "docente_layout_valor", "docente_id", docenteId);
             }
         });
     }
 
     public Map<Long, String> carregarValoresIesPorCampoId(final Long iesId) throws SQLException {
-        return executeInSession(new SessionWork<Map<Long, String>>() {
-            public Map<Long, String> execute(Session session) {
-                return carregarValoresPorCampoId(session, "ies_layout_valor", "ies_id", iesId);
+        return executeInEntityManager(new EntityManagerWork<Map<Long, String>>() {
+            public Map<Long, String> execute(EntityManager entityManager) {
+                return carregarValoresPorCampoId(entityManager, "ies_layout_valor", "ies_id", iesId);
             }
         });
     }
 
     public Map<Integer, String> carregarValoresAlunoPorNumero(final Long alunoId, final String modulo)
             throws SQLException {
-        return executeInSession(new SessionWork<Map<Integer, String>>() {
-            public Map<Integer, String> execute(Session session) {
-                return carregarValoresPorNumero(session, "aluno_layout_valor", "aluno_id", alunoId, modulo);
+        return executeInEntityManager(new EntityManagerWork<Map<Integer, String>>() {
+            public Map<Integer, String> execute(EntityManager entityManager) {
+                return carregarValoresPorNumero(entityManager, "aluno_layout_valor", "aluno_id", alunoId, modulo);
             }
         });
     }
 
     public Map<Integer, String> carregarValoresCursoPorNumero(final Long cursoId, final String modulo)
             throws SQLException {
-        return executeInSession(new SessionWork<Map<Integer, String>>() {
-            public Map<Integer, String> execute(Session session) {
-                return carregarValoresPorNumero(session, "curso_layout_valor", "curso_id", cursoId, modulo);
+        return executeInEntityManager(new EntityManagerWork<Map<Integer, String>>() {
+            public Map<Integer, String> execute(EntityManager entityManager) {
+                return carregarValoresPorNumero(entityManager, "curso_layout_valor", "curso_id", cursoId, modulo);
             }
         });
     }
 
     public Map<Integer, String> carregarValoresCursoAlunoPorNumero(final Long cursoAlunoId, final String modulo)
             throws SQLException {
-        return executeInSession(new SessionWork<Map<Integer, String>>() {
-            public Map<Integer, String> execute(Session session) {
+        return executeInEntityManager(new EntityManagerWork<Map<Integer, String>>() {
+            public Map<Integer, String> execute(EntityManager entityManager) {
                 return carregarValoresPorNumero(
-                        session, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId, modulo);
+                        entityManager, "curso_aluno_layout_valor", "curso_aluno_id", cursoAlunoId, modulo);
             }
         });
     }
 
     public Map<Integer, String> carregarValoresDocentePorNumero(final Long docenteId, final String modulo)
             throws SQLException {
-        return executeInSession(new SessionWork<Map<Integer, String>>() {
-            public Map<Integer, String> execute(Session session) {
-                return carregarValoresPorNumero(session, "docente_layout_valor", "docente_id", docenteId, modulo);
+        return executeInEntityManager(new EntityManagerWork<Map<Integer, String>>() {
+            public Map<Integer, String> execute(EntityManager entityManager) {
+                return carregarValoresPorNumero(entityManager, "docente_layout_valor", "docente_id", docenteId, modulo);
             }
         });
     }
 
     public Map<Integer, String> carregarValoresIesPorNumero(final Long iesId, final String modulo)
             throws SQLException {
-        return executeInSession(new SessionWork<Map<Integer, String>>() {
-            public Map<Integer, String> execute(Session session) {
-                return carregarValoresPorNumero(session, "ies_layout_valor", "ies_id", iesId, modulo);
+        return executeInEntityManager(new EntityManagerWork<Map<Integer, String>>() {
+            public Map<Integer, String> execute(EntityManager entityManager) {
+                return carregarValoresPorNumero(entityManager, "ies_layout_valor", "ies_id", iesId, modulo);
             }
         });
     }
@@ -187,7 +188,7 @@ public class LayoutCampoDAO extends AbstractHibernateDao {
         return mapa;
     }
 
-    private void salvarValores(Session session,
+    private void salvarValores(EntityManager entityManager,
                                String tabela,
                                String colunaFk,
                                Long fkValue,
@@ -195,7 +196,7 @@ public class LayoutCampoDAO extends AbstractHibernateDao {
         if (fkValue == null || valores == null || valores.isEmpty()) {
             return;
         }
-        Query query = session.createSQLQuery(
+        Query query = entityManager.createNativeQuery(
                 "INSERT INTO " + tabela + " (" + colunaFk + ", layout_campo_id, valor) " +
                         "VALUES (:fkValue, :layoutCampoId, :valor)");
         for (Map.Entry<Long, String> entry : valores.entrySet()) {
@@ -206,14 +207,14 @@ public class LayoutCampoDAO extends AbstractHibernateDao {
             if (valor == null) {
                 continue;
             }
-            query.setLong("fkValue", fkValue.longValue());
-            query.setLong("layoutCampoId", entry.getKey().longValue());
-            query.setString("valor", valor);
+            query.setParameter("fkValue", fkValue.longValue());
+            query.setParameter("layoutCampoId", entry.getKey().longValue());
+            query.setParameter("valor", valor);
             query.executeUpdate();
         }
     }
 
-    private Map<Long, String> carregarValoresPorCampoId(Session session,
+    private Map<Long, String> carregarValoresPorCampoId(EntityManager entityManager,
                                                         String tabela,
                                                         String colunaFk,
                                                         Long fkValue) {
@@ -221,10 +222,10 @@ public class LayoutCampoDAO extends AbstractHibernateDao {
         if (fkValue == null) {
             return valores;
         }
-        Query query = session.createSQLQuery(
+        Query query = entityManager.createNativeQuery(
                 "SELECT layout_campo_id, valor FROM " + tabela + " WHERE " + colunaFk + " = :fkValue");
-        query.setLong("fkValue", fkValue.longValue());
-        List rows = query.list();
+        query.setParameter("fkValue", fkValue.longValue());
+        List rows = query.getResultList();
         for (int i = 0; i < rows.size(); i++) {
             Object row = rows.get(i);
             if (!(row instanceof Object[])) {
@@ -239,7 +240,7 @@ public class LayoutCampoDAO extends AbstractHibernateDao {
         return valores;
     }
 
-    private Map<Integer, String> carregarValoresPorNumero(Session session,
+    private Map<Integer, String> carregarValoresPorNumero(EntityManager entityManager,
                                                           String tabela,
                                                           String colunaFk,
                                                           Long fkValue,
@@ -248,13 +249,13 @@ public class LayoutCampoDAO extends AbstractHibernateDao {
         if (fkValue == null) {
             return valores;
         }
-        Query query = session.createSQLQuery(
+        Query query = entityManager.createNativeQuery(
                 "SELECT c.numero_campo, v.valor FROM " + tabela + " v " +
                         "INNER JOIN layout_campo c ON c.id = v.layout_campo_id " +
                         "WHERE v." + colunaFk + " = :fkValue AND c.modulo = :modulo");
-        query.setLong("fkValue", fkValue.longValue());
-        query.setString("modulo", modulo);
-        List rows = query.list();
+        query.setParameter("fkValue", fkValue.longValue());
+        query.setParameter("modulo", modulo);
+        List rows = query.getResultList();
         for (int i = 0; i < rows.size(); i++) {
             Object row = rows.get(i);
             if (!(row instanceof Object[])) {
@@ -269,12 +270,12 @@ public class LayoutCampoDAO extends AbstractHibernateDao {
         return valores;
     }
 
-    private void removerValores(Session session, String tabela, String colunaFk, Long fkValue) {
+    private void removerValores(EntityManager entityManager, String tabela, String colunaFk, Long fkValue) {
         if (fkValue == null) {
             return;
         }
-        Query query = session.createSQLQuery("DELETE FROM " + tabela + " WHERE " + colunaFk + " = :fkValue");
-        query.setLong("fkValue", fkValue.longValue());
+        Query query = entityManager.createNativeQuery("DELETE FROM " + tabela + " WHERE " + colunaFk + " = :fkValue");
+        query.setParameter("fkValue", fkValue.longValue());
         query.executeUpdate();
     }
 

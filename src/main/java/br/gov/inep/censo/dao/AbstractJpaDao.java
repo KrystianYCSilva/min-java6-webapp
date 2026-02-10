@@ -1,42 +1,43 @@
 package br.gov.inep.censo.dao;
 
 import br.gov.inep.censo.config.HibernateConnectionProvider;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.sql.SQLException;
 
 /**
- * Infraestrutura base para DAOs Hibernate nativos (Session + Transaction),
+ * Infraestrutura base para DAOs JPA (EntityManager + EntityTransaction),
  * mantendo contrato checked de SQLException usado pelas camadas legadas.
  */
-public abstract class AbstractHibernateDao {
+public abstract class AbstractJpaDao {
 
-    protected interface SessionWork<T> {
-        T execute(Session session) throws SQLException;
+    protected interface EntityManagerWork<T> {
+        T execute(EntityManager entityManager) throws SQLException;
     }
 
-    protected <T> T executeInSession(SessionWork<T> work) throws SQLException {
-        Session session = null;
+    protected <T> T executeInEntityManager(EntityManagerWork<T> work) throws SQLException {
+        EntityManager entityManager = null;
         try {
-            session = HibernateConnectionProvider.openSession();
-            return work.execute(session);
+            entityManager = HibernateConnectionProvider.openEntityManager();
+            return work.execute(entityManager);
         } catch (SQLException e) {
             throw e;
         } catch (RuntimeException e) {
-            throw toSqlException("Falha de persistencia em sessao Hibernate.", e);
+            throw toSqlException("Falha de persistencia em contexto JPA.", e);
         } finally {
-            closeQuietly(session);
+            closeQuietly(entityManager);
         }
     }
 
-    protected <T> T executeInTransaction(SessionWork<T> work) throws SQLException {
-        Session session = null;
-        Transaction transaction = null;
+    protected <T> T executeInTransaction(EntityManagerWork<T> work) throws SQLException {
+        EntityManager entityManager = null;
+        EntityTransaction transaction = null;
         try {
-            session = HibernateConnectionProvider.openSession();
-            transaction = session.beginTransaction();
-            T result = work.execute(session);
+            entityManager = HibernateConnectionProvider.openEntityManager();
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            T result = work.execute(entityManager);
             transaction.commit();
             return result;
         } catch (SQLException e) {
@@ -44,9 +45,9 @@ public abstract class AbstractHibernateDao {
             throw e;
         } catch (RuntimeException e) {
             rollbackQuietly(transaction);
-            throw toSqlException("Falha de persistencia transacional com Hibernate.", e);
+            throw toSqlException("Falha de persistencia transacional com JPA.", e);
         } finally {
-            closeQuietly(session);
+            closeQuietly(entityManager);
         }
     }
 
@@ -74,8 +75,8 @@ public abstract class AbstractHibernateDao {
         return new SQLException(message, e);
     }
 
-    private void rollbackQuietly(Transaction transaction) {
-        if (transaction != null) {
+    private void rollbackQuietly(EntityTransaction transaction) {
+        if (transaction != null && transaction.isActive()) {
             try {
                 transaction.rollback();
             } catch (RuntimeException ignored) {
@@ -84,10 +85,10 @@ public abstract class AbstractHibernateDao {
         }
     }
 
-    private void closeQuietly(Session session) {
-        if (session != null) {
+    private void closeQuietly(EntityManager entityManager) {
+        if (entityManager != null) {
             try {
-                session.close();
+                entityManager.close();
             } catch (RuntimeException ignored) {
                 // noop
             }

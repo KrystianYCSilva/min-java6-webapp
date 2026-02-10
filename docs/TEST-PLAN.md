@@ -10,6 +10,7 @@ Dependencias de teste no `pom.xml`:
 
 Dependencias de persistencia em producao (tambem exercitadas nos testes de integracao):
 - `org.hibernate:hibernate-core:4.2.21.Final`
+- `org.hibernate:hibernate-entitymanager:4.2.21.Final`
 
 Controle de cobertura:
 - `org.jacoco:jacoco-maven-plugin:0.8.8`
@@ -21,7 +22,7 @@ Infra de apoio:
   - reinicializa H2 em memoria;
   - executa `schema.sql`, `seed.sql`, `seed_layout.sql`, `seed_layout_ies_docente.sql` e `seed_municipio.sql`.
 - `src/main/java/br/gov/inep/censo/config/HibernateConnectionProvider.java`
-  - abre sessoes e ciclo de vida de `SessionFactory` Hibernate;
+  - abre `EntityManager` e ciclo de vida de `EntityManagerFactory`;
   - resolve `Dialect` por URL (H2/PostgreSQL/MySQL/DB2);
   - preserva compatibilidade de configuracao do banco.
 
@@ -43,7 +44,7 @@ Casos cobertos:
 
 ## 3. Camada 2 - Integracao (meio da piramide)
 
-### 3.1 DAO + persistencia Hibernate nativa
+### 3.1 DAO + persistencia JPA (Hibernate)
 
 Classes:
 - `src/test/java/br/gov/inep/censo/dao/AlunoDAOTest.java`
@@ -59,7 +60,7 @@ Fluxos validados:
 4. Persistir e consultar Docente/IES com campos complementares.
 5. Validar tabela de apoio `municipio` por codigo e UF.
 6. Validar contagem de linhas com DBUnit.
-7. Validar DAOs com `Session` Hibernate sem regressao funcional.
+7. Validar DAOs com `EntityManager` sem regressao funcional.
 
 ### 3.2 Servicos com banco
 

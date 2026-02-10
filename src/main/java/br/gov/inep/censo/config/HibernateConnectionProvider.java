@@ -2,11 +2,11 @@ package br.gov.inep.censo.config;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.jdbc.ReturningWork;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -14,19 +14,21 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Fabrica central de SessionFactory/Sessions do Hibernate.
+ * Fabrica central de EntityManagerFactory/EntityManager com provider Hibernate.
  *
- * Mantem compatibilidade com DAOs legados que ainda precisem de JDBC bruto,
- * mas prioriza uso de Session/Transaction na camada DAO.
+ * Mantem compatibilidade com acesso JDBC bruto quando necessario, mas prioriza
+ * o uso de EntityManager/EntityTransaction na camada DAO.
  */
 public final class HibernateConnectionProvider {
 
     private static final Object LOCK = new Object();
+    private static final String PERSISTENCE_UNIT_NAME = "censo-superior-pu";
 
-    private static volatile SessionFactory sessionFactory;
+    private static volatile EntityManagerFactory entityManagerFactory;
     private static volatile String activeUrl;
     private static volatile String activeUser;
     private static volatile String activePassword;
@@ -34,16 +36,29 @@ public final class HibernateConnectionProvider {
     private HibernateConnectionProvider() {
     }
 
-    public static Session openSession() throws SQLException {
+    public static EntityManager openEntityManager() throws SQLException {
         try {
-            return ensureSessionFactory().openSession();
+            return ensureEntityManagerFactory().createEntityManager();
         } catch (RuntimeException e) {
-            throw new SQLException("Falha ao abrir sessao Hibernate.", e);
+            throw new SQLException("Falha ao abrir EntityManager JPA.", e);
         }
     }
 
     public static Connection getConnection() throws SQLException {
-        final Session session = openSession();
+        final EntityManager entityManager = openEntityManager();
+
+        final Session session;
+        try {
+            Object delegate = entityManager.getDelegate();
+            if (delegate instanceof Session) {
+                session = (Session) delegate;
+            } else {
+                session = (Session) entityManager.unwrap(Session.class);
+            }
+        } catch (RuntimeException e) {
+            closeEntityManagerQuietly(entityManager);
+            throw new SQLException("Falha ao obter sessao nativa a partir do EntityManager.", e);
+        }
 
         final Connection rawConnection;
         try {
@@ -53,17 +68,17 @@ public final class HibernateConnectionProvider {
                 }
             });
         } catch (RuntimeException e) {
-            closeSessionQuietly(session);
-            throw new SQLException("Falha ao obter conexao via Hibernate.", e);
+            closeEntityManagerQuietly(entityManager);
+            throw new SQLException("Falha ao obter conexao JDBC via EntityManager.", e);
         }
 
-        return createSessionBoundConnection(rawConnection, session);
+        return createEntityManagerBoundConnection(rawConnection, entityManager);
     }
 
     public static void invalidate() {
         synchronized (LOCK) {
-            closeSessionFactoryQuietly(sessionFactory);
-            sessionFactory = null;
+            closeEntityManagerFactoryQuietly(entityManagerFactory);
+            entityManagerFactory = null;
             activeUrl = null;
             activeUser = null;
             activePassword = null;
@@ -74,25 +89,25 @@ public final class HibernateConnectionProvider {
         invalidate();
     }
 
-    private static SessionFactory ensureSessionFactory() {
+    private static EntityManagerFactory ensureEntityManagerFactory() {
         String url = ConnectionFactory.getJdbcUrl();
         String user = ConnectionFactory.getJdbcUser();
         String password = ConnectionFactory.getJdbcPassword();
 
-        if (isCurrentConfig(url, user, password) && sessionFactory != null) {
-            return sessionFactory;
+        if (isCurrentConfig(url, user, password) && entityManagerFactory != null) {
+            return entityManagerFactory;
         }
 
         synchronized (LOCK) {
-            if (isCurrentConfig(url, user, password) && sessionFactory != null) {
-                return sessionFactory;
+            if (isCurrentConfig(url, user, password) && entityManagerFactory != null) {
+                return entityManagerFactory;
             }
-            closeSessionFactoryQuietly(sessionFactory);
-            sessionFactory = buildSessionFactory(url, user, password);
+            closeEntityManagerFactoryQuietly(entityManagerFactory);
+            entityManagerFactory = buildEntityManagerFactory(url, user, password);
             activeUrl = url;
             activeUser = user;
             activePassword = password;
-            return sessionFactory;
+            return entityManagerFactory;
         }
     }
 
@@ -109,29 +124,31 @@ public final class HibernateConnectionProvider {
         return a.equals(b);
     }
 
-    private static SessionFactory buildSessionFactory(String url, String user, String password) {
+    private static EntityManagerFactory buildEntityManagerFactory(String url, String user, String password) {
         try {
-            Configuration configuration = new Configuration().configure();
-            Properties properties = configuration.getProperties();
-            properties.setProperty("hibernate.connection.driver_class", resolveDriver(url));
-            properties.setProperty("hibernate.connection.url", url);
-            properties.setProperty("hibernate.connection.username", user == null ? "" : user);
-            properties.setProperty("hibernate.connection.password", password == null ? "" : password);
-            properties.setProperty("hibernate.dialect", resolveDialect(url));
-            properties.setProperty("hibernate.show_sql", "false");
-            properties.setProperty("hibernate.format_sql", "false");
-            properties.setProperty("hibernate.use_sql_comments", "false");
-            properties.setProperty("hibernate.jdbc.batch_size", "25");
-            properties.setProperty("hibernate.order_inserts", "true");
-            properties.setProperty("hibernate.order_updates", "true");
-            configuration.setProperties(properties);
-
-            ServiceRegistry serviceRegistry = new ServiceRegistryBuilder()
-                    .applySettings(configuration.getProperties())
-                    .buildServiceRegistry();
-            return configuration.buildSessionFactory(serviceRegistry);
+            String jdbcDriver = resolveDriver(url);
+            Map<String, String> properties = new HashMap<String, String>();
+            properties.put("javax.persistence.jdbc.driver", jdbcDriver);
+            properties.put("javax.persistence.jdbc.url", url);
+            properties.put("javax.persistence.jdbc.user", user == null ? "" : user);
+            properties.put("javax.persistence.jdbc.password", password == null ? "" : password);
+            properties.put("hibernate.connection.driver_class", jdbcDriver);
+            properties.put("hibernate.connection.url", url);
+            properties.put("hibernate.connection.username", user == null ? "" : user);
+            properties.put("hibernate.connection.password", password == null ? "" : password);
+            properties.put("hibernate.connection.pool_size", "10");
+            properties.put("hibernate.dialect", resolveDialect(url));
+            properties.put("hibernate.show_sql", "false");
+            properties.put("hibernate.format_sql", "false");
+            properties.put("hibernate.use_sql_comments", "false");
+            properties.put("hibernate.jdbc.batch_size", "25");
+            properties.put("hibernate.order_inserts", "true");
+            properties.put("hibernate.order_updates", "true");
+            return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
         } catch (HibernateException e) {
-            throw new IllegalStateException("Falha ao criar SessionFactory do Hibernate.", e);
+            throw new IllegalStateException("Falha ao criar EntityManagerFactory JPA.", e);
+        } catch (RuntimeException e) {
+            throw new IllegalStateException("Falha ao criar EntityManagerFactory JPA.", e);
         }
     }
 
@@ -161,7 +178,8 @@ public final class HibernateConnectionProvider {
         return "org.hibernate.dialect.H2Dialect";
     }
 
-    private static Connection createSessionBoundConnection(final Connection delegate, final Session session) {
+    private static Connection createEntityManagerBoundConnection(final Connection delegate,
+                                                                 final EntityManager entityManager) {
         InvocationHandler handler = new InvocationHandler() {
             private boolean closed;
 
@@ -194,7 +212,7 @@ public final class HibernateConnectionProvider {
                     return;
                 }
                 closed = true;
-                closeSessionQuietly(session);
+                closeEntityManagerQuietly(entityManager);
             }
         };
 
@@ -204,7 +222,7 @@ public final class HibernateConnectionProvider {
                 handler);
     }
 
-    private static void closeSessionFactoryQuietly(SessionFactory factory) {
+    private static void closeEntityManagerFactoryQuietly(EntityManagerFactory factory) {
         if (factory != null) {
             try {
                 factory.close();
@@ -214,10 +232,10 @@ public final class HibernateConnectionProvider {
         }
     }
 
-    private static void closeSessionQuietly(Session session) {
-        if (session != null) {
+    private static void closeEntityManagerQuietly(EntityManager entityManager) {
+        if (entityManager != null) {
             try {
-                session.close();
+                entityManager.close();
             } catch (RuntimeException ignored) {
                 // noop
             }

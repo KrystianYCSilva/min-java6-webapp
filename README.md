@@ -4,7 +4,7 @@ Prototipo funcional com:
 - Java 6 (JDK 1.6)
 - Servlet 2.5 / JSP
 - Hibernate ORM 4.2 (compativel com Java 6)
-- Hibernate nativo nos DAOs (`Session` + `Transaction` + HQL/SQL nativo)
+- JPA nos DAOs (`EntityManager` + `EntityTransaction` + JPQL/SQL nativo)
 - Mapeamento ORM por anotacoes JPA `javax.persistence` (`@Entity`, `@Table`, `@Column`)
 - Tomcat 6/7
 - Maven 3.2.5 (compatibilidade de projeto)
@@ -15,7 +15,7 @@ Prototipo funcional com:
 ### Camadas
 - `web` (Servlets): recebe request/response e delega para servicos.
 - `service`: validacoes e regras de negocio.
-- `dao`: persistencia Hibernate nativa sobre `SessionFactory`.
+- `dao`: persistencia JPA sobre `EntityManagerFactory`.
 - `model`: entidades de dominio.
 - `util`: utilitarios de seguranca/validacao/mapeamento de request.
 
@@ -29,9 +29,9 @@ Prototipo funcional com:
 ### Padroes de projeto utilizados
 - DAO Pattern (`AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`, etc.).
 - Service Layer (`AlunoService`, `CursoService`, `CursoAlunoService`, `DocenteService`, `IesService`, `AuthService`).
-- Template transacional Hibernate (`AbstractHibernateDao`) para padronizar `Session`/`Transaction`.
-- ORM mapping por classes anotadas (`hibernate.cfg.xml` + `javax.persistence`) com compatibilidade Java 6.
-- Bridge de persistencia via `HibernateConnectionProvider` (boot e ciclo de vida de `SessionFactory`).
+- Template transacional JPA (`AbstractJpaDao`) para padronizar `EntityManager`/`EntityTransaction`.
+- ORM mapping por classes anotadas e unidade JPA (`META-INF/persistence.xml` + `javax.persistence`).
+- Bridge de persistencia via `HibernateConnectionProvider` (boot e ciclo de vida de `EntityManagerFactory`).
 
 ## Modelagem de banco
 
@@ -106,7 +106,7 @@ mvn -Dmaven.repo.local=.m2/repository -Dmaven.compiler.source=1.7 -Dmaven.compil
 
 Cobertura:
 - JaCoCo com gate minimo de `80%` (linha) para `dao`, `service` e `util`.
-- Resultado atual da suite: acima do gate, com DAOs rodando sobre Hibernate nativo (`Session`/`Transaction`) e entidades JPA anotadas.
+- Resultado atual da suite: acima do gate, com DAOs rodando em JPA (`EntityManager`/`EntityTransaction`) e entidades JPA anotadas.
 
 Consulte `docs/TEST-PLAN.md` para detalhes da piramide de testes e roteiro E2E.
 Consulte `docs/ARCHITECTURE.md` para visao arquitetural detalhada do sistema.
