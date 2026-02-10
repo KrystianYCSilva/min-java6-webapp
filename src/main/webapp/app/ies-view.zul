@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <style src="/css/pdf-like.css"/>
+
+    <window id="winIesView" apply="br.gov.inep.censo.web.zk.modulo.IesComposer"
+            border="normal" width="1020px" sclass="sheet" position="center,top">
+        <vbox spacing="10px" width="100%">
+            <label value="IES" sclass="official-tag"/>
+            <label value="Visualizar IES" style="font-size:22px;font-weight:bold;"/>
+
+            <hbox spacing="8px" sclass="top-actions">
+                <button id="btnVoltarViewIes" label="Voltar para Listagem" sclass="btn-outline"/>
+                <button id="btnEditarViewIes" label="Alterar" sclass="btn-outline"/>
+            </hbox>
+
+            <grid width="100%">
+                <columns>
+                    <column width="38%"/>
+                    <column width="62%"/>
+                </columns>
+                <rows>
+                    <row><label value="ID"/><label id="lblViewIesId"/></row>
+                    <row><label value="ID IES INEP"/><label id="lblViewIesIdInep"/></row>
+                    <row><label value="Nome laboratorio"/><label id="lblViewIesNomeLaboratorio"/></row>
+                    <row><label value="Registro laboratorio IES"/><label id="lblViewIesRegistro"/></row>
+                    <row><label value="Laboratorio ativo"/><label id="lblViewIesAtivo"/></row>
+                    <row><label value="Descricao atividades"/><label id="lblViewIesDescricao"/></row>
+                    <row><label value="Palavras-chave"/><label id="lblViewIesPalavras"/></row>
+                    <row><label value="Laboratorio de informatica"/><label id="lblViewIesLabInfo"/></row>
+                    <row><label value="Tipo de laboratorio"/><label id="lblViewIesTipo"/></row>
+                    <row><label value="UF laboratorio"/><label id="lblViewIesUf"/></row>
+                    <row><label value="Municipio laboratorio"/><label id="lblViewIesMunicipio"/></row>
+                </rows>
+            </grid>
+
+            <label value="Campos complementares do leiaute" style="font-weight:bold;"/>
+            <listbox id="lstViewCamposIes" width="100%">
+                <listhead>
+                    <listheader label="Campo" width="55%"/>
+                    <listheader label="Valor" width="45%"/>
+                </listhead>
+            </listbox>
+        </vbox>
+    </window>
+</zk>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <style src="/css/pdf-like.css"/>
+
+    <window id="winAlunoView" apply="br.gov.inep.censo.web.zk.modulo.AlunoComposer"
+            border="normal" width="1000px" sclass="sheet" position="center,top">
+        <vbox spacing="10px" width="100%">
+            <label value="Aluno" sclass="official-tag"/>
+            <label value="Visualizar Aluno" style="font-size:22px;font-weight:bold;"/>
+
+            <hbox spacing="8px" sclass="top-actions">
+                <button id="btnVoltarViewAluno" label="Voltar para Listagem" sclass="btn-outline"/>
+                <button id="btnEditarViewAluno" label="Alterar" sclass="btn-outline"/>
+            </hbox>
+
+            <grid width="100%">
+                <columns>
+                    <column width="28%"/>
+                    <column width="72%"/>
+                </columns>
+                <rows>
+                    <row><label value="ID"/><label id="lblViewAlunoId"/></row>
+                    <row><label value="ID INEP"/><label id="lblViewAlunoIdInep"/></row>
+                    <row><label value="Nome"/><label id="lblViewAlunoNome"/></row>
+                    <row><label value="CPF"/><label id="lblViewAlunoCpf"/></row>
+                    <row><label value="Data de Nascimento"/><label id="lblViewAlunoNascimento"/></row>
+                    <row><label value="Cor/Raca"/><label id="lblViewAlunoCorRaca"/></row>
+                    <row><label value="Nacionalidade"/><label id="lblViewAlunoNacionalidade"/></row>
+                    <row><label value="UF"/><label id="lblViewAlunoUf"/></row>
+                    <row><label value="Municipio"/><label id="lblViewAlunoMunicipio"/></row>
+                    <row><label value="Pais"/><label id="lblViewAlunoPais"/></row>
+                    <row><label value="Tipos Deficiencia"/><label id="lblViewAlunoDeficiencia"/></row>
+                </rows>
+            </grid>
+
+            <label value="Campos complementares do leiaute" style="font-weight:bold;"/>
+            <listbox id="lstViewCamposAluno" width="100%">
+                <listhead>
+                    <listheader label="Campo" width="55%"/>
+                    <listheader label="Valor" width="45%"/>
+                </listhead>
+            </listbox>
+        </vbox>
+    </window>
+</zk>

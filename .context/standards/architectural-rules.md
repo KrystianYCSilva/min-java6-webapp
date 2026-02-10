@@ -7,25 +7,26 @@ triggers:
   - camadas
   - dependencia
   - sql
-  - hibernate
+  - jpa
+  - zk
 last_updated: 2026-02-10
 ---
 # Regras Arquiteturais
 
 ## Regras obrigatorias (MUST)
 
-1. `Servlet` deve apenas orquestrar HTTP e delegar para `service`.
+1. `web/zk` deve apenas orquestrar interacao de tela e delegar para `service`.
 2. Regra de negocio deve ficar em `service`.
 3. Persistencia deve ficar apenas em classes `dao`.
 4. SQL nativo em `dao` deve usar bind seguro de parametros.
 5. Classes `model` nao devem depender de `web` nem de `dao`.
 6. Novos fluxos autenticados devem passar por `AuthFilter`.
 7. Mudancas de schema devem manter compatibilidade com seeds e testes.
-8. DAOs devem usar `AbstractHibernateDao`/`HibernateConnectionProvider` (sem `DriverManager` direto).
+8. DAOs devem usar `AbstractJpaDao` (sem `DriverManager` direto).
 
 ## Direcao de dependencias permitida
 
-1. `web -> service`
+1. `web/zk -> service`
 2. `service -> dao | model | util`
 3. `dao -> model | config | domain`
 4. `util` deve ser reutilizavel e sem dependencia de camada web

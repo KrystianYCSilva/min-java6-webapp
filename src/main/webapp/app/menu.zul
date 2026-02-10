@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <style src="/css/pdf-like.css"/>
+    <style src="/css/app-shell.css"/>
+
+    <window id="winShell" apply="br.gov.inep.censo.web.zk.menu.MenuComposer"
+            border="none" width="100%" height="100%" sclass="shell-root">
+        <borderlayout width="100%" height="100%" sclass="shell-layout">
+            <north size="72px" border="none" splittable="false" collapsible="false">
+                <hbox sclass="shell-header" hflex="1" vflex="1" pack="justify" align="center">
+                    <vbox spacing="2px">
+                        <label value="Censo da Educacao Superior 2025" sclass="shell-title"/>
+                        <label value="Painel Operacional" sclass="shell-subtitle"/>
+                    </vbox>
+
+                    <hbox spacing="16px" align="center">
+                        <vbox spacing="1px" sclass="shell-userbox">
+                            <label id="lblUsuarioHeader" sclass="shell-user-name"/>
+                            <label id="lblUsuarioLogin" sclass="shell-user-login"/>
+                        </vbox>
+                        <button id="btnSairHeader" label="Sair" sclass="btn"/>
+                    </hbox>
+                </hbox>
+            </north>
+
+            <west size="250px" border="normal" splittable="false" collapsible="false">
+                <vbox sclass="shell-sidebar" hflex="1" vflex="1" spacing="8px">
+                    <label value="Navegacao" sclass="shell-nav-title"/>
+
+                    <button id="btnNavHome" label="Home" sclass="shell-nav-btn"/>
+                    <button id="btnNavAluno" label="Modulo Aluno" sclass="shell-nav-btn"/>
+                    <button id="btnNavCurso" label="Modulo Curso" sclass="shell-nav-btn"/>
+                    <button id="btnNavCursoAluno" label="Registro 42 - CursoAluno" sclass="shell-nav-btn"/>
+                    <button id="btnNavDocente" label="Modulo Docente" sclass="shell-nav-btn"/>
+                    <button id="btnNavIes" label="Modulo IES" sclass="shell-nav-btn"/>
+                </vbox>
+            </west>
+
+            <center border="none" autoscroll="true">
+                <div sclass="shell-content-wrap">
+                    <include id="incMain"/>
+                </div>
+            </center>
+
+            <south size="44px" border="none" splittable="false" collapsible="false">
+                <hbox sclass="shell-footer" hflex="1" vflex="1" align="center" pack="center">
+                    <label id="lblFooter"/>
+                </hbox>
+            </south>
+        </borderlayout>
+
+        <window id="winSub" mode="modal" closable="true" visible="false"
+                width="92%" height="88%" border="normal" sclass="shell-subwindow"
+                title="Detalhes">
+            <vbox width="100%" height="100%" spacing="6px">
+                <hbox pack="justify" align="center" sclass="shell-subheader">
+                    <label id="lblSubTitle" sclass="shell-subtitle-main"/>
+                    <button id="btnCloseSub" label="Fechar" sclass="btn-outline"/>
+                </hbox>
+                <div sclass="shell-subcontent" hflex="1" vflex="1">
+                    <include id="incSub"/>
+                </div>
+            </vbox>
+        </window>
+    </window>
+</zk>

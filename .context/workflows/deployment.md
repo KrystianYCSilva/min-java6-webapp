@@ -1,5 +1,5 @@
 ---
-description: Workflow de build, empacotamento e deploy local no Tomcat para o webapp legado, incluindo validacoes de smoke test.
+description: Workflow de build, empacotamento e deploy local no Tomcat para o webapp, incluindo validacoes de smoke test.
 tier: T2
 triggers:
   - deploy
@@ -38,23 +38,24 @@ mvn clean package
 
 ### 4. Smoke test
 
-1. Abrir `http://localhost:8080/censo-superior-2025/login`.
+1. Abrir `http://localhost:8080/censo-superior-2025/login.zul`.
 2. Login com `admin / admin123`.
-3. Navegar para menu e validar acesso aos modulos Aluno, Curso, CursoAluno, Docente e IES.
-4. Testar um fluxo rapido de cadastro ou listagem.
-5. Testar importacao/exportacao TXT pipe em pelo menos um dos modulos novos (`Docente` ou `IES`).
+3. Validar redirecionamento para `app/menu.zul?view=dashboard`.
+4. Navegar no menu lateral para Aluno, Curso, CursoAluno, Docente e IES.
+5. Abrir ao menos um cadastro em sub-window (`sub=...`) e salvar.
+6. Testar importacao/exportacao TXT pipe em pelo menos um modulo.
 
 ## Sinais de problema comuns
 
 1. Erro de compilacao por versao de JDK.
 2. Falha de autenticacao por seed ausente.
 3. Pagina de erro por incompatibilidade de schema/seed.
-4. Configuracao JDBC invalida para `HibernateConnectionProvider` (driver/url/dialect).
+4. Configuracao JDBC invalida para `EntityManagerFactory`.
 5. Uso de pool embutido do Hibernate em ambiente de producao sem ajuste de datasource.
 
 ## Checklist antes de entregar
 
 1. Suite de testes passou.
 2. WAR foi gerado sem erro.
-3. Login e navegacao basica funcionam.
+3. Login e navegacao basica no shell funcionam.
 4. Nao ha alteracao manual em artefatos gerados.

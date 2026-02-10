@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <style src="/css/pdf-like.css"/>
+
+    <window id="winCursoView" apply="br.gov.inep.censo.web.zk.modulo.CursoComposer"
+            border="normal" width="1000px" sclass="sheet" position="center,top">
+        <vbox spacing="10px" width="100%">
+            <label value="Curso" sclass="official-tag"/>
+            <label value="Visualizar Curso" style="font-size:22px;font-weight:bold;"/>
+
+            <hbox spacing="8px" sclass="top-actions">
+                <button id="btnVoltarViewCurso" label="Voltar para Listagem" sclass="btn-outline"/>
+                <button id="btnEditarViewCurso" label="Alterar" sclass="btn-outline"/>
+            </hbox>
+
+            <grid width="100%">
+                <columns>
+                    <column width="30%"/>
+                    <column width="70%"/>
+                </columns>
+                <rows>
+                    <row><label value="ID"/><label id="lblViewCursoId"/></row>
+                    <row><label value="Codigo E-MEC"/><label id="lblViewCursoCodigo"/></row>
+                    <row><label value="Nome"/><label id="lblViewCursoNome"/></row>
+                    <row><label value="Nivel Academico"/><label id="lblViewCursoNivel"/></row>
+                    <row><label value="Formato de Oferta"/><label id="lblViewCursoFormato"/></row>
+                    <row><label value="Teve aluno vinculado"/><label id="lblViewCursoVinculado"/></row>
+                    <row><label value="Recursos assistivos"/><label id="lblViewCursoRecursos"/></row>
+                </rows>
+            </grid>
+
+            <label value="Campos complementares do leiaute" style="font-weight:bold;"/>
+            <listbox id="lstViewCamposCurso" width="100%">
+                <listhead>
+                    <listheader label="Campo" width="55%"/>
+                    <listheader label="Valor" width="45%"/>
+                </listhead>
+            </listbox>
+        </vbox>
+    </window>
+</zk>

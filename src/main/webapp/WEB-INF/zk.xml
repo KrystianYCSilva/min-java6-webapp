@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <system-config>
+        <disable-event-thread>true</disable-event-thread>
+    </system-config>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+        <max-desktops-per-session>15</max-desktops-per-session>
+    </session-config>
+
+    <library-property>
+        <name>org.zkoss.zk.ui.disable-zscript</name>
+        <value>true</value>
+    </library-property>
+
+    <library-property>
+        <name>org.zkoss.zk.ui.checkClassWebResource</name>
+        <value>false</value>
+    </library-property>
+</zk>

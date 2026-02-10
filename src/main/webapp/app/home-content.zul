@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <window id="winDashboard" apply="br.gov.inep.censo.web.zk.home.DashboardComposer"
+            border="normal" width="100%" sclass="sheet">
+        <vbox spacing="12px" width="100%">
+            <label value="Home" sclass="official-tag"/>
+            <label value="Painel Inicial" style="font-size:24px;font-weight:bold;"/>
+            <label id="lblResumoDashboard" style="color:#334e68;"/>
+
+            <label id="lblFlashDashboard" sclass="ok" visible="false"/>
+
+            <separator bar="true"/>
+
+            <grid width="100%">
+                <columns>
+                    <column width="26%" label="Area"/>
+                    <column width="74%" label="Descricao"/>
+                </columns>
+                <rows>
+                    <row>
+                        <label value="Aluno"/>
+                        <label value="Cadastro, importacao/exportacao TXT e campos complementares do Registro 41."/>
+                    </row>
+                    <row>
+                        <label value="Curso"/>
+                        <label value="Cadastro, recursos assistivos e fluxo TXT do Registro 21."/>
+                    </row>
+                    <row>
+                        <label value="CursoAluno"/>
+                        <label value="Vinculo Aluno x Curso (Registro 42) com normalizacao 1..N."/>
+                    </row>
+                    <row>
+                        <label value="Docente"/>
+                        <label value="Cadastro do Registro 31 com validacoes de UF/municipio e campos extras."/>
+                    </row>
+                    <row>
+                        <label value="IES"/>
+                        <label value="Registro 11 de laboratorio com importacao/exportacao TXT pipe."/>
+                    </row>
+                </rows>
+            </grid>
+        </vbox>
+    </window>
+</zk>
