@@ -16,12 +16,12 @@ last_updated: 2026-02-10
 
 1. `Servlet` deve apenas orquestrar HTTP e delegar para `service`.
 2. Regra de negocio deve ficar em `service`.
-3. SQL deve ficar apenas em classes `dao`.
-4. `dao` deve usar `PreparedStatement` e bind seguro de parametros.
+3. Persistencia deve ficar apenas em classes `dao`.
+4. SQL nativo em `dao` deve usar bind seguro de parametros.
 5. Classes `model` nao devem depender de `web` nem de `dao`.
 6. Novos fluxos autenticados devem passar por `AuthFilter`.
 7. Mudancas de schema devem manter compatibilidade com seeds e testes.
-8. DAOs devem abrir conexao via `HibernateConnectionProvider` (sem `DriverManager` direto).
+8. DAOs devem usar `AbstractHibernateDao`/`HibernateConnectionProvider` (sem `DriverManager` direto).
 
 ## Direcao de dependencias permitida
 

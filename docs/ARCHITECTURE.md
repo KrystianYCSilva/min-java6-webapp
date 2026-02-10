@@ -18,7 +18,7 @@ O sistema segue arquitetura em camadas com separacao clara de responsabilidades:
 
 1. `web`: entrada HTTP, navegacao e renderizacao JSP.
 2. `service`: regras de negocio, validacoes e import/export TXT pipe.
-3. `dao`: persistencia SQL com conexao JDBC gerenciada por Hibernate 4.2.
+3. `dao`: persistencia Hibernate nativa (`Session`/`Transaction`) com HQL e SQL nativo quando necessario.
 4. `model`: entidades e enums de dominio.
 5. `util`: utilitarios transversais (hash, validacoes, mapeamento).
 
@@ -28,8 +28,8 @@ flowchart LR
     B --> C[CsrfFilter]
     C --> D[Servlets]
     D --> E[Services]
-    E --> F[DAOs SQL]
-    F --> I[HibernateConnectionProvider / SessionFactory]
+    E --> F[DAOs Hibernate]
+    F --> I[AbstractHibernateDao / SessionFactory]
     I --> G[(H2 Database)]
     D --> H[JSP Views]
 ```
@@ -41,7 +41,7 @@ flowchart LR
 | Web | `br.gov.inep.censo.web` | Controller HTTP e roteamento | `AbstractActionServlet`, `AlunoServlet`, `CursoServlet`, `CursoAlunoServlet`, `DocenteServlet`, `IesServlet` |
 | Filtro | `br.gov.inep.censo.web.filter` | Protecao de rotas autenticadas e anti-CSRF | `AuthFilter`, `CsrfFilter` |
 | Service | `br.gov.inep.censo.service` | Regra de negocio e orquestracao | `AlunoService`, `CursoService`, `CursoAlunoService`, `DocenteService`, `IesService` |
-| DAO | `br.gov.inep.censo.dao` | SQL, mapeamento, CRUD e consultas | `AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`, `MunicipioDAO` |
+| DAO | `br.gov.inep.censo.dao` | CRUD, transacao e consulta com Hibernate nativo | `AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`, `MunicipioDAO` |
 | Modelo | `br.gov.inep.censo.model` | Entidades persistidas | `Aluno`, `Curso`, `CursoAluno`, `Docente`, `Ies`, `Municipio`, `Usuario` |
 | Dominio auxiliar | `br.gov.inep.censo.domain` | Constantes de dominio/layout | `CategoriasOpcao`, `ModulosLayout` |
 | Utilitarios | `br.gov.inep.censo.util` | Funcoes de apoio reutilizaveis | `ValidationUtils`, `PasswordUtil`, `RequestFieldMapper` |
@@ -64,7 +64,7 @@ flowchart LR
 1. Servlet recebe acao (`lista`, `form`, `salvar`, `mostrar`, `excluir`, `importar`, `exportar`).
 2. `AbstractActionServlet` despacha a acao para comando registrado (`Map<String, ActionCommand>`).
 3. Service valida regras e consistencia.
-4. DAO executa SQL usando `Connection` fornecida por `HibernateConnectionProvider`.
+4. DAO executa operacoes em `Session` Hibernate (HQL e SQL nativo para tabelas auxiliares).
 5. JSP renderiza saida com escape HTML via `ViewUtils.e(...)`.
 6. Servlet encaminha para JSP de lista, formulario ou visualizacao.
 
@@ -113,8 +113,8 @@ Scripts de banco:
 
 ## 6. Decisoes Arquiteturais Relevantes
 
-1. Hibernate 4.2 (compativel com Java 6) introduzido como primeiro framework de acesso ao banco.
-2. SQL de negocio permanece nos DAOs na fase atual da migracao para preservar comportamento legado.
+1. Hibernate 4.2 (compativel com Java 6) adotado como base de persistencia sem JPA.
+2. Mapeamento ORM por XML (`hibernate.cfg.xml` + `*.hbm.xml`) para compatibilidade com Java 6 e controle explicito.
 3. Monolito em camadas para simplicidade de manutencao em stack legado.
 4. Modelagem de campos de layout por metadados para suportar evolucao de leiaute.
 5. Sessao HTTP + filtro para autenticacao sem dependencia externa.
@@ -125,6 +125,7 @@ Scripts de banco:
 10. Output Encoding centralizado com `ViewUtils.e(...)` para mitigar XSS refletido/armazenado em JSP.
 11. Migracao progressiva de hash de senha: compatibilidade legado + rehash automatico para PBKDF2.
 12. Command Pattern no web layer para despacho de `acao` sem cadeias extensas de `if/else`.
+13. JPA/`EntityManager` adiado para versao `1.2.0`; baseline atual permanece Hibernate nativo.
 
 ## 7. Qualidade, Build e Testes
 
@@ -149,7 +150,7 @@ Qualidade:
 ## 8. Restricoes e Riscos
 
 1. Stack legado (Servlet 2.5, JSP 2.1, Java 6) limita uso de recursos modernos.
-2. Mudancas de schema exigem sincronizacao entre SQL, DAO, service e testes.
+2. Mudancas de schema exigem sincronizacao entre mapeamentos Hibernate, DAO, service e testes.
 3. Acoplamento entre importacao/exportacao e metadados de layout exige regressao cuidadosa.
 4. Seguranca depende de manter `ViewUtils.e(...)` em toda saida JSP e `_csrf` em todo `POST` de `/app/*`.
 5. Pool embutido do Hibernate e adequado para desenvolvimento, mas nao para producao.
@@ -159,8 +160,9 @@ Qualidade:
 1. `README.md`
 2. `docs/TEST-PLAN.md`
 3. `docs/HIBERNATE-MIGRATION.md`
-4. `src/main/java/br/gov/inep/censo/web`
-5. `src/main/java/br/gov/inep/censo/service`
-6. `src/main/java/br/gov/inep/censo/dao`
-7. `src/main/java/br/gov/inep/censo/config`
-8. `src/main/resources/db`
+4. `docs/HIBERNATE-NATIVE-WHAT-CHANGED.md`
+5. `src/main/java/br/gov/inep/censo/web`
+6. `src/main/java/br/gov/inep/censo/service`
+7. `src/main/java/br/gov/inep/censo/dao`
+8. `src/main/java/br/gov/inep/censo/config`
+9. `src/main/resources/db`

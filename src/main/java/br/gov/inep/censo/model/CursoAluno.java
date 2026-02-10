@@ -13,6 +13,8 @@ public class CursoAluno implements Serializable {
     private Long id;
     private Long alunoId;
     private Long cursoId;
+    private Aluno aluno;
+    private Curso curso;
     private String idAlunoIes;
     private String periodoReferencia;
     private String codigoPoloEad;
@@ -54,19 +56,55 @@ public class CursoAluno implements Serializable {
     }
 
     public Long getAlunoId() {
+        if (alunoId == null && aluno != null) {
+            return aluno.getId();
+        }
         return alunoId;
     }
 
     public void setAlunoId(Long alunoId) {
         this.alunoId = alunoId;
+        if (aluno != null) {
+            Long alunoRelacionamentoId = aluno.getId();
+            if (alunoRelacionamentoId == null || !alunoRelacionamentoId.equals(alunoId)) {
+                this.aluno = null;
+            }
+        }
     }
 
     public Long getCursoId() {
+        if (cursoId == null && curso != null) {
+            return curso.getId();
+        }
         return cursoId;
     }
 
     public void setCursoId(Long cursoId) {
         this.cursoId = cursoId;
+        if (curso != null) {
+            Long cursoRelacionamentoId = curso.getId();
+            if (cursoRelacionamentoId == null || !cursoRelacionamentoId.equals(cursoId)) {
+                this.curso = null;
+            }
+        }
+    }
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+        this.alunoId = aluno == null ? null : aluno.getId();
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+        this.cursoId = curso == null ? null : curso.getId();
     }
 
     public String getIdAlunoIes() {

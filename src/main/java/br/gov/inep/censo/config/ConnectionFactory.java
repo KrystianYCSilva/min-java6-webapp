@@ -9,19 +9,25 @@ public final class ConnectionFactory {
     private static String jdbcUrl = "jdbc:h2:./data/censo2025;DB_CLOSE_DELAY=-1";
     private static String jdbcUser = "sa";
     private static String jdbcPassword = "";
+    private static String loadedDriverClass;
 
     static {
-        loadDriver();
+        ensureDriverLoaded(jdbcUrl);
     }
 
     private ConnectionFactory() {
     }
 
-    private static void loadDriver() {
+    private static synchronized void ensureDriverLoaded(String url) {
+        String driverClass = resolveDriverClass(url);
+        if (driverClass.equals(loadedDriverClass)) {
+            return;
+        }
         try {
-            Class.forName("org.h2.Driver");
+            Class.forName(driverClass);
+            loadedDriverClass = driverClass;
         } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("Driver JDBC H2 nao encontrado.", e);
+            throw new IllegalStateException("Driver JDBC nao encontrado: " + driverClass, e);
         }
     }
 
@@ -49,6 +55,7 @@ public final class ConnectionFactory {
         }
 
         if (changed) {
+            ensureDriverLoaded(jdbcUrl);
             HibernateConnectionProvider.invalidate();
         }
     }
@@ -67,5 +74,18 @@ public final class ConnectionFactory {
 
     public static synchronized String getJdbcPassword() {
         return jdbcPassword;
+    }
+
+    private static String resolveDriverClass(String url) {
+        if (url != null && url.startsWith("jdbc:postgresql:")) {
+            return "org.postgresql.Driver";
+        }
+        if (url != null && url.startsWith("jdbc:mysql:")) {
+            return "com.mysql.jdbc.Driver";
+        }
+        if (url != null && url.startsWith("jdbc:db2:")) {
+            return "com.ibm.db2.jcc.DB2Driver";
+        }
+        return "org.h2.Driver";
     }
 }

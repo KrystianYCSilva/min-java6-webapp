@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="br.gov.inep.censo.model.CursoAluno" table="curso_aluno" dynamic-update="true">
+        <id name="id" column="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <many-to-one name="aluno"
+                     class="br.gov.inep.censo.model.Aluno"
+                     column="aluno_id"
+                     not-null="true"
+                     lazy="proxy"/>
+        <many-to-one name="curso"
+                     class="br.gov.inep.censo.model.Curso"
+                     column="curso_id"
+                     not-null="true"
+                     lazy="proxy"/>
+        <property name="idAlunoIes" column="id_aluno_ies" type="string" not-null="true" length="30"/>
+        <property name="periodoReferencia" column="periodo_referencia" type="string" not-null="true" length="4"/>
+        <property name="codigoPoloEad" column="codigo_polo_ead" type="string" length="12"/>
+        <property name="turnoAluno" column="turno_aluno" type="integer"/>
+        <property name="situacaoVinculo" column="situacao_vinculo" type="integer"/>
+        <property name="cursoOrigem" column="curso_origem" type="string" length="12"/>
+        <property name="semestreConclusao" column="semestre_conclusao" type="string" length="6"/>
+        <property name="alunoParfor" column="aluno_parfor" type="integer"/>
+        <property name="segundaLicenciaturaFormacao" column="segunda_licenciatura_formacao" type="integer"/>
+        <property name="tipoSegundaLicenciaturaFormacao" column="tipo_segunda_licenciatura_formacao" type="integer"/>
+        <property name="semestreIngresso" column="semestre_ingresso" type="string" length="6"/>
+        <property name="formaIngressoVestibular" column="forma_ingresso_vestibular" type="integer"/>
+        <property name="formaIngressoEnem" column="forma_ingresso_enem" type="integer"/>
+        <property name="formaIngressoAvaliacaoSeriada" column="forma_ingresso_avaliacao_seriada" type="integer"/>
+        <property name="formaIngressoSelecaoSimplificada" column="forma_ingresso_selecao_simplificada" type="integer"/>
+        <property name="formaIngressoEgressoBiLi" column="forma_ingresso_egresso_bi_li" type="integer"/>
+        <property name="formaIngressoPecG" column="forma_ingresso_pec_g" type="integer"/>
+        <property name="formaIngressoTransferenciaExofficio" column="forma_ingresso_transferencia_exofficio" type="integer"/>
+        <property name="formaIngressoDecisaoJudicial" column="forma_ingresso_decisao_judicial" type="integer"/>
+        <property name="formaIngressoVagasRemanescentes" column="forma_ingresso_vagas_remanescentes" type="integer"/>
+        <property name="formaIngressoProgramasEspeciais" column="forma_ingresso_programas_especiais" type="integer"/>
+    </class>
+</hibernate-mapping>

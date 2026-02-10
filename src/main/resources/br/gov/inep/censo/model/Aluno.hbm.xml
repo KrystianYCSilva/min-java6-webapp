@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="br.gov.inep.censo.model.Aluno" table="aluno" dynamic-update="true">
+        <id name="id" column="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <property name="idAlunoInep" column="id_aluno_inep" type="long"/>
+        <property name="nome" column="nome" type="string" not-null="true" length="120"/>
+        <property name="cpf" column="cpf" type="string" not-null="true" length="11"/>
+        <property name="dataNascimento" column="data_nascimento" type="date" not-null="true"/>
+        <property name="corRaca" column="cor_raca" type="integer"/>
+        <property name="nacionalidade" column="nacionalidade" type="integer" not-null="true"/>
+        <property name="ufNascimento" column="uf_nascimento" type="string" length="2"/>
+        <property name="municipioNascimento" column="municipio_nascimento" type="string" length="120"/>
+        <property name="paisOrigem" column="pais_origem" type="string" not-null="true" length="3"/>
+    </class>
+</hibernate-mapping>

@@ -15,7 +15,7 @@ last_updated: 2026-02-10
 | ID | Decisao | Status | Racional | Impacto |
 | --- | --- | --- | --- | --- |
 | ADR-001 | Arquitetura em camadas (`web/service/dao/model/util`) | Aceita | Facilita manutencao em legado e separa responsabilidades | Evita acoplamento entre HTTP, regra e SQL |
-| ADR-002 | SQL explicito em DAO | Aceita | Controle explicito de SQL e compatibilidade com Java 6 | Mudancas de schema exigem ajuste manual de SQL |
+| ADR-002 | Hibernate nativo em DAO (Session/Transaction) com SQL nativo pontual | Aceita | Reduzir boilerplate JDBC e manter controle fino nas tabelas auxiliares | Mudancas de schema exigem alinhar mapeamentos ORM e SQL auxiliar |
 | ADR-003 | H2 embarcado para ambiente local e testes | Aceita | Rapidez de setup e execucao de suite automatizada | Aproxima testes de persistencia sem dependencia externa |
 | ADR-004 | Campos de layout modelados com metadados (`layout_campo` + `_layout_valor`) | Aceita | Cobrir variacao de leiautes sem inflar schema principal | Import/export permanece extensivel por configuracao |
 | ADR-005 | Autenticacao por sessao HTTP + `AuthFilter` | Aceita | Simplicidade operacional no stack servlet legado | Requer cuidado com protecao de rotas `/app/*` |
@@ -30,7 +30,8 @@ last_updated: 2026-02-10
 | ADR-014 | Escape de saida JSP centralizado em `ViewUtils.e(...)` | Aceita | Mitigar XSS em renderizacao de dados dinamicos | Padroniza renderizacao segura e reduz risco de regressao |
 | ADR-015 | Hash de senha PBKDF2 com migracao transparente de SHA-256 legado | Aceita | Elevar seguranca sem quebrar base existente de usuarios | Login bem-sucedido em hash legado dispara rehash para PBKDF2 |
 | ADR-016 | Command Pattern no web layer para despacho de `acao` (`AbstractActionServlet`) | Aceita | Reduzir encadeamento de `if/else` e facilitar extensao de operacoes por modulo | Mantem comportamento e melhora legibilidade/manutenibilidade dos servlets |
-| ADR-017 | Hibernate 4.2 introduzido como infraestrutura de conexao para DAOs | Aceita | Adicionar framework de persistencia compativel com Java 6 sem quebrar SQL legado | DAOs passam a usar `HibernateConnectionProvider` e base fica pronta para migracao ORM gradual |
+| ADR-017 | Hibernate 4.2 consolidado como ORM nativo por XML (`*.hbm.xml`) | Aceita | Estabilizar persistencia em Java 6 sem depender de JPA nesta versao | DAOs passam a usar `AbstractHibernateDao` e `SessionFactory` |
+| ADR-018 | JPA adiado para versao 1.2.0 | Aceita | Reduzir risco de mudanca dupla (ORM + API JPA) na mesma entrega | Baseline 1.1.x permanece Hibernate nativo sem `EntityManager` |
 
 ## Quando atualizar este arquivo
 

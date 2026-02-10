@@ -1,5 +1,6 @@
 package br.gov.inep.censo.config;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -16,8 +17,10 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * Fornece conexoes JDBC gerenciadas pelo Hibernate para preservar o contrato
- * atual dos DAOs legados.
+ * Fabrica central de SessionFactory/Sessions do Hibernate.
+ *
+ * Mantem compatibilidade com DAOs legados que ainda precisem de JDBC bruto,
+ * mas prioriza uso de Session/Transaction na camada DAO.
  */
 public final class HibernateConnectionProvider {
 
@@ -31,9 +34,16 @@ public final class HibernateConnectionProvider {
     private HibernateConnectionProvider() {
     }
 
+    public static Session openSession() throws SQLException {
+        try {
+            return ensureSessionFactory().openSession();
+        } catch (RuntimeException e) {
+            throw new SQLException("Falha ao abrir sessao Hibernate.", e);
+        }
+    }
+
     public static Connection getConnection() throws SQLException {
-        ensureSessionFactory();
-        final Session session = sessionFactory.openSession();
+        final Session session = openSession();
 
         final Connection rawConnection;
         try {
@@ -64,24 +74,25 @@ public final class HibernateConnectionProvider {
         invalidate();
     }
 
-    private static void ensureSessionFactory() {
+    private static SessionFactory ensureSessionFactory() {
         String url = ConnectionFactory.getJdbcUrl();
         String user = ConnectionFactory.getJdbcUser();
         String password = ConnectionFactory.getJdbcPassword();
 
         if (isCurrentConfig(url, user, password) && sessionFactory != null) {
-            return;
+            return sessionFactory;
         }
 
         synchronized (LOCK) {
             if (isCurrentConfig(url, user, password) && sessionFactory != null) {
-                return;
+                return sessionFactory;
             }
             closeSessionFactoryQuietly(sessionFactory);
             sessionFactory = buildSessionFactory(url, user, password);
             activeUrl = url;
             activeUser = user;
             activePassword = password;
+            return sessionFactory;
         }
     }
 
@@ -99,22 +110,29 @@ public final class HibernateConnectionProvider {
     }
 
     private static SessionFactory buildSessionFactory(String url, String user, String password) {
-        Configuration configuration = new Configuration();
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.connection.driver_class", resolveDriver(url));
-        properties.setProperty("hibernate.connection.url", url);
-        properties.setProperty("hibernate.connection.username", user == null ? "" : user);
-        properties.setProperty("hibernate.connection.password", password == null ? "" : password);
-        properties.setProperty("hibernate.dialect", resolveDialect(url));
-        properties.setProperty("hibernate.show_sql", "false");
-        properties.setProperty("hibernate.format_sql", "false");
-        properties.setProperty("hibernate.current_session_context_class", "thread");
-        configuration.setProperties(properties);
+        try {
+            Configuration configuration = new Configuration().configure();
+            Properties properties = configuration.getProperties();
+            properties.setProperty("hibernate.connection.driver_class", resolveDriver(url));
+            properties.setProperty("hibernate.connection.url", url);
+            properties.setProperty("hibernate.connection.username", user == null ? "" : user);
+            properties.setProperty("hibernate.connection.password", password == null ? "" : password);
+            properties.setProperty("hibernate.dialect", resolveDialect(url));
+            properties.setProperty("hibernate.show_sql", "false");
+            properties.setProperty("hibernate.format_sql", "false");
+            properties.setProperty("hibernate.use_sql_comments", "false");
+            properties.setProperty("hibernate.jdbc.batch_size", "25");
+            properties.setProperty("hibernate.order_inserts", "true");
+            properties.setProperty("hibernate.order_updates", "true");
+            configuration.setProperties(properties);
 
-        ServiceRegistry serviceRegistry = new ServiceRegistryBuilder()
-                .applySettings(configuration.getProperties())
-                .buildServiceRegistry();
-        return configuration.buildSessionFactory(serviceRegistry);
+            ServiceRegistry serviceRegistry = new ServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties())
+                    .buildServiceRegistry();
+            return configuration.buildSessionFactory(serviceRegistry);
+        } catch (HibernateException e) {
+            throw new IllegalStateException("Falha ao criar SessionFactory do Hibernate.", e);
+        }
     }
 
     private static String resolveDriver(String url) {

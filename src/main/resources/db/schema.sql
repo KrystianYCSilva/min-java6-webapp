@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS curso_aluno (
     forma_ingresso_vagas_remanescentes SMALLINT DEFAULT 0,
     forma_ingresso_programas_especiais SMALLINT DEFAULT 0,
     criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_curso_aluno_aluno FOREIGN KEY (aluno_id) REFERENCES aluno (id),
-    CONSTRAINT fk_curso_aluno_curso FOREIGN KEY (curso_id) REFERENCES curso (id),
+    CONSTRAINT fk_curso_aluno_aluno FOREIGN KEY (aluno_id) REFERENCES aluno (id) ON DELETE CASCADE,
+    CONSTRAINT fk_curso_aluno_curso FOREIGN KEY (curso_id) REFERENCES curso (id) ON DELETE CASCADE,
     CONSTRAINT uk_curso_aluno UNIQUE (aluno_id, curso_id, periodo_referencia)
 );
 
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS aluno_opcao (
     opcao_id BIGINT NOT NULL,
     criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (aluno_id, opcao_id),
-    CONSTRAINT fk_aluno_opcao_aluno FOREIGN KEY (aluno_id) REFERENCES aluno (id),
+    CONSTRAINT fk_aluno_opcao_aluno FOREIGN KEY (aluno_id) REFERENCES aluno (id) ON DELETE CASCADE,
     CONSTRAINT fk_aluno_opcao_opcao FOREIGN KEY (opcao_id) REFERENCES dominio_opcao (id)
 );
 
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS curso_opcao (
     opcao_id BIGINT NOT NULL,
     criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (curso_id, opcao_id),
-    CONSTRAINT fk_curso_opcao_curso FOREIGN KEY (curso_id) REFERENCES curso (id),
+    CONSTRAINT fk_curso_opcao_curso FOREIGN KEY (curso_id) REFERENCES curso (id) ON DELETE CASCADE,
     CONSTRAINT fk_curso_opcao_opcao FOREIGN KEY (opcao_id) REFERENCES dominio_opcao (id)
 );
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS curso_aluno_opcao (
     opcao_id BIGINT NOT NULL,
     criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (curso_aluno_id, opcao_id),
-    CONSTRAINT fk_curso_aluno_opcao_curso_aluno FOREIGN KEY (curso_aluno_id) REFERENCES curso_aluno (id),
+    CONSTRAINT fk_curso_aluno_opcao_curso_aluno FOREIGN KEY (curso_aluno_id) REFERENCES curso_aluno (id) ON DELETE CASCADE,
     CONSTRAINT fk_curso_aluno_opcao_opcao FOREIGN KEY (opcao_id) REFERENCES dominio_opcao (id)
 );
 
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS aluno_layout_valor (
     valor VARCHAR(4000),
     atualizado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (aluno_id, layout_campo_id),
-    CONSTRAINT fk_aluno_layout_valor_aluno FOREIGN KEY (aluno_id) REFERENCES aluno (id),
+    CONSTRAINT fk_aluno_layout_valor_aluno FOREIGN KEY (aluno_id) REFERENCES aluno (id) ON DELETE CASCADE,
     CONSTRAINT fk_aluno_layout_valor_layout FOREIGN KEY (layout_campo_id) REFERENCES layout_campo (id)
 );
 
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS curso_layout_valor (
     valor VARCHAR(4000),
     atualizado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (curso_id, layout_campo_id),
-    CONSTRAINT fk_curso_layout_valor_curso FOREIGN KEY (curso_id) REFERENCES curso (id),
+    CONSTRAINT fk_curso_layout_valor_curso FOREIGN KEY (curso_id) REFERENCES curso (id) ON DELETE CASCADE,
     CONSTRAINT fk_curso_layout_valor_layout FOREIGN KEY (layout_campo_id) REFERENCES layout_campo (id)
 );
 
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS curso_aluno_layout_valor (
     valor VARCHAR(4000),
     atualizado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (curso_aluno_id, layout_campo_id),
-    CONSTRAINT fk_curso_aluno_layout_valor_curso_aluno FOREIGN KEY (curso_aluno_id) REFERENCES curso_aluno (id),
+    CONSTRAINT fk_curso_aluno_layout_valor_curso_aluno FOREIGN KEY (curso_aluno_id) REFERENCES curso_aluno (id) ON DELETE CASCADE,
     CONSTRAINT fk_curso_aluno_layout_valor_layout FOREIGN KEY (layout_campo_id) REFERENCES layout_campo (id)
 );
 
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS docente_layout_valor (
     valor VARCHAR(4000),
     atualizado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (docente_id, layout_campo_id),
-    CONSTRAINT fk_docente_layout_valor_docente FOREIGN KEY (docente_id) REFERENCES docente (id),
+    CONSTRAINT fk_docente_layout_valor_docente FOREIGN KEY (docente_id) REFERENCES docente (id) ON DELETE CASCADE,
     CONSTRAINT fk_docente_layout_valor_layout FOREIGN KEY (layout_campo_id) REFERENCES layout_campo (id)
 );
 
@@ -200,6 +200,17 @@ CREATE TABLE IF NOT EXISTS ies_layout_valor (
     valor VARCHAR(4000),
     atualizado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (ies_id, layout_campo_id),
-    CONSTRAINT fk_ies_layout_valor_ies FOREIGN KEY (ies_id) REFERENCES ies (id),
+    CONSTRAINT fk_ies_layout_valor_ies FOREIGN KEY (ies_id) REFERENCES ies (id) ON DELETE CASCADE,
     CONSTRAINT fk_ies_layout_valor_layout FOREIGN KEY (layout_campo_id) REFERENCES layout_campo (id)
 );
+
+CREATE INDEX IF NOT EXISTS idx_aluno_nome ON aluno (nome);
+CREATE INDEX IF NOT EXISTS idx_curso_nome ON curso (nome);
+CREATE INDEX IF NOT EXISTS idx_docente_nome ON docente (nome);
+CREATE INDEX IF NOT EXISTS idx_ies_nome_laboratorio ON ies (nome_laboratorio);
+
+CREATE INDEX IF NOT EXISTS idx_curso_aluno_aluno_id ON curso_aluno (aluno_id);
+CREATE INDEX IF NOT EXISTS idx_curso_aluno_curso_id ON curso_aluno (curso_id);
+CREATE INDEX IF NOT EXISTS idx_curso_aluno_periodo_ref ON curso_aluno (periodo_referencia);
+
+CREATE INDEX IF NOT EXISTS idx_municipio_uf_nome ON municipio (codigo_uf, nome);

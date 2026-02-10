@@ -22,7 +22,7 @@ last_updated: 2026-02-10
 ### 1. Executar testes
 
 ```bash
-mvn -Dmaven.repo.local=.m2/repository -Dmaven.compiler.source=1.7 -Dmaven.compiler.target=1.7 test
+mvn '-Dmaven.repo.local=.m2/repository' '-Dmaven.compiler.source=1.7' '-Dmaven.compiler.target=1.7' test
 ```
 
 ### 2. Gerar pacote WAR

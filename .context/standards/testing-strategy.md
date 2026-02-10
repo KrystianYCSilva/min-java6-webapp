@@ -29,7 +29,7 @@ last_updated: 2026-02-10
 ### Suite principal no workspace atual
 
 ```bash
-mvn -Dmaven.repo.local=.m2/repository -Dmaven.compiler.source=1.7 -Dmaven.compiler.target=1.7 test
+mvn '-Dmaven.repo.local=.m2/repository' '-Dmaven.compiler.source=1.7' '-Dmaven.compiler.target=1.7' test
 ```
 
 ### E2E (quando houver container + driver)
@@ -42,7 +42,7 @@ mvn -De2e.baseUrl=http://localhost:8080/censo-superior-2025 -Dtest=CensoE2ETest 
 
 1. Mudanca em `util`: atualizar teste unitario correspondente.
 2. Mudanca em regra de `service`: adicionar/ajustar teste de service.
-3. Mudanca em SQL/DAO: atualizar teste de integracao DAO.
+3. Mudanca em DAO/HQL/SQL nativo: atualizar teste de integracao DAO.
 4. Mudanca em infraestrutura Hibernate (`config` de persistencia): executar suite completa `dao` + `service`.
 5. Mudanca em autenticacao/filtro: atualizar teste de `AuthFilter`.
 6. Mudanca de fluxo ponta a ponta: considerar ajuste de E2E.

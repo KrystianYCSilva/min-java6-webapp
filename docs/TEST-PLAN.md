@@ -10,7 +10,6 @@ Dependencias de teste no `pom.xml`:
 
 Dependencias de persistencia em producao (tambem exercitadas nos testes de integracao):
 - `org.hibernate:hibernate-core:4.2.21.Final`
-- `org.hibernate:hibernate-entitymanager:4.2.21.Final`
 
 Controle de cobertura:
 - `org.jacoco:jacoco-maven-plugin:0.8.8`
@@ -22,9 +21,9 @@ Infra de apoio:
   - reinicializa H2 em memoria;
   - executa `schema.sql`, `seed.sql`, `seed_layout.sql`, `seed_layout_ies_docente.sql` e `seed_municipio.sql`.
 - `src/main/java/br/gov/inep/censo/config/HibernateConnectionProvider.java`
-  - abre conexoes JDBC via `SessionFactory` Hibernate;
+  - abre sessoes e ciclo de vida de `SessionFactory` Hibernate;
   - resolve `Dialect` por URL (H2/PostgreSQL/MySQL/DB2);
-  - preserva o contrato atual dos DAOs legados.
+  - preserva compatibilidade de configuracao do banco.
 
 ## 2. Camada 1 - Unitarios (base da piramide)
 
@@ -44,7 +43,7 @@ Casos cobertos:
 
 ## 3. Camada 2 - Integracao (meio da piramide)
 
-### 3.1 DAO + persistencia Hibernate/JDBC (hibrida)
+### 3.1 DAO + persistencia Hibernate nativa
 
 Classes:
 - `src/test/java/br/gov/inep/censo/dao/AlunoDAOTest.java`
@@ -60,7 +59,7 @@ Fluxos validados:
 4. Persistir e consultar Docente/IES com campos complementares.
 5. Validar tabela de apoio `municipio` por codigo e UF.
 6. Validar contagem de linhas com DBUnit.
-7. Validar DAOs com conexao provida pelo Hibernate sem regressao funcional.
+7. Validar DAOs com `Session` Hibernate sem regressao funcional.
 
 ### 3.2 Servicos com banco
 
@@ -115,7 +114,7 @@ mvn test
 
 No ambiente deste workspace (JDK moderno + plugin WAR legado), usar:
 ```bash
-mvn -Dmaven.repo.local=.m2/repository -Dmaven.compiler.source=1.7 -Dmaven.compiler.target=1.7 test
+mvn '-Dmaven.repo.local=.m2/repository' '-Dmaven.compiler.source=1.7' '-Dmaven.compiler.target=1.7' test
 ```
 
 ### 5.2 E2E

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.format_sql">false</property>
+        <property name="hibernate.use_sql_comments">false</property>
+        <property name="hibernate.connection.pool_size">10</property>
+        <property name="hibernate.jdbc.batch_size">25</property>
+
+        <mapping resource="br/gov/inep/censo/model/Aluno.hbm.xml"/>
+        <mapping resource="br/gov/inep/censo/model/Curso.hbm.xml"/>
+        <mapping resource="br/gov/inep/censo/model/CursoAluno.hbm.xml"/>
+        <mapping resource="br/gov/inep/censo/model/Docente.hbm.xml"/>
+        <mapping resource="br/gov/inep/censo/model/Ies.hbm.xml"/>
+        <mapping resource="br/gov/inep/censo/model/Municipio.hbm.xml"/>
+        <mapping resource="br/gov/inep/censo/model/OpcaoDominio.hbm.xml"/>
+        <mapping resource="br/gov/inep/censo/model/LayoutCampo.hbm.xml"/>
+        <mapping resource="br/gov/inep/censo/model/Usuario.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>

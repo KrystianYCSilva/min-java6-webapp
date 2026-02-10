@@ -1,11 +1,9 @@
 package br.gov.inep.censo.dao;
 
-import br.gov.inep.censo.config.HibernateConnectionProvider;
 import br.gov.inep.censo.model.Municipio;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,78 +11,51 @@ import java.util.List;
 /**
  * DAO da tabela de apoio de municipios.
  */
-public class MunicipioDAO extends AbstractJdbcDao {
+public class MunicipioDAO extends AbstractHibernateDao {
 
-    public boolean existeCodigo(String codigo) throws SQLException {
-        if (codigo == null || codigo.trim().length() == 0) {
+    public boolean existeCodigo(final String codigo) throws SQLException {
+        final String normalized = trimToNull(codigo);
+        if (normalized == null) {
             return false;
         }
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = HibernateConnectionProvider.getConnection();
-            statement = connection.prepareStatement("SELECT 1 FROM municipio WHERE codigo = ?");
-            statement.setString(1, codigo.trim());
-            resultSet = statement.executeQuery();
-            return resultSet.next();
-        } finally {
-            closeQuietly(resultSet);
-            closeQuietly(statement);
-            closeQuietly(connection);
-        }
-    }
-
-    public boolean existeCodigoNaUf(String codigo, Integer codigoUf) throws SQLException {
-        if (codigo == null || codigo.trim().length() == 0 || codigoUf == null) {
-            return false;
-        }
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = HibernateConnectionProvider.getConnection();
-            statement = connection.prepareStatement(
-                    "SELECT 1 FROM municipio WHERE codigo = ? AND codigo_uf = ?");
-            statement.setString(1, codigo.trim());
-            statement.setInt(2, codigoUf.intValue());
-            resultSet = statement.executeQuery();
-            return resultSet.next();
-        } finally {
-            closeQuietly(resultSet);
-            closeQuietly(statement);
-            closeQuietly(connection);
-        }
-    }
-
-    public List<Municipio> listarPorUf(Integer codigoUf) throws SQLException {
-        List<Municipio> municipios = new ArrayList<Municipio>();
-        if (codigoUf == null) {
-            return municipios;
-        }
-
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = HibernateConnectionProvider.getConnection();
-            statement = connection.prepareStatement(
-                    "SELECT codigo, nome, codigo_uf, nome_uf FROM municipio WHERE codigo_uf = ? ORDER BY nome");
-            statement.setInt(1, codigoUf.intValue());
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Municipio municipio = new Municipio();
-                municipio.setCodigo(resultSet.getString("codigo"));
-                municipio.setNome(resultSet.getString("nome"));
-                municipio.setCodigoUf(Integer.valueOf(resultSet.getInt("codigo_uf")));
-                municipio.setNomeUf(resultSet.getString("nome_uf"));
-                municipios.add(municipio);
+        return executeInSession(new SessionWork<Boolean>() {
+            public Boolean execute(Session session) {
+                Query query = session.createQuery("select count(m.codigo) from Municipio m where m.codigo = :codigo");
+                query.setString("codigo", normalized);
+                Long total = (Long) query.uniqueResult();
+                return Boolean.valueOf(total != null && total.longValue() > 0L);
             }
-            return municipios;
-        } finally {
-            closeQuietly(resultSet);
-            closeQuietly(statement);
-            closeQuietly(connection);
+        }).booleanValue();
+    }
+
+    public boolean existeCodigoNaUf(final String codigo, final Integer codigoUf) throws SQLException {
+        final String normalized = trimToNull(codigo);
+        if (normalized == null || codigoUf == null) {
+            return false;
         }
+        return executeInSession(new SessionWork<Boolean>() {
+            public Boolean execute(Session session) {
+                Query query = session.createQuery(
+                        "select count(m.codigo) from Municipio m where m.codigo = :codigo and m.codigoUf = :codigoUf");
+                query.setString("codigo", normalized);
+                query.setInteger("codigoUf", codigoUf.intValue());
+                Long total = (Long) query.uniqueResult();
+                return Boolean.valueOf(total != null && total.longValue() > 0L);
+            }
+        }).booleanValue();
+    }
+
+    public List<Municipio> listarPorUf(final Integer codigoUf) throws SQLException {
+        if (codigoUf == null) {
+            return new ArrayList<Municipio>();
+        }
+        return executeInSession(new SessionWork<List<Municipio>>() {
+            public List<Municipio> execute(Session session) {
+                Query query = session.createQuery(
+                        "from Municipio m where m.codigoUf = :codigoUf order by m.nome");
+                query.setInteger("codigoUf", codigoUf.intValue());
+                return query.list();
+            }
+        });
     }
 }

@@ -110,6 +110,11 @@ public class AlunoDAOTest {
                 connection.close();
             }
         }
+
+        alunoDAO.excluir(alunoId);
+        Assert.assertNull(alunoDAO.buscarPorId(alunoId));
+        Assert.assertTrue(cursoAlunoDAO.listar().isEmpty());
+        Assert.assertEquals(1, cursoDAO.contar());
     }
 
     @Test

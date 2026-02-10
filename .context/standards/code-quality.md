@@ -21,22 +21,22 @@ last_updated: 2026-02-10
 ## Regras para Java legado
 
 1. Sem lambda, stream, try-with-resources ou APIs apos Java 6 em producao.
-2. Fechar recursos JDBC de forma explicita (usar infraestrutura existente em `AbstractJdbcDao`).
+2. Transacoes DAO devem usar infraestrutura comum (`AbstractHibernateDao`) para commit/rollback consistente.
 3. Evitar `catch` vazio; sempre registrar contexto do erro e propagar de forma controlada.
-4. Em DAO, obter conexao apenas por `HibernateConnectionProvider`.
+4. Em DAO, usar `Session` Hibernate e evitar `Connection`/`DriverManager` direto.
 
 ## Regras de seguranca e validacao
 
 1. Entrada HTTP deve ser validada antes de persistir.
 2. Senhas devem usar utilitario central (`PasswordUtil`) e nao hash ad-hoc.
-3. Consultas SQL devem ser parametrizadas (nunca concatenar entrada do usuario).
+3. Consultas HQL/SQL nativas devem ser parametrizadas (nunca concatenar entrada do usuario).
 4. Nao registrar dados sensiveis em logs ou mensagens de erro.
 
 ## Regras de design por camada
 
 1. `web`: parse de parametros, validacao basica e roteamento de resposta.
 2. `service`: regras de negocio, orquestracao e invariantes de dominio.
-3. `dao`: SQL, mapeamento e transacao local sobre conexao gerenciada por Hibernate.
+3. `dao`: mapeamento ORM, HQL/SQL nativo pontual e transacao por `Session`.
 4. `util`: funcoes reutilizaveis sem estado de request.
 
 ## Definicao de pronto para alteracao de codigo

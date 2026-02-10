@@ -20,7 +20,7 @@ last_updated: 2026-02-10
 | Web | Servlet 2.5 + JSP 2.1 |
 | Container alvo | Tomcat 6/7 |
 | Banco | H2 (`com.h2database:h2:1.3.176`) |
-| Persistencia | Hibernate ORM 4.2 + SQL legado em DAO |
+| Persistencia | Hibernate ORM 4.2 nativo (`Session`/`Transaction` + `*.hbm.xml`) |
 | Empacotamento | WAR (`censo-superior-2025.war`) |
 
 ## Dependencias principais (pom.xml)
@@ -31,7 +31,6 @@ last_updated: 2026-02-10
 2. `javax.servlet.jsp:jsp-api:2.1` (provided)
 3. `com.h2database:h2:1.3.176` (runtime)
 4. `org.hibernate:hibernate-core:4.2.21.Final`
-5. `org.hibernate:hibernate-entitymanager:4.2.21.Final`
 
 ### Teste
 
@@ -49,9 +48,11 @@ last_updated: 2026-02-10
 
 ## Observacoes de persistencia
 
-1. DAOs continuam com SQL explicito para preservar compatibilidade de comportamento.
-2. Abertura de conexao dos DAOs e feita por `HibernateConnectionProvider`.
-3. Dialect e resolvido por URL JDBC (H2/PostgreSQL/MySQL/DB2).
+1. DAOs usam `AbstractHibernateDao` com transacao por `Session`.
+2. Mapeamento ORM e definido por XML (`hibernate.cfg.xml` + `*.hbm.xml`) sem JPA.
+3. SQL nativo fica restrito a tabelas auxiliares (`*_opcao`, `*_layout_valor`).
+4. Dialect e driver sao resolvidos por URL JDBC (H2/PostgreSQL/MySQL/DB2).
+5. JPA foi adiado para `1.2.0`.
 
 ## Comandos usuais
 
@@ -64,7 +65,7 @@ mvn clean package
 ### Testes recomendados no workspace atual
 
 ```bash
-mvn -Dmaven.repo.local=.m2/repository -Dmaven.compiler.source=1.7 -Dmaven.compiler.target=1.7 test
+mvn '-Dmaven.repo.local=.m2/repository' '-Dmaven.compiler.source=1.7' '-Dmaven.compiler.target=1.7' test
 ```
 
 ## Gate de qualidade

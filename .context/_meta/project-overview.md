@@ -30,7 +30,7 @@ Aplicacao web legada para cadastro, consulta, importacao e exportacao de dados d
 
 1. Codigo de producao deve permanecer compativel com Java 6.
 2. Camadas devem manter isolamento (`web`, `service`, `dao`, `model`, `util`).
-3. Persistencia com SQL explicito em DAO e conexao gerenciada por Hibernate 4.2.
+3. Persistencia com Hibernate 4.2 nativo (`Session`/`Transaction`), sem JPA nesta versao.
 4. Banco principal de desenvolvimento/teste: H2 embarcado.
 
 ## Fluxos criticos
