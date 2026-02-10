@@ -1,17 +1,34 @@
 package br.gov.inep.censo.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
  * Item de catalogo de dominio para campos multivalorados.
  */
+@Entity
+@Table(name = "dominio_opcao")
 public class OpcaoDominio implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "categoria", nullable = false, length = 60)
     private String categoria;
+
+    @Column(name = "codigo", nullable = false, length = 30)
     private String codigo;
+
+    @Column(name = "nome", nullable = false, length = 255)
     private String nome;
 
     public Long getId() {

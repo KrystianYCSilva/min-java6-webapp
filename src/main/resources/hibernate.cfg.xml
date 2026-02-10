@@ -10,14 +10,14 @@
         <property name="hibernate.connection.pool_size">10</property>
         <property name="hibernate.jdbc.batch_size">25</property>
 
-        <mapping resource="br/gov/inep/censo/model/Aluno.hbm.xml"/>
-        <mapping resource="br/gov/inep/censo/model/Curso.hbm.xml"/>
-        <mapping resource="br/gov/inep/censo/model/CursoAluno.hbm.xml"/>
-        <mapping resource="br/gov/inep/censo/model/Docente.hbm.xml"/>
-        <mapping resource="br/gov/inep/censo/model/Ies.hbm.xml"/>
-        <mapping resource="br/gov/inep/censo/model/Municipio.hbm.xml"/>
-        <mapping resource="br/gov/inep/censo/model/OpcaoDominio.hbm.xml"/>
-        <mapping resource="br/gov/inep/censo/model/LayoutCampo.hbm.xml"/>
-        <mapping resource="br/gov/inep/censo/model/Usuario.hbm.xml"/>
+        <mapping class="br.gov.inep.censo.model.Aluno"/>
+        <mapping class="br.gov.inep.censo.model.Curso"/>
+        <mapping class="br.gov.inep.censo.model.CursoAluno"/>
+        <mapping class="br.gov.inep.censo.model.Docente"/>
+        <mapping class="br.gov.inep.censo.model.Ies"/>
+        <mapping class="br.gov.inep.censo.model.Municipio"/>
+        <mapping class="br.gov.inep.censo.model.OpcaoDominio"/>
+        <mapping class="br.gov.inep.censo.model.LayoutCampo"/>
+        <mapping class="br.gov.inep.censo.model.Usuario"/>
     </session-factory>
 </hibernate-configuration>

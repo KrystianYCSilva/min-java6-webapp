@@ -3,6 +3,13 @@ package br.gov.inep.censo.model;
 import br.gov.inep.censo.model.enums.CorRacaEnum;
 import br.gov.inep.censo.model.enums.NacionalidadeEnum;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Map;
@@ -10,22 +17,51 @@ import java.util.Map;
 /**
  * Entidade de aluno (Registro 41) com apoio a campos complementares de leiaute.
  */
+@Entity
+@Table(name = "aluno")
 public class Aluno implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "id_aluno_inep")
     private Long idAlunoInep;
+
+    @Column(name = "nome", nullable = false, length = 120)
     private String nome;
+
+    @Column(name = "cpf", nullable = false, length = 11)
     private String cpf;
+
+    @Column(name = "data_nascimento", nullable = false)
     private Date dataNascimento;
+
+    @Column(name = "cor_raca")
     private Integer corRaca;
+
+    @Column(name = "nacionalidade", nullable = false)
     private Integer nacionalidade;
+
+    @Column(name = "uf_nascimento", length = 2)
     private String ufNascimento;
+
+    @Column(name = "municipio_nascimento", length = 120)
     private String municipioNascimento;
+
+    @Column(name = "pais_origem", nullable = false, length = 3)
     private String paisOrigem;
+
+    @Transient
     private String tiposDeficienciaResumo;
+
+    @Transient
     private Map<Long, String> camposComplementares;
+
+    @Transient
     private Map<Integer, String> camposRegistro41;
 
     public Long getId() {

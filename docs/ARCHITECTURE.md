@@ -113,8 +113,8 @@ Scripts de banco:
 
 ## 6. Decisoes Arquiteturais Relevantes
 
-1. Hibernate 4.2 (compativel com Java 6) adotado como base de persistencia sem JPA.
-2. Mapeamento ORM por XML (`hibernate.cfg.xml` + `*.hbm.xml`) para compatibilidade com Java 6 e controle explicito.
+1. Hibernate 4.2 (compativel com Java 6) adotado como base de persistencia com entidades anotadas em JPA (`javax.persistence`).
+2. Mapeamento ORM por classes anotadas (`hibernate.cfg.xml` + `mapping class`) para manter contrato Java 6 e reduzir dependencia de XML separado.
 3. Monolito em camadas para simplicidade de manutencao em stack legado.
 4. Modelagem de campos de layout por metadados para suportar evolucao de leiaute.
 5. Sessao HTTP + filtro para autenticacao sem dependencia externa.
@@ -125,7 +125,7 @@ Scripts de banco:
 10. Output Encoding centralizado com `ViewUtils.e(...)` para mitigar XSS refletido/armazenado em JSP.
 11. Migracao progressiva de hash de senha: compatibilidade legado + rehash automatico para PBKDF2.
 12. Command Pattern no web layer para despacho de `acao` sem cadeias extensas de `if/else`.
-13. JPA/`EntityManager` adiado para versao `1.2.0`; baseline atual permanece Hibernate nativo.
+13. JPA annotations (`@Entity`, `@Table`, `@Column`) adotadas sem migrar os DAOs para `EntityManager`, mantendo baseline Hibernate nativo na camada DAO.
 
 ## 7. Qualidade, Build e Testes
 

@@ -1,8 +1,8 @@
-# Migracao Hibernate (Fase 1 -> Fase 2)
+# Migracao Hibernate (Fase 1 -> Fase 3)
 
 ## 1. Objetivo
 
-Consolidar o Hibernate como camada de persistencia do projeto Java 6 sem usar JPA nesta versao.
+Consolidar o Hibernate como camada de persistencia do projeto Java 6 com mapeamento por anotacoes JPA `javax.persistence`, preservando os contratos legados.
 
 ## 2. Evolucao por fase
 
@@ -12,28 +12,32 @@ Consolidar o Hibernate como camada de persistencia do projeto Java 6 sem usar JP
 2. Introducao de `HibernateConnectionProvider`.
 3. DAOs ainda orientados a JDBC/SQL manual para reduzir risco inicial.
 
-### Fase 2 (estado atual)
+### Fase 2 (concluida)
 
 1. DAOs migrados para Hibernate nativo (`Session` + `Transaction`).
 2. Introducao de `AbstractHibernateDao` para padrao unico de transacao/erro.
-3. Mapeamento ORM por XML:
-   - `src/main/resources/hibernate.cfg.xml`
-   - `src/main/resources/br/gov/inep/censo/model/*.hbm.xml`
-4. Remocao de `hibernate-entitymanager` (sem JPA nesta versao).
-5. Relacionamentos do banco reforcados com `ON DELETE CASCADE` e indices.
+3. Mapeamento ORM por XML (`hibernate.cfg.xml` + `*.hbm.xml`).
+4. Relacionamentos do banco reforcados com `ON DELETE CASCADE` e indices.
+
+### Fase 3 (estado atual)
+
+1. Entidades migradas para anotacoes JPA `javax.persistence` (`@Entity`, `@Table`, `@Column`, `@ManyToOne`, `@JoinColumn`, `@Transient`).
+2. `hibernate.cfg.xml` passou a usar `mapping class="..."`.
+3. Arquivos legados `*.hbm.xml` foram removidos.
+4. DAOs continuam em Hibernate nativo (`Session`/`Transaction`) para minimizar risco de regressao.
 
 ## 3. Baseline tecnico atual
 
 ### Dependencias
 
 1. `org.hibernate:hibernate-core:4.2.21.Final`
-2. Sem `hibernate-entitymanager`.
+2. API JPA (`javax.persistence`) provida pelo stack do Hibernate 4.2.
 
 ### Persistencia
 
 1. CRUD principal em HQL/operacoes de entidade.
 2. SQL nativo mantido apenas para tabelas auxiliares de alto volume (`*_opcao`, `*_layout_valor`).
-3. Mapeamento de relacionamento `CursoAluno -> Aluno/Curso` por `many-to-one`.
+3. Relacionamento `CursoAluno -> Aluno/Curso` mapeado por `@ManyToOne(fetch = LAZY)`.
 
 ### Configuracao
 
@@ -43,25 +47,20 @@ Consolidar o Hibernate como camada de persistencia do projeto Java 6 sem usar JP
 
 ## 4. Banco e integridade referencial
 
-Alteracoes relevantes em `schema.sql`:
+Alteracoes relevantes em `schema.sql` mantidas:
 
-1. `ON DELETE CASCADE` em FKs de tabelas filhas:
-   - `curso_aluno`
-   - `aluno_opcao`, `curso_opcao`, `curso_aluno_opcao`
-   - `*_layout_valor`
-2. Novos indices para busca/paginacao e validacao:
-   - nome de entidades principais
-   - chaves de relacionamento em `curso_aluno`
-   - `municipio(codigo_uf, nome)`
+1. `ON DELETE CASCADE` em FKs de tabelas filhas.
+2. Indices para busca/paginacao e validacao (inclusive `municipio(codigo_uf, nome)`).
 
 ## 5. Nao objetivos desta versao
 
-1. Nao usar JPA/`EntityManager`.
-2. Nao usar anotacoes JPA nas entidades.
+1. Nao migrar DAOs para `EntityManager`.
+2. Nao alterar contratos das camadas `service` e `web`.
 
-## 6. Roadmap
+## 6. Proximos passos sugeridos
 
-1. `v1.2.0`: avaliar camada JPA (anotacoes e/ou `EntityManager`) sobre o baseline Hibernate atual.
+1. Avaliar migracao gradual para `EntityManager` somente se houver ganho funcional/operacional claro.
+2. Revisar estrategia de fetch e write patterns para cargas maiores em producao.
 
 ## 7. Validacao executada
 

@@ -3,24 +3,52 @@ package br.gov.inep.censo.model;
 import br.gov.inep.censo.model.enums.FormatoOfertaEnum;
 import br.gov.inep.censo.model.enums.NivelAcademicoEnum;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Entidade de curso (Registro 21) com suporte a campos normalizados e complementares.
  */
+@Entity
+@Table(name = "curso")
 public class Curso implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "codigo_curso_emec", nullable = false, length = 12)
     private String codigoCursoEmec;
+
+    @Column(name = "nome", nullable = false, length = 160)
     private String nome;
+
+    @Column(name = "nivel_academico", nullable = false, length = 30)
     private String nivelAcademico;
+
+    @Column(name = "formato_oferta", nullable = false, length = 20)
     private String formatoOferta;
+
+    @Column(name = "curso_teve_aluno_vinculado", nullable = false)
     private Integer cursoTeveAlunoVinculado;
+
+    @Transient
     private String recursosTecnologiaAssistivaResumo;
+
+    @Transient
     private Map<Long, String> camposComplementares;
+
+    @Transient
     private Map<Integer, String> camposRegistro21;
 
     public Long getId() {

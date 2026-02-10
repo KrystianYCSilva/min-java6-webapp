@@ -1,50 +1,134 @@
 package br.gov.inep.censo.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Entidade de vinculo aluno-curso (Registro 42).
  */
+@Entity
+@Table(name = "curso_aluno")
 public class CursoAluno implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Transient
     private Long alunoId;
+
+    @Transient
     private Long cursoId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "aluno_id", nullable = false)
     private Aluno aluno;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "curso_id", nullable = false)
     private Curso curso;
+
+    @Column(name = "id_aluno_ies", nullable = false, length = 30)
     private String idAlunoIes;
+
+    @Column(name = "periodo_referencia", nullable = false, length = 4)
     private String periodoReferencia;
+
+    @Column(name = "codigo_polo_ead", length = 12)
     private String codigoPoloEad;
+
+    @Column(name = "turno_aluno")
     private Integer turnoAluno;
+
+    @Column(name = "situacao_vinculo")
     private Integer situacaoVinculo;
+
+    @Column(name = "curso_origem", length = 12)
     private String cursoOrigem;
+
+    @Column(name = "semestre_conclusao", length = 6)
     private String semestreConclusao;
+
+    @Column(name = "aluno_parfor")
     private Integer alunoParfor;
+
+    @Column(name = "segunda_licenciatura_formacao")
     private Integer segundaLicenciaturaFormacao;
+
+    @Column(name = "tipo_segunda_licenciatura_formacao")
     private Integer tipoSegundaLicenciaturaFormacao;
+
+    @Column(name = "semestre_ingresso", length = 6)
     private String semestreIngresso;
+
+    @Column(name = "forma_ingresso_vestibular")
     private Integer formaIngressoVestibular;
+
+    @Column(name = "forma_ingresso_enem")
     private Integer formaIngressoEnem;
+
+    @Column(name = "forma_ingresso_avaliacao_seriada")
     private Integer formaIngressoAvaliacaoSeriada;
+
+    @Column(name = "forma_ingresso_selecao_simplificada")
     private Integer formaIngressoSelecaoSimplificada;
+
+    @Column(name = "forma_ingresso_egresso_bi_li")
     private Integer formaIngressoEgressoBiLi;
+
+    @Column(name = "forma_ingresso_pec_g")
     private Integer formaIngressoPecG;
+
+    @Column(name = "forma_ingresso_transferencia_exofficio")
     private Integer formaIngressoTransferenciaExofficio;
+
+    @Column(name = "forma_ingresso_decisao_judicial")
     private Integer formaIngressoDecisaoJudicial;
+
+    @Column(name = "forma_ingresso_vagas_remanescentes")
     private Integer formaIngressoVagasRemanescentes;
+
+    @Column(name = "forma_ingresso_programas_especiais")
     private Integer formaIngressoProgramasEspeciais;
 
+    @Transient
     private String alunoNome;
+
+    @Transient
     private String cursoNome;
+
+    @Transient
     private String codigoCursoEmec;
+
+    @Transient
     private String financiamentosResumo;
+
+    @Transient
     private String apoioSocialResumo;
+
+    @Transient
     private String atividadesResumo;
+
+    @Transient
     private String reservasResumo;
+
+    @Transient
     private Map<Long, String> camposComplementares;
+
+    @Transient
     private Map<Integer, String> camposRegistro42;
 
     public Long getId() {

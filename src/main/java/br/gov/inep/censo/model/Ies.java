@@ -3,28 +3,64 @@ package br.gov.inep.censo.model;
 import br.gov.inep.censo.model.enums.EstadoEnum;
 import br.gov.inep.censo.model.enums.TipoLaboratorioEnum;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Entidade de IES com foco no Registro 11 (laboratorio) e campos complementares.
  */
+@Entity
+@Table(name = "ies")
 public class Ies implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "id_ies_inep")
     private Long idIesInep;
+
+    @Column(name = "nome_laboratorio", nullable = false, length = 200)
     private String nomeLaboratorio;
+
+    @Column(name = "registro_laboratorio_ies", length = 14)
     private String registroLaboratorioIes;
+
+    @Column(name = "laboratorio_ativo_ano")
     private Integer laboratorioAtivoAno;
+
+    @Column(name = "descricao_atividades", length = 2000)
     private String descricaoAtividades;
+
+    @Column(name = "palavras_chave", length = 200)
     private String palavrasChave;
+
+    @Column(name = "laboratorio_informatica")
     private Integer laboratorioInformatica;
+
+    @Column(name = "tipo_laboratorio")
     private Integer tipoLaboratorio;
+
+    @Column(name = "codigo_uf_laboratorio")
     private Integer codigoUfLaboratorio;
+
+    @Column(name = "codigo_municipio_laboratorio", length = 7)
     private String codigoMunicipioLaboratorio;
+
+    @Transient
     private Map<Long, String> camposComplementares;
+
+    @Transient
     private Map<Integer, String> camposRegistro11;
 
     public Long getId() {

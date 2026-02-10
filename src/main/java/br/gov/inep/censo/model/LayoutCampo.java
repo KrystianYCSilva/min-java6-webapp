@@ -1,18 +1,37 @@
 package br.gov.inep.censo.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
  * Metadado de campo de leiaute oficial (CSV).
  */
+@Entity
+@Table(name = "layout_campo")
 public class LayoutCampo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "modulo", nullable = false, length = 30)
     private String modulo;
+
+    @Column(name = "numero_campo", nullable = false)
     private Integer numeroCampo;
+
+    @Column(name = "nome_campo", nullable = false, length = 255)
     private String nomeCampo;
+
+    @Column(name = "obrigatoriedade", length = 20)
     private String obrigatoriedade;
 
     public Long getId() {
