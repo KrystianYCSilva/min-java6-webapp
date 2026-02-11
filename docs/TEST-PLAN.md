@@ -21,7 +21,7 @@ Frontend em producao:
 Cobertura:
 - `org.jacoco:jacoco-maven-plugin:0.8.8`
 - Gate minimo de linha: `80%`
-- Escopo: `dao`, `service`, `util`
+- Escopo: `repository`, `service`, `util`
 
 Infra de apoio:
 - `src/test/java/br/gov/inep/censo/support/TestDatabaseSupport.java`
@@ -44,19 +44,14 @@ Cobertura:
 
 ## 3. Camada 2 - Integracao
 
-### 3.1 DAO + JPA
+### 3.1 Repository + JPA
 
-- `AlunoDAOTest`
-- `CursoDAOTest`
-- `DocenteDAOTest`
-- `IesDAOTest`
-- `MunicipioDAOTest`
+Cobertura atual:
+- validada principalmente via `ServiceTest` com banco H2;
+- sem suite dedicada em `repository/*` neste momento.
 
-Cobertura:
-- CRUD, paginacao, contagem;
-- relacionamento e tabelas auxiliares 1..N;
-- campos complementares por layout;
-- consistencia UF/municipio.
+Risco conhecido:
+- queries nativas dos repositorios custom estao cobertas indiretamente, nao por testes focados de repositorio.
 
 ### 3.2 Service + banco
 
@@ -112,7 +107,7 @@ src/test/java/
    ├─ support/
    ├─ util/
    ├─ model/enums/
-   ├─ dao/
+   ├─ repository/ (planejado)
    ├─ service/
    ├─ web/filter/
    └─ e2e/

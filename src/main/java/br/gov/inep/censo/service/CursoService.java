@@ -26,9 +26,9 @@ import java.util.Set;
  */
 public class CursoService {
 
-    private final LayoutCampoValueRepository layoutCampoDAO;
+    private final LayoutCampoValueRepository layoutCampoValueRepository;
     private final CursoRepository cursoRepository;
-    private final OpcaoVinculoRepository opcaoDAO;
+    private final OpcaoVinculoRepository opcaoVinculoRepository;
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
@@ -40,14 +40,14 @@ public class CursoService {
                 SpringBridge.getBean(EntityManagerFactory.class));
     }
 
-    public CursoService(LayoutCampoValueRepository layoutCampoDAO,
+    public CursoService(LayoutCampoValueRepository layoutCampoValueRepository,
                         CursoRepository cursoRepository,
-                        OpcaoVinculoRepository opcaoDAO,
+                        OpcaoVinculoRepository opcaoVinculoRepository,
                         PlatformTransactionManager transactionManager,
                         EntityManagerFactory entityManagerFactory) {
-        this.layoutCampoDAO = layoutCampoDAO;
+        this.layoutCampoValueRepository = layoutCampoValueRepository;
         this.cursoRepository = cursoRepository;
-        this.opcaoDAO = opcaoDAO;
+        this.opcaoVinculoRepository = opcaoVinculoRepository;
         this.transactionManager = transactionManager;
         this.entityManagerFactory = entityManagerFactory;
     }
@@ -66,8 +66,8 @@ public class CursoService {
                             if (cursoId == null) {
                                 throw new SQLException("Falha ao gerar ID para curso.");
                             }
-                            opcaoDAO.salvarVinculosCurso(entityManager, cursoId, opcaoIdsFinal);
-                            layoutCampoDAO.salvarValoresCurso(entityManager, cursoId, camposFinal);
+                            opcaoVinculoRepository.salvarVinculosCurso(entityManager, cursoId, opcaoIdsFinal);
+                            layoutCampoValueRepository.salvarValoresCurso(entityManager, cursoId, camposFinal);
                             return cursoId;
                         }
                     }, "Falha ao cadastrar curso via repository.");
@@ -88,8 +88,8 @@ public class CursoService {
                     new SpringBridge.SqlWork<Void>() {
                         public Void execute(EntityManager entityManager) throws SQLException {
                             cursoRepository.save(cursoFinal);
-                            opcaoDAO.substituirVinculosCurso(entityManager, cursoFinal.getId(), opcaoIdsFinal);
-                            layoutCampoDAO.substituirValoresCurso(entityManager, cursoFinal.getId(), camposFinal);
+                            opcaoVinculoRepository.substituirVinculosCurso(entityManager, cursoFinal.getId(), opcaoIdsFinal);
+                            layoutCampoValueRepository.substituirValoresCurso(entityManager, cursoFinal.getId(), camposFinal);
                             return null;
                         }
                     }, "Falha ao atualizar curso via repository.");
@@ -164,8 +164,8 @@ public class CursoService {
             SpringBridge.inTransaction(transactionManager, entityManagerFactory,
                     new SpringBridge.SqlWork<Void>() {
                         public Void execute(EntityManager entityManager) throws SQLException {
-                            opcaoDAO.removerVinculosCurso(entityManager, idFinal);
-                            layoutCampoDAO.removerValoresCurso(entityManager, idFinal);
+                            opcaoVinculoRepository.removerVinculosCurso(entityManager, idFinal);
+                            layoutCampoValueRepository.removerValoresCurso(entityManager, idFinal);
                             if (cursoRepository.exists(idFinal)) {
                                 cursoRepository.delete(idFinal);
                             }
@@ -178,14 +178,14 @@ public class CursoService {
     }
 
     public List<Long> listarOpcaoRecursoAssistivoIds(Long cursoId) throws SQLException {
-        if (opcaoDAO != null) {
-            return opcaoDAO.listarIdsCurso(cursoId, CategoriasOpcao.CURSO_RECURSO_TECNOLOGIA_ASSISTIVA);
+        if (opcaoVinculoRepository != null) {
+            return opcaoVinculoRepository.listarIdsCurso(cursoId, CategoriasOpcao.CURSO_RECURSO_TECNOLOGIA_ASSISTIVA);
         }
         return new ArrayList<Long>();
     }
 
     public Map<Long, String> carregarCamposComplementaresPorCampoId(Long cursoId) throws SQLException {
-        return layoutCampoDAO.carregarValoresCursoPorCampoId(cursoId);
+        return layoutCampoValueRepository.carregarValoresCursoPorCampoId(cursoId);
     }
 
     public String exportarTodosTxtPipe() throws SQLException {
@@ -217,7 +217,7 @@ public class CursoService {
     }
 
     private boolean canUseRepositoryWritePath() {
-        return cursoRepository != null && opcaoDAO != null
+        return cursoRepository != null && opcaoVinculoRepository != null
                 && transactionManager != null && entityManagerFactory != null;
     }
 
@@ -231,18 +231,18 @@ public class CursoService {
     }
 
     private void hydrateResumo(Curso curso) throws SQLException {
-        if (curso == null || curso.getId() == null || opcaoDAO == null) {
+        if (curso == null || curso.getId() == null || opcaoVinculoRepository == null) {
             return;
         }
         curso.setRecursosTecnologiaAssistivaResumo(
-                opcaoDAO.resumirCurso(curso.getId(), CategoriasOpcao.CURSO_RECURSO_TECNOLOGIA_ASSISTIVA));
+                opcaoVinculoRepository.resumirCurso(curso.getId(), CategoriasOpcao.CURSO_RECURSO_TECNOLOGIA_ASSISTIVA));
     }
 
     public int importarTxtPipe(String conteudo) throws SQLException {
         if (conteudo == null || conteudo.trim().length() == 0) {
             return 0;
         }
-        Map<Integer, Long> campoIdPorNumero = layoutCampoDAO.mapaCampoIdPorNumero(ModulosLayout.CURSO_21);
+        Map<Integer, Long> campoIdPorNumero = layoutCampoValueRepository.mapaCampoIdPorNumero(ModulosLayout.CURSO_21);
         String[] linhas = conteudo.split("\\r?\\n");
         int importados = 0;
         for (int i = 0; i < linhas.length; i++) {
@@ -275,10 +275,10 @@ public class CursoService {
     }
 
     private String exportarLinhaTxtPipe(Curso curso) throws SQLException {
-        Map<Integer, String> valores = layoutCampoDAO.carregarValoresCursoPorNumero(curso.getId(), ModulosLayout.CURSO_21);
+        Map<Integer, String> valores = layoutCampoValueRepository.carregarValoresCursoPorNumero(curso.getId(), ModulosLayout.CURSO_21);
         Set<String> codigos = new HashSet<String>();
-        if (opcaoDAO != null) {
-            codigos.addAll(opcaoDAO.listarCodigosCurso(curso.getId(), CategoriasOpcao.CURSO_RECURSO_TECNOLOGIA_ASSISTIVA));
+        if (opcaoVinculoRepository != null) {
+            codigos.addAll(opcaoVinculoRepository.listarCodigosCurso(curso.getId(), CategoriasOpcao.CURSO_RECURSO_TECNOLOGIA_ASSISTIVA));
         }
 
         int max = 67;
@@ -427,4 +427,5 @@ public class CursoService {
         return Integer.valueOf(Integer.parseInt(value));
     }
 }
+
 

@@ -23,8 +23,8 @@ import java.util.Map;
 public class CursoAlunoService {
 
     private final CursoAlunoRepository cursoAlunoRepository;
-    private final OpcaoVinculoRepository opcaoDAO;
-    private final LayoutCampoValueRepository layoutCampoDAO;
+    private final OpcaoVinculoRepository opcaoVinculoRepository;
+    private final LayoutCampoValueRepository layoutCampoValueRepository;
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
@@ -37,13 +37,13 @@ public class CursoAlunoService {
     }
 
     public CursoAlunoService(CursoAlunoRepository cursoAlunoRepository,
-                             OpcaoVinculoRepository opcaoDAO,
-                             LayoutCampoValueRepository layoutCampoDAO,
+                             OpcaoVinculoRepository opcaoVinculoRepository,
+                             LayoutCampoValueRepository layoutCampoValueRepository,
                              PlatformTransactionManager transactionManager,
                              EntityManagerFactory entityManagerFactory) {
         this.cursoAlunoRepository = cursoAlunoRepository;
-        this.opcaoDAO = opcaoDAO;
-        this.layoutCampoDAO = layoutCampoDAO;
+        this.opcaoVinculoRepository = opcaoVinculoRepository;
+        this.layoutCampoValueRepository = layoutCampoValueRepository;
         this.transactionManager = transactionManager;
         this.entityManagerFactory = entityManagerFactory;
     }
@@ -65,8 +65,8 @@ public class CursoAlunoService {
                             if (cursoAlunoId == null) {
                                 throw new SQLException("Falha ao gerar ID para curso_aluno.");
                             }
-                            opcaoDAO.salvarVinculosCursoAluno(entityManager, cursoAlunoId, opcaoIdsFinal);
-                            layoutCampoDAO.salvarValoresCursoAluno(entityManager, cursoAlunoId, camposFinal);
+                            opcaoVinculoRepository.salvarVinculosCursoAluno(entityManager, cursoAlunoId, opcaoIdsFinal);
+                            layoutCampoValueRepository.salvarValoresCursoAluno(entityManager, cursoAlunoId, camposFinal);
                             return cursoAlunoId;
                         }
                     }, "Falha ao cadastrar registro 42 via repository.");
@@ -102,13 +102,13 @@ public class CursoAlunoService {
             item.setCursoNome(item.getCurso().getNome());
             item.setCodigoCursoEmec(item.getCurso().getCodigoCursoEmec());
         }
-        item.setFinanciamentosResumo(opcaoDAO.resumirCursoAluno(
+        item.setFinanciamentosResumo(opcaoVinculoRepository.resumirCursoAluno(
                 item.getId(), CategoriasOpcao.CURSO_ALUNO_TIPO_FINANCIAMENTO));
-        item.setApoioSocialResumo(opcaoDAO.resumirCursoAluno(
+        item.setApoioSocialResumo(opcaoVinculoRepository.resumirCursoAluno(
                 item.getId(), CategoriasOpcao.CURSO_ALUNO_APOIO_SOCIAL));
-        item.setAtividadesResumo(opcaoDAO.resumirCursoAluno(
+        item.setAtividadesResumo(opcaoVinculoRepository.resumirCursoAluno(
                 item.getId(), CategoriasOpcao.CURSO_ALUNO_ATIVIDADE_EXTRACURRICULAR));
-        item.setReservasResumo(opcaoDAO.resumirCursoAluno(
+        item.setReservasResumo(opcaoVinculoRepository.resumirCursoAluno(
                 item.getId(), CategoriasOpcao.CURSO_ALUNO_RESERVA_VAGA));
     }
 
@@ -140,8 +140,9 @@ public class CursoAlunoService {
     }
 
     private boolean canUseRepositoryWritePath() {
-        return cursoAlunoRepository != null && opcaoDAO != null && layoutCampoDAO != null
+        return cursoAlunoRepository != null && opcaoVinculoRepository != null && layoutCampoValueRepository != null
                 && transactionManager != null && entityManagerFactory != null;
     }
 }
+
 

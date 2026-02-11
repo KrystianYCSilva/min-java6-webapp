@@ -18,7 +18,7 @@ A arquitetura segue camadas com responsabilidade explicita:
 1. `web/zk`: composers MVC e paginas `.zul`.
 2. `web/filter`: seguranca de acesso a `/app/*`.
 3. `service`: regras de negocio, validacoes e import/export TXT pipe.
-4. `dao`: persistencia JPA (`EntityManager`, `EntityTransaction`).
+4. `repository`: persistencia JPA (Spring Data + repositorios custom).
 5. `model`: entidades e enums de dominio.
 6. `util`: utilitarios transversais.
 
@@ -28,8 +28,8 @@ flowchart LR
     B --> C[ZK Pages *.zul]
     C --> D[ZK MVC Composers]
     D --> E[Services]
-    E --> F[DAOs JPA]
-    F --> G[AbstractJpaDao / EntityManagerFactory]
+    E --> F[Repositories JPA]
+    F --> G[Spring Data / EntityManagerFactory]
     G --> H[(H2 Database)]
 ```
 
@@ -40,7 +40,7 @@ flowchart LR
 | Web ZK | `br.gov.inep.censo.web.zk` | Controllers MVC de tela | `LoginComposer`, `HomeComposer`, `MenuComposer`, `DashboardComposer`, `AlunoComposer`, `CursoComposer`, `CursoAlunoComposer`, `DocenteComposer`, `IesComposer` |
 | Filtro | `br.gov.inep.censo.web.filter` | Protecao de rotas autenticadas | `AuthFilter` |
 | Service | `br.gov.inep.censo.service` | Regra de negocio e orquestracao | `AlunoService`, `CursoService`, `CursoAlunoService`, `DocenteService`, `IesService`, `AuthService` |
-| DAO | `br.gov.inep.censo.dao` | CRUD e consulta com JPA | `AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`, `MunicipioDAO` |
+| Repository | `br.gov.inep.censo.repository` | CRUD/consulta com Spring Data JPA e queries nativas custom | `AlunoRepository`, `CursoRepository`, `CursoAlunoRepository`, `DocenteRepository`, `IesRepository`, `UsuarioRepository`, `MunicipioRepository`, `OpcaoVinculoRepository`, `LayoutCampoValueRepository` |
 | Modelo | `br.gov.inep.censo.model` | Entidades persistidas | `Aluno`, `Curso`, `CursoAluno`, `Docente`, `Ies`, `Municipio`, `Usuario` |
 | Dominio auxiliar | `br.gov.inep.censo.domain` | Constantes de dominio/layout | `CategoriasOpcao`, `ModulosLayout` |
 | Utilitarios | `br.gov.inep.censo.util` | Apoio reutilizavel | `ValidationUtils`, `PasswordUtil`, `RequestFieldMapper` |
@@ -108,7 +108,7 @@ Scripts:
 1. Hibernate 4.2 + JPA (`javax.persistence`) para manter compatibilidade Java 6.
 2. Frontend unificado em ZK 3.6.2 MVC, removendo JSP/servlets de tela.
 3. Navegacao por shell unico com includes (`incMain`/`incSub`) para reduzir acoplamento de rotas.
-4. Camadas `service` e `dao` mantidas para isolamento de regra de negocio e persistencia.
+4. Camadas `service` e `repository` mantidas para isolamento de regra de negocio e persistencia.
 5. Builder Pattern nas entidades principais para reduzir acoplamento de construcao.
 6. Metadados de leiaute (`layout_campo`) para suportar evolucao de campos sem alterar modelo central.
 
@@ -126,13 +126,13 @@ mvn '-Dmaven.compiler.source=1.7' '-Dmaven.compiler.target=1.7' test
 
 Qualidade:
 1. JaCoCo com gate minimo de 80% de cobertura de linha.
-2. Escopo do gate: `dao`, `service` e `util`.
+2. Escopo do gate: `repository`, `service` e `util`.
 3. E2E mantido como `@Ignore` por padrao.
 
 ## 8. Restricoes e riscos
 
 1. Stack legado (Servlet 2.5, Java 6) limita upgrades de bibliotecas.
-2. Mudancas de schema exigem alinhamento entre DAO/Service/Testes.
+2. Mudancas de schema exigem alinhamento entre Repository/Service/Testes.
 3. Import/export depende de metadados corretos do leiaute oficial.
 4. Pool interno do Hibernate e adequado para desenvolvimento, nao para producao.
 

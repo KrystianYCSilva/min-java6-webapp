@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class IesService {
 
-    private final LayoutCampoValueRepository layoutCampoDAO;
+    private final LayoutCampoValueRepository layoutCampoValueRepository;
     private final IesRepository iesRepository;
     private final MunicipioRepository municipioRepository;
     private final PlatformTransactionManager transactionManager;
@@ -36,12 +36,12 @@ public class IesService {
                 SpringBridge.getBean(EntityManagerFactory.class));
     }
 
-    public IesService(LayoutCampoValueRepository layoutCampoDAO,
+    public IesService(LayoutCampoValueRepository layoutCampoValueRepository,
                       IesRepository iesRepository,
                       MunicipioRepository municipioRepository,
                       PlatformTransactionManager transactionManager,
                       EntityManagerFactory entityManagerFactory) {
-        this.layoutCampoDAO = layoutCampoDAO;
+        this.layoutCampoValueRepository = layoutCampoValueRepository;
         this.iesRepository = iesRepository;
         this.municipioRepository = municipioRepository;
         this.transactionManager = transactionManager;
@@ -61,7 +61,7 @@ public class IesService {
                             if (iesId == null) {
                                 throw new SQLException("Falha ao gerar ID para IES.");
                             }
-                            layoutCampoDAO.salvarValoresIes(entityManager, iesId, camposFinal);
+                            layoutCampoValueRepository.salvarValoresIes(entityManager, iesId, camposFinal);
                             return iesId;
                         }
                     }, "Falha ao cadastrar ies via repository.");
@@ -81,7 +81,7 @@ public class IesService {
                     new SpringBridge.SqlWork<Void>() {
                         public Void execute(EntityManager entityManager) throws SQLException {
                             iesRepository.save(iesFinal);
-                            layoutCampoDAO.substituirValoresIes(entityManager, iesFinal.getId(), camposFinal);
+                            layoutCampoValueRepository.substituirValoresIes(entityManager, iesFinal.getId(), camposFinal);
                             return null;
                         }
                     }, "Falha ao atualizar ies via repository.");
@@ -150,7 +150,7 @@ public class IesService {
             SpringBridge.inTransaction(transactionManager, entityManagerFactory,
                     new SpringBridge.SqlWork<Void>() {
                         public Void execute(EntityManager entityManager) throws SQLException {
-                            layoutCampoDAO.removerValoresIes(entityManager, idFinal);
+                            layoutCampoValueRepository.removerValoresIes(entityManager, idFinal);
                             if (iesRepository.exists(idFinal)) {
                                 iesRepository.delete(idFinal);
                             }
@@ -163,7 +163,7 @@ public class IesService {
     }
 
     public Map<Long, String> carregarCamposComplementaresPorCampoId(Long iesId) throws SQLException {
-        return layoutCampoDAO.carregarValoresIesPorCampoId(iesId);
+        return layoutCampoValueRepository.carregarValoresIesPorCampoId(iesId);
     }
 
     public String exportarTodosTxtPipe() throws SQLException {
@@ -202,7 +202,7 @@ public class IesService {
         if (conteudo == null || conteudo.trim().length() == 0) {
             return 0;
         }
-        Map<Integer, Long> campoIdPorNumero = layoutCampoDAO.mapaCampoIdPorNumero(ModulosLayout.IES_11);
+        Map<Integer, Long> campoIdPorNumero = layoutCampoValueRepository.mapaCampoIdPorNumero(ModulosLayout.IES_11);
         String[] linhas = conteudo.split("\\r?\\n");
         int importados = 0;
         Long idIesHeader = null;
@@ -253,7 +253,7 @@ public class IesService {
     }
 
     private String exportarLinhaTxtPipe(Ies ies) throws SQLException {
-        Map<Integer, String> valores = layoutCampoDAO.carregarValoresIesPorNumero(ies.getId(), ModulosLayout.IES_11);
+        Map<Integer, String> valores = layoutCampoValueRepository.carregarValoresIesPorNumero(ies.getId(), ModulosLayout.IES_11);
         int max = 29;
         String[] campos = new String[max];
         for (int i = 0; i < max; i++) {
@@ -372,4 +372,5 @@ public class IesService {
         return Integer.valueOf(Integer.parseInt(value));
     }
 }
+
 

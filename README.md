@@ -18,21 +18,21 @@ Principais pontos:
 - shell autenticado em `app/menu.zul` com `header + sidebar + center + footer`;
 - navegacao centralizada por querystring (`view` para conteudo principal, `sub` para sub-window modal);
 - telas de cadastro/visualizacao abertas em sub-window modal para melhorar UX;
-- camada `service/dao/model` JPA preservada.
+- camada `service/repository/model` JPA preservada.
 
 ## Arquitetura em camadas
 
 - `web/zk`: composers MVC de navegacao e interacao de tela.
 - `web/filter`: autenticacao de acesso a `/app/*`.
 - `service`: regras de negocio e validacoes.
-- `dao`: persistencia JPA (`EntityManager`/`EntityTransaction`).
+- `repository`: persistencia JPA (Spring Data + repositorios custom).
 - `model`: entidades de dominio.
 - `util`: utilitarios de seguranca e validacao.
 
 Padroes utilizados:
-- DAO Pattern (`AlunoDAO`, `CursoDAO`, `CursoAlunoDAO`, `DocenteDAO`, `IesDAO`).
+- Repository Pattern (`AlunoRepository`, `CursoRepository`, `CursoAlunoRepository`, `DocenteRepository`, `IesRepository`, `UsuarioRepository`, `MunicipioRepository`).
 - Service Layer (`AlunoService`, `CursoService`, `CursoAlunoService`, `DocenteService`, `IesService`, `AuthService`).
-- Template transacional JPA (`AbstractJpaDao`).
+- Repositorios custom para vinculos/campos complementares (`OpcaoVinculoRepository`, `LayoutCampoValueRepository`).
 - Builder Pattern para entidades extensas (`Aluno`, `Curso`, `CursoAluno`, `Docente`, `Ies`).
 - MVC Composer (ZK 3.6.2) para web.
 

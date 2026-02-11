@@ -29,9 +29,9 @@ import java.util.Set;
  */
 public class AlunoService {
 
-    private final LayoutCampoValueRepository layoutCampoDAO;
+    private final LayoutCampoValueRepository layoutCampoValueRepository;
     private final AlunoRepository alunoRepository;
-    private final OpcaoVinculoRepository opcaoDAO;
+    private final OpcaoVinculoRepository opcaoVinculoRepository;
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
@@ -43,14 +43,14 @@ public class AlunoService {
                 SpringBridge.getBean(EntityManagerFactory.class));
     }
 
-    public AlunoService(LayoutCampoValueRepository layoutCampoDAO,
+    public AlunoService(LayoutCampoValueRepository layoutCampoValueRepository,
                         AlunoRepository alunoRepository,
-                        OpcaoVinculoRepository opcaoDAO,
+                        OpcaoVinculoRepository opcaoVinculoRepository,
                         PlatformTransactionManager transactionManager,
                         EntityManagerFactory entityManagerFactory) {
-        this.layoutCampoDAO = layoutCampoDAO;
+        this.layoutCampoValueRepository = layoutCampoValueRepository;
         this.alunoRepository = alunoRepository;
-        this.opcaoDAO = opcaoDAO;
+        this.opcaoVinculoRepository = opcaoVinculoRepository;
         this.transactionManager = transactionManager;
         this.entityManagerFactory = entityManagerFactory;
     }
@@ -69,8 +69,8 @@ public class AlunoService {
                             if (alunoId == null) {
                                 throw new SQLException("Falha ao gerar ID para aluno.");
                             }
-                            opcaoDAO.salvarVinculosAluno(entityManager, alunoId, opcaoIdsFinal);
-                            layoutCampoDAO.salvarValoresAluno(entityManager, alunoId, camposFinal);
+                            opcaoVinculoRepository.salvarVinculosAluno(entityManager, alunoId, opcaoIdsFinal);
+                            layoutCampoValueRepository.salvarValoresAluno(entityManager, alunoId, camposFinal);
                             return alunoId;
                         }
                     }, "Falha ao cadastrar aluno via repository.");
@@ -91,8 +91,8 @@ public class AlunoService {
                     new SpringBridge.SqlWork<Void>() {
                         public Void execute(EntityManager entityManager) throws SQLException {
                             alunoRepository.save(alunoFinal);
-                            opcaoDAO.substituirVinculosAluno(entityManager, alunoFinal.getId(), opcaoIdsFinal);
-                            layoutCampoDAO.substituirValoresAluno(entityManager, alunoFinal.getId(), camposFinal);
+                            opcaoVinculoRepository.substituirVinculosAluno(entityManager, alunoFinal.getId(), opcaoIdsFinal);
+                            layoutCampoValueRepository.substituirValoresAluno(entityManager, alunoFinal.getId(), camposFinal);
                             return null;
                         }
                     }, "Falha ao atualizar aluno via repository.");
@@ -167,8 +167,8 @@ public class AlunoService {
             SpringBridge.inTransaction(transactionManager, entityManagerFactory,
                     new SpringBridge.SqlWork<Void>() {
                         public Void execute(EntityManager entityManager) throws SQLException {
-                            opcaoDAO.removerVinculosAluno(entityManager, idFinal);
-                            layoutCampoDAO.removerValoresAluno(entityManager, idFinal);
+                            opcaoVinculoRepository.removerVinculosAluno(entityManager, idFinal);
+                            layoutCampoValueRepository.removerValoresAluno(entityManager, idFinal);
                             if (alunoRepository.exists(idFinal)) {
                                 alunoRepository.delete(idFinal);
                             }
@@ -181,14 +181,14 @@ public class AlunoService {
     }
 
     public List<Long> listarOpcaoDeficienciaIds(Long alunoId) throws SQLException {
-        if (opcaoDAO != null) {
-            return opcaoDAO.listarIdsAluno(alunoId, CategoriasOpcao.ALUNO_TIPO_DEFICIENCIA);
+        if (opcaoVinculoRepository != null) {
+            return opcaoVinculoRepository.listarIdsAluno(alunoId, CategoriasOpcao.ALUNO_TIPO_DEFICIENCIA);
         }
         return new ArrayList<Long>();
     }
 
     public Map<Long, String> carregarCamposComplementaresPorCampoId(Long alunoId) throws SQLException {
-        return layoutCampoDAO.carregarValoresAlunoPorCampoId(alunoId);
+        return layoutCampoValueRepository.carregarValoresAlunoPorCampoId(alunoId);
     }
 
     public String exportarTodosTxtPipe() throws SQLException {
@@ -220,7 +220,7 @@ public class AlunoService {
     }
 
     private boolean canUseRepositoryWritePath() {
-        return alunoRepository != null && opcaoDAO != null
+        return alunoRepository != null && opcaoVinculoRepository != null
                 && transactionManager != null && entityManagerFactory != null;
     }
 
@@ -234,18 +234,18 @@ public class AlunoService {
     }
 
     private void hydrateResumo(Aluno aluno) throws SQLException {
-        if (aluno == null || aluno.getId() == null || opcaoDAO == null) {
+        if (aluno == null || aluno.getId() == null || opcaoVinculoRepository == null) {
             return;
         }
         aluno.setTiposDeficienciaResumo(
-                opcaoDAO.resumirAluno(aluno.getId(), CategoriasOpcao.ALUNO_TIPO_DEFICIENCIA));
+                opcaoVinculoRepository.resumirAluno(aluno.getId(), CategoriasOpcao.ALUNO_TIPO_DEFICIENCIA));
     }
 
     public int importarTxtPipe(String conteudo) throws SQLException {
         if (conteudo == null || conteudo.trim().length() == 0) {
             return 0;
         }
-        Map<Integer, Long> campoIdPorNumero = layoutCampoDAO.mapaCampoIdPorNumero(ModulosLayout.ALUNO_41);
+        Map<Integer, Long> campoIdPorNumero = layoutCampoValueRepository.mapaCampoIdPorNumero(ModulosLayout.ALUNO_41);
         String[] linhas = conteudo.split("\\r?\\n");
         int importados = 0;
         for (int i = 0; i < linhas.length; i++) {
@@ -284,10 +284,10 @@ public class AlunoService {
     }
 
     private String exportarLinhaTxtPipe(Aluno aluno) throws SQLException {
-        Map<Integer, String> valores = layoutCampoDAO.carregarValoresAlunoPorNumero(aluno.getId(), ModulosLayout.ALUNO_41);
+        Map<Integer, String> valores = layoutCampoValueRepository.carregarValoresAlunoPorNumero(aluno.getId(), ModulosLayout.ALUNO_41);
         Set<String> codigosDeficiencia = new HashSet<String>();
-        if (opcaoDAO != null) {
-            codigosDeficiencia.addAll(opcaoDAO.listarCodigosAluno(aluno.getId(), CategoriasOpcao.ALUNO_TIPO_DEFICIENCIA));
+        if (opcaoVinculoRepository != null) {
+            codigosDeficiencia.addAll(opcaoVinculoRepository.listarCodigosAluno(aluno.getId(), CategoriasOpcao.ALUNO_TIPO_DEFICIENCIA));
         }
 
         int max = 23;
@@ -473,4 +473,5 @@ public class AlunoService {
         return new SimpleDateFormat("yyyyMMdd").format(new java.util.Date(date.getTime()));
     }
 }
+
 

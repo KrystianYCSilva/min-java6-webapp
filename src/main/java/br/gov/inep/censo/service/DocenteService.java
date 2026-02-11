@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class DocenteService {
 
-    private final LayoutCampoValueRepository layoutCampoDAO;
+    private final LayoutCampoValueRepository layoutCampoValueRepository;
     private final DocenteRepository docenteRepository;
     private final MunicipioRepository municipioRepository;
     private final PlatformTransactionManager transactionManager;
@@ -39,12 +39,12 @@ public class DocenteService {
                 SpringBridge.getBean(EntityManagerFactory.class));
     }
 
-    public DocenteService(LayoutCampoValueRepository layoutCampoDAO,
+    public DocenteService(LayoutCampoValueRepository layoutCampoValueRepository,
                           DocenteRepository docenteRepository,
                           MunicipioRepository municipioRepository,
                           PlatformTransactionManager transactionManager,
                           EntityManagerFactory entityManagerFactory) {
-        this.layoutCampoDAO = layoutCampoDAO;
+        this.layoutCampoValueRepository = layoutCampoValueRepository;
         this.docenteRepository = docenteRepository;
         this.municipioRepository = municipioRepository;
         this.transactionManager = transactionManager;
@@ -64,7 +64,7 @@ public class DocenteService {
                             if (docenteId == null) {
                                 throw new SQLException("Falha ao gerar ID para docente.");
                             }
-                            layoutCampoDAO.salvarValoresDocente(entityManager, docenteId, camposFinal);
+                            layoutCampoValueRepository.salvarValoresDocente(entityManager, docenteId, camposFinal);
                             return docenteId;
                         }
                     }, "Falha ao cadastrar docente via repository.");
@@ -84,7 +84,7 @@ public class DocenteService {
                     new SpringBridge.SqlWork<Void>() {
                         public Void execute(EntityManager entityManager) throws SQLException {
                             docenteRepository.save(docenteFinal);
-                            layoutCampoDAO.substituirValoresDocente(entityManager, docenteFinal.getId(), camposFinal);
+                            layoutCampoValueRepository.substituirValoresDocente(entityManager, docenteFinal.getId(), camposFinal);
                             return null;
                         }
                     }, "Falha ao atualizar docente via repository.");
@@ -153,7 +153,7 @@ public class DocenteService {
             SpringBridge.inTransaction(transactionManager, entityManagerFactory,
                     new SpringBridge.SqlWork<Void>() {
                         public Void execute(EntityManager entityManager) throws SQLException {
-                            layoutCampoDAO.removerValoresDocente(entityManager, idFinal);
+                            layoutCampoValueRepository.removerValoresDocente(entityManager, idFinal);
                             if (docenteRepository.exists(idFinal)) {
                                 docenteRepository.delete(idFinal);
                             }
@@ -166,7 +166,7 @@ public class DocenteService {
     }
 
     public Map<Long, String> carregarCamposComplementaresPorCampoId(Long docenteId) throws SQLException {
-        return layoutCampoDAO.carregarValoresDocentePorCampoId(docenteId);
+        return layoutCampoValueRepository.carregarValoresDocentePorCampoId(docenteId);
     }
 
     public String exportarTodosTxtPipe() throws SQLException {
@@ -205,7 +205,7 @@ public class DocenteService {
         if (conteudo == null || conteudo.trim().length() == 0) {
             return 0;
         }
-        Map<Integer, Long> campoIdPorNumero = layoutCampoDAO.mapaCampoIdPorNumero(ModulosLayout.DOCENTE_31);
+        Map<Integer, Long> campoIdPorNumero = layoutCampoValueRepository.mapaCampoIdPorNumero(ModulosLayout.DOCENTE_31);
         String[] linhas = conteudo.split("\\r?\\n");
         int importados = 0;
         for (int i = 0; i < linhas.length; i++) {
@@ -245,7 +245,7 @@ public class DocenteService {
     }
 
     private String exportarLinhaTxtPipe(Docente docente) throws SQLException {
-        Map<Integer, String> valores = layoutCampoDAO.carregarValoresDocentePorNumero(docente.getId(), ModulosLayout.DOCENTE_31);
+        Map<Integer, String> valores = layoutCampoValueRepository.carregarValoresDocentePorNumero(docente.getId(), ModulosLayout.DOCENTE_31);
         int max = 42;
         String[] campos = new String[max];
         for (int i = 0; i < max; i++) {
@@ -396,4 +396,5 @@ public class DocenteService {
         return new SimpleDateFormat("yyyyMMdd").format(new java.util.Date(date.getTime()));
     }
 }
+
 
