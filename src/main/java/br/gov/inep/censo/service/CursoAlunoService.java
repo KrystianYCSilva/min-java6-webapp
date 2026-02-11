@@ -1,14 +1,18 @@
 package br.gov.inep.censo.service;
 
-import br.gov.inep.censo.dao.CursoAlunoDAO;
+import br.gov.inep.censo.dao.LayoutCampoDAO;
 import br.gov.inep.censo.dao.OpcaoDAO;
 import br.gov.inep.censo.domain.CategoriasOpcao;
+import br.gov.inep.censo.model.Aluno;
+import br.gov.inep.censo.model.Curso;
 import br.gov.inep.censo.model.CursoAluno;
 import br.gov.inep.censo.repository.CursoAlunoRepository;
+import br.gov.inep.censo.spring.SpringBridge;
 import br.gov.inep.censo.util.ValidationUtils;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -18,30 +22,56 @@ import java.util.Map;
  */
 public class CursoAlunoService {
 
-    private final CursoAlunoDAO cursoAlunoDAO;
     private final CursoAlunoRepository cursoAlunoRepository;
     private final OpcaoDAO opcaoDAO;
+    private final LayoutCampoDAO layoutCampoDAO;
+    private final PlatformTransactionManager transactionManager;
+    private final EntityManagerFactory entityManagerFactory;
 
     public CursoAlunoService() {
-        this(new CursoAlunoDAO(), resolveRepository(), new OpcaoDAO());
+        this(SpringBridge.getBean(CursoAlunoRepository.class),
+                new OpcaoDAO(),
+                new LayoutCampoDAO(),
+                SpringBridge.getBean(PlatformTransactionManager.class),
+                SpringBridge.getBean(EntityManagerFactory.class));
     }
 
-    public CursoAlunoService(CursoAlunoDAO cursoAlunoDAO) {
-        this(cursoAlunoDAO, null, new OpcaoDAO());
-    }
-
-    public CursoAlunoService(CursoAlunoDAO cursoAlunoDAO,
-                             CursoAlunoRepository cursoAlunoRepository,
-                             OpcaoDAO opcaoDAO) {
-        this.cursoAlunoDAO = cursoAlunoDAO;
+    public CursoAlunoService(CursoAlunoRepository cursoAlunoRepository,
+                             OpcaoDAO opcaoDAO,
+                             LayoutCampoDAO layoutCampoDAO,
+                             PlatformTransactionManager transactionManager,
+                             EntityManagerFactory entityManagerFactory) {
         this.cursoAlunoRepository = cursoAlunoRepository;
         this.opcaoDAO = opcaoDAO;
+        this.layoutCampoDAO = layoutCampoDAO;
+        this.transactionManager = transactionManager;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     public Long cadastrar(CursoAluno cursoAluno, long[] opcaoIds, Map<Long, String> camposComplementares)
             throws SQLException {
         validar(cursoAluno);
-        return cursoAlunoDAO.salvar(cursoAluno, opcaoIds, camposComplementares);
+        if (canUseRepositoryWritePath()) {
+            final CursoAluno cursoAlunoFinal = cursoAluno;
+            final long[] opcaoIdsFinal = opcaoIds;
+            final Map<Long, String> camposFinal = camposComplementares;
+            return SpringBridge.inTransaction(transactionManager, entityManagerFactory,
+                    new SpringBridge.SqlWork<Long>() {
+                        public Long execute(EntityManager entityManager) throws SQLException {
+                            cursoAlunoFinal.setAluno(entityManager.getReference(Aluno.class, cursoAlunoFinal.getAlunoId()));
+                            cursoAlunoFinal.setCurso(entityManager.getReference(Curso.class, cursoAlunoFinal.getCursoId()));
+                            CursoAluno salvo = cursoAlunoRepository.save(cursoAlunoFinal);
+                            Long cursoAlunoId = salvo != null ? salvo.getId() : cursoAlunoFinal.getId();
+                            if (cursoAlunoId == null) {
+                                throw new SQLException("Falha ao gerar ID para curso_aluno.");
+                            }
+                            opcaoDAO.salvarVinculosCursoAluno(entityManager, cursoAlunoId, opcaoIdsFinal);
+                            layoutCampoDAO.salvarValoresCursoAluno(entityManager, cursoAlunoId, camposFinal);
+                            return cursoAlunoId;
+                        }
+                    }, "Falha ao cadastrar registro 42 via repository.");
+        }
+        throw new SQLException("Infraestrutura Spring Data/Transaction indisponivel para cadastrar registro 42.");
     }
 
     public List<CursoAluno> listar() throws SQLException {
@@ -56,7 +86,7 @@ public class CursoAlunoService {
                 throw toSqlException("Falha ao listar registros 42 via repository.", e);
             }
         }
-        return cursoAlunoDAO.listar();
+        throw new SQLException("CursoAlunoRepository indisponivel para listagem.");
     }
 
     private void hydrateResumo(CursoAluno item) throws SQLException {
@@ -109,15 +139,8 @@ public class CursoAlunoService {
         return new SQLException(mensagem, e);
     }
 
-    private static CursoAlunoRepository resolveRepository() {
-        try {
-            WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
-            if (context == null) {
-                return null;
-            }
-            return context.getBean(CursoAlunoRepository.class);
-        } catch (Exception e) {
-            return null;
-        }
+    private boolean canUseRepositoryWritePath() {
+        return cursoAlunoRepository != null && opcaoDAO != null && layoutCampoDAO != null
+                && transactionManager != null && entityManagerFactory != null;
     }
 }
