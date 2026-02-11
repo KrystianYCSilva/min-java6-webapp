@@ -1,6 +1,6 @@
 package br.gov.inep.censo.service;
 
-import br.gov.inep.censo.dao.LayoutCampoDAO;
+import br.gov.inep.censo.repository.LayoutCampoValueRepository;
 import br.gov.inep.censo.domain.ModulosLayout;
 import br.gov.inep.censo.model.Ies;
 import br.gov.inep.censo.repository.IesRepository;
@@ -22,21 +22,21 @@ import java.util.Map;
  */
 public class IesService {
 
-    private final LayoutCampoDAO layoutCampoDAO;
+    private final LayoutCampoValueRepository layoutCampoDAO;
     private final IesRepository iesRepository;
     private final MunicipioRepository municipioRepository;
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
     public IesService() {
-        this(new LayoutCampoDAO(),
+        this(new LayoutCampoValueRepository(),
                 SpringBridge.getBean(IesRepository.class),
                 SpringBridge.getBean(MunicipioRepository.class),
                 SpringBridge.getBean(PlatformTransactionManager.class),
                 SpringBridge.getBean(EntityManagerFactory.class));
     }
 
-    public IesService(LayoutCampoDAO layoutCampoDAO,
+    public IesService(LayoutCampoValueRepository layoutCampoDAO,
                       IesRepository iesRepository,
                       MunicipioRepository municipioRepository,
                       PlatformTransactionManager transactionManager,
@@ -372,3 +372,4 @@ public class IesService {
         return Integer.valueOf(Integer.parseInt(value));
     }
 }
+

@@ -1,6 +1,6 @@
 package br.gov.inep.censo.service;
 
-import br.gov.inep.censo.dao.LayoutCampoDAO;
+import br.gov.inep.censo.repository.LayoutCampoValueRepository;
 import br.gov.inep.censo.domain.ModulosLayout;
 import br.gov.inep.censo.model.Docente;
 import br.gov.inep.censo.repository.DocenteRepository;
@@ -25,21 +25,21 @@ import java.util.Map;
  */
 public class DocenteService {
 
-    private final LayoutCampoDAO layoutCampoDAO;
+    private final LayoutCampoValueRepository layoutCampoDAO;
     private final DocenteRepository docenteRepository;
     private final MunicipioRepository municipioRepository;
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
     public DocenteService() {
-        this(new LayoutCampoDAO(),
+        this(new LayoutCampoValueRepository(),
                 SpringBridge.getBean(DocenteRepository.class),
                 SpringBridge.getBean(MunicipioRepository.class),
                 SpringBridge.getBean(PlatformTransactionManager.class),
                 SpringBridge.getBean(EntityManagerFactory.class));
     }
 
-    public DocenteService(LayoutCampoDAO layoutCampoDAO,
+    public DocenteService(LayoutCampoValueRepository layoutCampoDAO,
                           DocenteRepository docenteRepository,
                           MunicipioRepository municipioRepository,
                           PlatformTransactionManager transactionManager,
@@ -396,3 +396,4 @@ public class DocenteService {
         return new SimpleDateFormat("yyyyMMdd").format(new java.util.Date(date.getTime()));
     }
 }
+

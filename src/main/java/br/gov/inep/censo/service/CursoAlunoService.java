@@ -1,7 +1,7 @@
 package br.gov.inep.censo.service;
 
-import br.gov.inep.censo.dao.LayoutCampoDAO;
-import br.gov.inep.censo.dao.OpcaoDAO;
+import br.gov.inep.censo.repository.LayoutCampoValueRepository;
+import br.gov.inep.censo.repository.OpcaoVinculoRepository;
 import br.gov.inep.censo.domain.CategoriasOpcao;
 import br.gov.inep.censo.model.Aluno;
 import br.gov.inep.censo.model.Curso;
@@ -23,22 +23,22 @@ import java.util.Map;
 public class CursoAlunoService {
 
     private final CursoAlunoRepository cursoAlunoRepository;
-    private final OpcaoDAO opcaoDAO;
-    private final LayoutCampoDAO layoutCampoDAO;
+    private final OpcaoVinculoRepository opcaoDAO;
+    private final LayoutCampoValueRepository layoutCampoDAO;
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
     public CursoAlunoService() {
         this(SpringBridge.getBean(CursoAlunoRepository.class),
-                new OpcaoDAO(),
-                new LayoutCampoDAO(),
+                new OpcaoVinculoRepository(),
+                new LayoutCampoValueRepository(),
                 SpringBridge.getBean(PlatformTransactionManager.class),
                 SpringBridge.getBean(EntityManagerFactory.class));
     }
 
     public CursoAlunoService(CursoAlunoRepository cursoAlunoRepository,
-                             OpcaoDAO opcaoDAO,
-                             LayoutCampoDAO layoutCampoDAO,
+                             OpcaoVinculoRepository opcaoDAO,
+                             LayoutCampoValueRepository layoutCampoDAO,
                              PlatformTransactionManager transactionManager,
                              EntityManagerFactory entityManagerFactory) {
         this.cursoAlunoRepository = cursoAlunoRepository;
@@ -144,3 +144,4 @@ public class CursoAlunoService {
                 && transactionManager != null && entityManagerFactory != null;
     }
 }
+

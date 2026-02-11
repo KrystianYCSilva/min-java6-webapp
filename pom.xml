@@ -189,7 +189,7 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>br/gov/inep/censo/dao/*</include>
+                                <include>br/gov/inep/censo/repository/*</include>
                                 <include>br/gov/inep/censo/service/*</include>
                                 <include>br/gov/inep/censo/util/*</include>
                             </includes>

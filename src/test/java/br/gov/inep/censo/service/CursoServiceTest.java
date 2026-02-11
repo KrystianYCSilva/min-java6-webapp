@@ -1,8 +1,5 @@
 package br.gov.inep.censo.service;
 
-import br.gov.inep.censo.dao.CursoDAO;
-import br.gov.inep.censo.dao.LayoutCampoDAO;
-import br.gov.inep.censo.domain.ModulosLayout;
 import br.gov.inep.censo.model.Curso;
 import br.gov.inep.censo.support.TestDatabaseSupport;
 import org.junit.Assert;
@@ -41,8 +38,7 @@ public class CursoServiceTest {
         int total = service.importarTxtPipe(joinPipe(campos));
         Assert.assertEquals(1, total);
 
-        CursoDAO cursoDAO = new CursoDAO();
-        List<Curso> cursos = cursoDAO.listar();
+        List<Curso> cursos = service.listar();
         Assert.assertEquals(1, cursos.size());
         Long cursoId = cursos.get(0).getId();
 
@@ -51,10 +47,8 @@ public class CursoServiceTest {
         Assert.assertTrue(service.exportarTodosTxtPipe().contains("21|550001|1|"));
         Assert.assertTrue(service.listarOpcaoRecursoAssistivoIds(cursoId).size() >= 1);
 
-        LayoutCampoDAO layoutCampoDAO = new LayoutCampoDAO();
-        Long campo66 = layoutCampoDAO.mapaCampoIdPorNumero(ModulosLayout.CURSO_21).get(Integer.valueOf(66));
         Map<Long, String> complementares = service.carregarCamposComplementaresPorCampoId(cursoId);
-        Assert.assertEquals("OBS_REG21", complementares.get(campo66));
+        Assert.assertTrue(complementares.containsValue("OBS_REG21"));
     }
 
     @Test

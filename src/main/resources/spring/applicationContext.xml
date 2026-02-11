@@ -40,34 +40,32 @@
                       entity-manager-factory-ref="entityManagerFactory"
                       transaction-manager-ref="transactionManager"/>
 
+    <bean id="layoutCampoValueRepository" class="br.gov.inep.censo.repository.LayoutCampoValueRepository">
+        <constructor-arg ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="opcaoVinculoRepository" class="br.gov.inep.censo.repository.OpcaoVinculoRepository">
+        <constructor-arg ref="entityManagerFactory"/>
+    </bean>
+
     <bean id="alunoService" class="br.gov.inep.censo.service.AlunoService">
-        <constructor-arg>
-            <bean class="br.gov.inep.censo.dao.LayoutCampoDAO"/>
-        </constructor-arg>
+        <constructor-arg ref="layoutCampoValueRepository"/>
         <constructor-arg ref="alunoRepository"/>
-        <constructor-arg>
-            <bean class="br.gov.inep.censo.dao.OpcaoDAO"/>
-        </constructor-arg>
+        <constructor-arg ref="opcaoVinculoRepository"/>
         <constructor-arg ref="transactionManager"/>
         <constructor-arg ref="entityManagerFactory"/>
     </bean>
 
     <bean id="cursoService" class="br.gov.inep.censo.service.CursoService">
-        <constructor-arg>
-            <bean class="br.gov.inep.censo.dao.LayoutCampoDAO"/>
-        </constructor-arg>
+        <constructor-arg ref="layoutCampoValueRepository"/>
         <constructor-arg ref="cursoRepository"/>
-        <constructor-arg>
-            <bean class="br.gov.inep.censo.dao.OpcaoDAO"/>
-        </constructor-arg>
+        <constructor-arg ref="opcaoVinculoRepository"/>
         <constructor-arg ref="transactionManager"/>
         <constructor-arg ref="entityManagerFactory"/>
     </bean>
 
     <bean id="docenteService" class="br.gov.inep.censo.service.DocenteService">
-        <constructor-arg>
-            <bean class="br.gov.inep.censo.dao.LayoutCampoDAO"/>
-        </constructor-arg>
+        <constructor-arg ref="layoutCampoValueRepository"/>
         <constructor-arg ref="docenteRepository"/>
         <constructor-arg ref="municipioRepository"/>
         <constructor-arg ref="transactionManager"/>
@@ -75,9 +73,7 @@
     </bean>
 
     <bean id="iesService" class="br.gov.inep.censo.service.IesService">
-        <constructor-arg>
-            <bean class="br.gov.inep.censo.dao.LayoutCampoDAO"/>
-        </constructor-arg>
+        <constructor-arg ref="layoutCampoValueRepository"/>
         <constructor-arg ref="iesRepository"/>
         <constructor-arg ref="municipioRepository"/>
         <constructor-arg ref="transactionManager"/>
@@ -86,12 +82,8 @@
 
     <bean id="cursoAlunoService" class="br.gov.inep.censo.service.CursoAlunoService">
         <constructor-arg ref="cursoAlunoRepository"/>
-        <constructor-arg>
-            <bean class="br.gov.inep.censo.dao.OpcaoDAO"/>
-        </constructor-arg>
-        <constructor-arg>
-            <bean class="br.gov.inep.censo.dao.LayoutCampoDAO"/>
-        </constructor-arg>
+        <constructor-arg ref="opcaoVinculoRepository"/>
+        <constructor-arg ref="layoutCampoValueRepository"/>
         <constructor-arg ref="transactionManager"/>
         <constructor-arg ref="entityManagerFactory"/>
     </bean>
@@ -101,3 +93,4 @@
         <constructor-arg ref="layoutCampoRepository"/>
     </bean>
 </beans>
+

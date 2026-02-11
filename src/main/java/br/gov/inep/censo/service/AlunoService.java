@@ -1,7 +1,7 @@
 package br.gov.inep.censo.service;
 
-import br.gov.inep.censo.dao.LayoutCampoDAO;
-import br.gov.inep.censo.dao.OpcaoDAO;
+import br.gov.inep.censo.repository.LayoutCampoValueRepository;
+import br.gov.inep.censo.repository.OpcaoVinculoRepository;
 import br.gov.inep.censo.domain.CategoriasOpcao;
 import br.gov.inep.censo.domain.ModulosLayout;
 import br.gov.inep.censo.model.Aluno;
@@ -29,23 +29,23 @@ import java.util.Set;
  */
 public class AlunoService {
 
-    private final LayoutCampoDAO layoutCampoDAO;
+    private final LayoutCampoValueRepository layoutCampoDAO;
     private final AlunoRepository alunoRepository;
-    private final OpcaoDAO opcaoDAO;
+    private final OpcaoVinculoRepository opcaoDAO;
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
     public AlunoService() {
-        this(new LayoutCampoDAO(),
+        this(new LayoutCampoValueRepository(),
                 SpringBridge.getBean(AlunoRepository.class),
-                new OpcaoDAO(),
+                new OpcaoVinculoRepository(),
                 SpringBridge.getBean(PlatformTransactionManager.class),
                 SpringBridge.getBean(EntityManagerFactory.class));
     }
 
-    public AlunoService(LayoutCampoDAO layoutCampoDAO,
+    public AlunoService(LayoutCampoValueRepository layoutCampoDAO,
                         AlunoRepository alunoRepository,
-                        OpcaoDAO opcaoDAO,
+                        OpcaoVinculoRepository opcaoDAO,
                         PlatformTransactionManager transactionManager,
                         EntityManagerFactory entityManagerFactory) {
         this.layoutCampoDAO = layoutCampoDAO;
@@ -473,3 +473,4 @@ public class AlunoService {
         return new SimpleDateFormat("yyyyMMdd").format(new java.util.Date(date.getTime()));
     }
 }
+
