@@ -21,7 +21,7 @@ import java.util.Map;
  * Fabrica central de EntityManagerFactory/EntityManager com provider Hibernate.
  *
  * Mantem compatibilidade com acesso JDBC bruto quando necessario, mas prioriza
- * o uso de EntityManager/EntityTransaction na camada DAO.
+ * o uso de EntityManager/EntityTransaction na camada de repositorios.
  */
 public final class HibernateConnectionProvider {
 
